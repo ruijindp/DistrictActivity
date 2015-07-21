@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="72dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="336dp">
+
+                <ImageView
+                    android:id="@+id/activity_user_imgBg"
+                    android:layout_width="match_parent"
+                    android:layout_height="336dp"
+                    android:contentDescription="@string/default_content_description"
+                    android:src="@color/test" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="28dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/activity_user_imgHead"
+                        android:layout_width="152dp"
+                        android:layout_height="152dp"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:contentDescription="@string/default_content_description"
+                        android:src="@color/test2"
+                        app:border_color="@android:color/white"
+                        app:border_width="1dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="22dp"
+                        android:text="@string/change_head"
+                        android:textColor="@android:color/white" />
+                </LinearLayout>
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/activity_user_tvChangeName"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:layout_marginTop="12dp"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:paddingLeft="24dp"
+                android:text="@string/change_name"
+                android:textColor="@color/blue"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/activity_user_tvChangePassword"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:paddingLeft="24dp"
+                android:text="@string/change_password"
+                android:textColor="@color/blue"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/line_broadcast"
+                android:paddingLeft="24dp" />
+
+            <FrameLayout
+                android:id="@+id/activity_user_lnPush"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/change_push"
+                    android:textColor="@color/textColorSecondary"
+                    android:textSize="16sp" />
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/activity_user_swPush"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical" />
+            </FrameLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <FrameLayout
+        android:id="@+id/activity_user_flLogout"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_gravity="bottom"
+        android:background="?selectableItemBackground"
+        android:clickable="true">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/div" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/exit"
+            android:textColor="@color/textColorSecondary"
+            android:textSize="18sp" />
+    </FrameLayout>
+
+    <include layout="@layout/tool_bar_transparent" />
+</FrameLayout>

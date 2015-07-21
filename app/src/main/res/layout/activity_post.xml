@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/tool_bar_root" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="?android:listDivider"
+            android:orientation="vertical"
+            android:showDividers="middle">
+
+            <EditText
+                android:id="@+id/activity_post_etTitle"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:background="@android:color/transparent"
+                android:gravity="center_vertical"
+                android:hint="@string/hint_title"
+                android:paddingLeft="16dp"
+                android:textSize="16sp" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:background="?selectableItemBackground"
+                android:clickable="true">
+
+                <TextView
+                    android:id="@+id/activity_post_tvCategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:hint="@string/hint_category"
+                    android:paddingLeft="16dp" />
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="13dp"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="16dp"
+                    android:contentDescription="@string/default_content_description"
+                    android:src="@color/test" />
+            </FrameLayout>
+
+            <EditText
+                android:id="@+id/activity_post_etContent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:gravity="top"
+                android:hint="@string/hint_content"
+                android:minHeight="320dp"
+                android:padding="16dp"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/div" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="@color/gray_snack"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/activity_post_imgPicture"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="16dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:contentDescription="@string/default_content_description"
+            android:src="@color/test2" />
+
+        <ImageView
+            android:id="@+id/activity_post_imgEmotion"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="24dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:contentDescription="@string/default_content_description"
+            android:src="@color/test2" />
+
+        <ImageView
+            android:id="@+id/activity_post_imgAudio"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="24dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:contentDescription="@string/default_content_description"
+            android:src="@color/test2" />
+
+        <ImageView
+            android:id="@+id/activity_post_imgVideo"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="24dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:contentDescription="@string/default_content_description"
+            android:src="@color/test2" />
+    </LinearLayout>
+
+    <HorizontalScrollView
+        android:id="@+id/activity_post_scAttached"
+        android:layout_width="match_parent"
+        android:layout_height="144dp">
+
+        <LinearLayout
+            android:id="@+id/activity_post_lnAttached"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <include layout="@layout/item_detail_attach" />
+        </LinearLayout>
+    </HorizontalScrollView>
+</LinearLayout>

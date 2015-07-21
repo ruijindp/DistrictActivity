@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?><!--android.support.v7.widget.RecyclerView-->
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipeRefreshLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ListView
+        android:id="@+id/fragment_showcase_lv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@null"
+        android:orientation="vertical"
+        tools:listfooter="@layout/foot_more"
+        tools:listheader="@layout/page_categories"
+        tools:listitem="@layout/item_showcase" />
+</android.support.v4.widget.SwipeRefreshLayout>

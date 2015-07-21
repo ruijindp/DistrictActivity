@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/video_h">
+
+    <ImageView
+        android:id="@+id/view_media_imgContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/default_content_description"
+        android:minHeight="96dp"
+        android:scaleType="fitCenter"
+        android:src="@color/test" />
+
+    <SurfaceView
+        android:id="@+id/view_media_surface"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/video_h" />
+
+    <LinearLayout
+        android:id="@+id/view_media_linearPlayer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="12dp">
+
+        <ImageView
+            android:id="@+id/view_media_imgPlay"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="@string/default_content_description"
+            android:padding="8dp"
+            android:src="@mipmap/icon_start"
+            android:tint="?colorAccent" />
+
+        <SeekBar
+            android:id="@+id/view_media_sb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view_media_btnRecord"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_margin="12dp"
+        android:background="@drawable/shape_circle_delete" />
+
+    <TextView
+        android:id="@+id/view_media_tvInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="123123" />
+</merge>

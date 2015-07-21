@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ci="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="176dp"
+        android:layout_marginBottom="4dp"
+        android:background="@color/card"
+        android:columnCount="4"
+        android:elevation="2dp"
+        android:orientation="vertical"
+        android:rowCount="2">
+
+        <!-- 第一行-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="88dp">
+
+            <LinearLayout
+                android:id="@+id/page_categories_item0"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/page_categories_img0"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:src="@color/test"
+                    ci:border_width="0px" />
+
+                <TextView
+                    android:id="@+id/page_categories_tv0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/test_cate"
+                    android:textColor="@color/textColorContent"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/page_categories_item1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/page_categories_img1"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:src="@color/test"
+                    ci:border_width="0px" />
+
+                <TextView
+                    android:id="@+id/page_categories_tv1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/test_cate"
+                    android:textColor="@color/textColorContent"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/page_categories_item2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/page_categories_img2"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:src="@color/test"
+                    ci:border_width="0px" />
+
+                <TextView
+                    android:id="@+id/page_categories_tv2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/test_cate"
+                    android:textColor="@color/textColorContent"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/page_categories_item3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/page_categories_img3"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:src="@color/test"
+                    ci:border_width="0px" />
+
+                <TextView
+                    android:id="@+id/page_categories_tv3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/test_cate"
+                    android:textColor="@color/textColorContent"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- 第二行-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="88dp">
+
+            <LinearLayout
+                android:id="@+id/page_categories_item4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/page_categories_img4"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:src="@color/test"
+                    ci:border_width="0px" />
+
+                <TextView
+                    android:id="@+id/page_categories_tv4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/test_cate"
+                    android:textColor="@color/textColorContent"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/page_categories_item5"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/page_categories_img5"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:src="@color/test"
+                    ci:border_width="0px" />
+
+                <TextView
+                    android:id="@+id/page_categories_tv5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/test_cate"
+                    android:textColor="@color/textColorContent"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/page_categories_item6"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/page_categories_img6"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:src="@color/test"
+                    ci:border_width="0px" />
+
+                <TextView
+                    android:id="@+id/page_categories_tv6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/test_cate"
+                    android:textColor="@color/textColorContent"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/page_categories_item7"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/page_categories_img7"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:src="@color/test"
+                    ci:border_width="0px" />
+
+                <TextView
+                    android:id="@+id/page_categories_tv7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/test_cate"
+                    android:textColor="@color/textColorContent"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+</FrameLayout>
+

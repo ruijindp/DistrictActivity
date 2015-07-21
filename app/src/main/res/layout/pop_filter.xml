@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ListView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="255dp"
+    android:layout_height="280dp"
+    android:background="@drawable/shape_card"
+    android:divider="@null"
+    android:elevation="8dp"
+    android:orientation="vertical"
+    tools:listitem="@layout/item_filter" />

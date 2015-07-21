@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary0">#1CBBD7</color>
+    <color name="colorPrimaryDark0">#1596A9</color>
+
+    <color name="textColor">#DD000000</color>
+    <color name="textColorContent">#C0000000</color>
+    <color name="textColorContentDetail">#6D000000</color>
+    <color name="textColorDate">#2C000000</color>
+    <color name="textColorSecondary">#89000000</color>
+    <color name="div">#29000000</color>
+    <color name="gray">#66000000</color>
+    <color name="gray_snack">#12000000</color>
+    <color name="dot_red">#FF0303</color>
+    <color name="broadcast">#F6EB48</color>
+    <color name="card">#FCFCFC</color>
+    <color name="blue">#1CBBD7</color>
+    <color name="blue_pressed">#ff179fb6</color>
+    <color name="red">#E60312</color>
+    <color name="red_pressed">#ffb2030d</color>
+    <color name="btn_pressed">#11000000</color>
+    <color name="checking">#A5D468</color>
+    <color name="checked">#942198</color>
+    <color name="reply">#8196FF</color>
+    <color name="vote">#BD5AA5</color>
+    <color name="praise">#5ABDA3</color>
+    <color name="check">#E41B45</color>
+    <color name="msg_user">#EDB94A</color>
+
+    <color name="test">#E6E6E6</color>
+    <color name="test2">#d0d0d0</color>
+    <color name="test3">#B758B8</color>
+</resources>

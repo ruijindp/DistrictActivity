@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/tool_bar_root" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="?android:listDivider"
+        android:orientation="vertical"
+        android:showDividers="middle">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:text="@string/chose_category_"
+                android:textSize="16sp" />
+
+            <FrameLayout
+                android:id="@+id/activity_filter_flCategory"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:padding="8dp">
+
+                <TextView
+                    android:id="@+id/activity_filter_tvCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:hint="@string/all"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="10dp"
+                    android:layout_gravity="right|center_vertical"
+                    android:src="@color/test" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:text="@string/chose_district_"
+                android:textSize="16sp" />
+
+            <FrameLayout
+                android:id="@+id/activity_filter_flDistrict"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:padding="8dp">
+
+                <TextView
+                    android:id="@+id/activity_filter_tvDistrict"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:hint="@string/all"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="10dp"
+                    android:layout_gravity="right|center_vertical"
+                    android:src="@color/test" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:text="@string/chose_school_"
+                android:textSize="16sp" />
+
+            <FrameLayout
+                android:id="@+id/activity_filter_flSchool"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:padding="8dp">
+
+                <TextView
+                    android:id="@+id/activity_filter_tvSchool"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:hint="@string/all"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="10dp"
+                    android:layout_gravity="right|center_vertical"
+                    android:src="@color/test" />
+            </FrameLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

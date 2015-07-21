@@ -1,0 +1,48 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion "23.0.0 rc2"
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+    }
+
+    defaultConfig {
+        applicationId "com.ljmob.districtactivity"
+        minSdkVersion 14
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets.main {
+        jniLibs.srcDir 'libs'
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile project(':lutil')
+    compile project(':firimupdate')
+    compile project(':richeditorfragment')
+    compile project(':qiniuupload')
+
+    compile 'com.android.support:appcompat-v7:22.2.0'
+    compile 'com.android.support:cardview-v7:22.2.0'
+    compile 'com.android.support:recyclerview-v7:22.2.0'
+    
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.4'
+    compile 'com.qiniu:qiniu-android-sdk:7.0.7'
+    compile 'jp.wasabeef:richeditor-android:0.1@aar'
+    compile 'de.hdodenhof:circleimageview:1.3.0'
+    compile 'com.jpardogo.materialtabstrip:library:1.1.0'
+}
