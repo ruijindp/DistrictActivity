@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <ScrollView
@@ -20,7 +21,7 @@
                 android:layout_height="336dp">
 
                 <ImageView
-                    android:id="@+id/activity_user_imgBg"
+                    android:id="@+id/activity_settings_imgBg"
                     android:layout_width="match_parent"
                     android:layout_height="336dp"
                     android:contentDescription="@string/default_content_description"
@@ -35,7 +36,7 @@
                     android:orientation="vertical">
 
                     <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/activity_user_imgHead"
+                        android:id="@+id/activity_settings_imgHead"
                         android:layout_width="152dp"
                         android:layout_height="152dp"
                         android:background="?selectableItemBackgroundBorderless"
@@ -55,7 +56,7 @@
             </FrameLayout>
 
             <TextView
-                android:id="@+id/activity_user_tvChangeName"
+                android:id="@+id/activity_settings_tvChangeName"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:layout_marginTop="12dp"
@@ -68,7 +69,7 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/activity_user_tvChangePassword"
+                android:id="@+id/activity_settings_tvChangePassword"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:background="?selectableItemBackground"
@@ -86,7 +87,7 @@
                 android:paddingLeft="24dp" />
 
             <FrameLayout
-                android:id="@+id/activity_user_lnPush"
+                android:id="@+id/activity_settings_lnPush"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:background="?selectableItemBackground"
@@ -103,7 +104,7 @@
                     android:textSize="16sp" />
 
                 <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/activity_user_swPush"
+                    android:id="@+id/activity_settings_swPush"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|center_vertical" />
@@ -112,7 +113,7 @@
     </ScrollView>
 
     <FrameLayout
-        android:id="@+id/activity_user_flLogout"
+        android:id="@+id/activity_settings_flLogout"
         android:layout_width="match_parent"
         android:layout_height="72dp"
         android:layout_gravity="bottom"

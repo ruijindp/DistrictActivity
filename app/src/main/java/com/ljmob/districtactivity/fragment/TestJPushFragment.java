@@ -20,7 +20,7 @@ import cn.jpush.android.api.JPushInterface;
  * Created by london on 15/7/15.
  * 推送
  */
-public class JPushFragment extends Fragment implements CompoundButton.OnCheckedChangeListener, PushMessageReceiver.PushMessageListener {
+public class TestJPushFragment extends Fragment implements CompoundButton.OnCheckedChangeListener, PushMessageReceiver.PushMessageListener {
     View rootView;
     TextView fragment_jpush_tvMessage;
     Switch fragment_jpush_swToggle;

@@ -21,6 +21,6 @@ public class Result extends LEntity {
     public boolean is_vote;
     public boolean is_praise;
     public boolean is_check;
-    public User user;
+    public Author author;
     public List<Item> items;
 }

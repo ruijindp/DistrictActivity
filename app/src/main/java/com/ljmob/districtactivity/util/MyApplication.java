@@ -4,6 +4,7 @@ import android.app.Application;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.google.gson.Gson;
 import com.ljmob.districtactivity.entity.User;
 import com.londonx.lutil.Lutil;
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
@@ -45,10 +46,14 @@ public class MyApplication extends Application {
                 .defaultDisplayImageOptions(imageOptions.build());
         ImageLoader.getInstance().init(builder.build());
 
-        JPushInterface.setDebugMode(false);
+        JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
-        JPushInterface.setAlias(this, "Nx9ny1C9DW82g5nyTYMG", null);
 
+        String userJson = Lutil.preferences.getString(Lutil.KEY_USER, "");
+        if (userJson != null && userJson.length() != 0) {
+            currentUser = new Gson().fromJson(userJson, User.class);
+            JPushInterface.setAlias(this, currentUser.token, null);
+        }
 //        BasicPushNotificationBuilder notificationBuilder = new BasicPushNotificationBuilder(this);
 //        notificationBuilder.statusBarDrawable = R.mipmap.ic_launcher;
 

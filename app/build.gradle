@@ -45,4 +45,5 @@ dependencies {
     compile 'jp.wasabeef:richeditor-android:0.1@aar'
     compile 'de.hdodenhof:circleimageview:1.3.0'
     compile 'com.jpardogo.materialtabstrip:library:1.1.0'
+    compile 'com.soundcloud.android:android-crop:1.0.0@aar'
 }

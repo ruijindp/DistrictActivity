@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <include layout="@layout/tool_bar_root" />
@@ -16,6 +17,7 @@
             android:id="@+id/activity_my_lv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:divider="@null"
             tools:listfooter="@layout/foot_more"
             tools:listitem="@layout/item_showcase" />
     </android.support.v4.widget.SwipeRefreshLayout>

@@ -15,7 +15,7 @@
         android:layout_height="24dp"
         android:layout_marginRight="12dp"
         android:layout_marginTop="4dp"
-        android:background="@drawable/shape_message_tag"
+        android:background="@drawable/shape_rect_reply"
         android:gravity="center"
         android:text="@string/tag_reply"
         android:textColor="@android:color/white" />
@@ -50,7 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:maxLines="7"
+                android:maxLength="7"
                 android:text="@string/test_title"
                 android:textColor="@color/blue"
                 android:textSize="18sp" />
@@ -74,6 +74,7 @@
             android:textSize="16sp" />
 
         <TextView
+            android:id="@+id/item_message_tvDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"

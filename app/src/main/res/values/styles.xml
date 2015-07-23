@@ -5,6 +5,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary0</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark0</item>
+        <item name="colorAccent">@color/colorPrimary0</item>
         <item name="colorControlNormal">@android:color/white</item>
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:textColor">@android:color/black</item>
@@ -35,4 +36,5 @@
         <item name="android:background">?selectableItemBackground</item>
         <item name="android:gravity">center_vertical</item>
     </style>
+
 </resources>

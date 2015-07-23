@@ -13,7 +13,7 @@ import com.ljmob.districtactivity.R;
  * Created by london on 15/7/16.
  * 主界面
  */
-public class MainFragment extends Fragment {
+public class TestMainFragment extends Fragment {
     View rootView;
 
     @Nullable

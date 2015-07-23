@@ -25,7 +25,7 @@ import java.util.HashMap;
 /**
  * Created by london on 15/6/2.
  * LRequestTool
- * Update in 2015-07-16 18:58:20
+ * Update in 2015-07-22 19:02:10
  */
 public class LRequestTool {
     private static HashMap<String, HttpURLConnection> lConnectionPool;
@@ -51,6 +51,11 @@ public class LRequestTool {
 
     public void doPut(final String strUrl, final HashMap<String, ?> urlParams, final int requestCode) {
         LRequest lRequest = new LRequest(strUrl, LRequest.METHOD_PUT, urlParams, requestCode);
+        lRequest.execute();
+    }
+
+    public void doDelete(final String strUrl, final HashMap<String, ?> urlParams, final int requestCode) {
+        LRequest lRequest = new LRequest(strUrl, LRequest.METHOD_DELETE, urlParams, requestCode);
         lRequest.execute();
     }
 
@@ -138,6 +143,7 @@ public class LRequestTool {
         public static final String METHOD_GET = "GET";
         public static final String METHOD_POST = "POST";
         public static final String METHOD_PUT = "PUT";
+        public static final String METHOD_DELETE = "DELETE";
 
         private static final int WHAT_DOWNLOAD_START = 1;
         private static final int WHAT_DOWNLOADING = 2;

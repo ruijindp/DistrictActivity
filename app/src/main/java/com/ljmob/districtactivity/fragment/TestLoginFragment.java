@@ -22,7 +22,7 @@ import java.util.HashMap;
  * Created by london on 15/7/9.
  * 登录界面
  */
-public class LoginFragment extends Fragment implements View.OnClickListener, LRequestTool.OnResponseListener {
+public class TestLoginFragment extends Fragment implements View.OnClickListener, LRequestTool.OnResponseListener {
     View rootView;
     EditText fragment_login_etUserName;
     EditText fragment_login_etPassword;
