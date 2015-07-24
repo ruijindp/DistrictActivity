@@ -1,5 +1,6 @@
 package com.ljmob.districtactivity.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,11 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.ljmob.districtactivity.DetailActivity;
 import com.ljmob.districtactivity.R;
 import com.ljmob.districtactivity.adapter.MainHeadPagerAdapter;
 import com.ljmob.districtactivity.adapter.ShowcaseAdapter;
@@ -33,9 +36,11 @@ import java.util.List;
  * Created by london on 15/7/17.
  * 作品展示
  */
-public class ShowcaseFragment extends Fragment implements LRequestTool.OnResponseListener, AbsListView.OnScrollListener, SwipeRefreshLayout.OnRefreshListener, MainHeadPagerAdapter.OnActivitySelectListener {
+public class ShowcaseFragment extends Fragment implements LRequestTool.OnResponseListener, AbsListView.OnScrollListener, SwipeRefreshLayout.OnRefreshListener, MainHeadPagerAdapter.OnActivitySelectListener, AdapterView.OnItemClickListener {
     private static final int API_SEARCH_RESULT = 1;
     private static final int API_ACTIVITY = 2;
+    public static boolean isResultChanged = false;
+
     View rootView;
     ViewPager headView;
     View footView;
@@ -63,6 +68,14 @@ public class ShowcaseFragment extends Fragment implements LRequestTool.OnRespons
         return rootView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (isResultChanged) {
+            refreshData();
+        }
+    }
+
     private void initView(LayoutInflater inflater) {
         fragment_showcase_lv = (ListView) rootView.findViewById(R.id.fragment_showcase_lv);
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
@@ -72,6 +85,7 @@ public class ShowcaseFragment extends Fragment implements LRequestTool.OnRespons
         fragment_showcase_lv.addHeaderView(headView);
         fragment_showcase_lv.addFooterView(footView);
         fragment_showcase_lv.setOnScrollListener(this);
+        fragment_showcase_lv.setOnItemClickListener(this);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimaryDark0);
         swipeRefreshLayout.setOnRefreshListener(this);
     }
@@ -125,8 +139,9 @@ public class ShowcaseFragment extends Fragment implements LRequestTool.OnRespons
                 }
                 if (currentPage == 1) {
                     results = appendResults;
+                }else {
+                    results.addAll(appendResults);
                 }
-                results.addAll(appendResults);
                 if (appendResults == null || appendResults.size() != 15) {
                     hasMore = false;
                     ((TextView) rootView.findViewById(R.id.foot_more_tv)).setText(R.string.no_more);
@@ -169,5 +184,16 @@ public class ShowcaseFragment extends Fragment implements LRequestTool.OnRespons
     @Override
     public void onActivitySelected(MainHeadPagerAdapter adapter, Activity activity) {
         ToastUtil.show(activity.id + "" + activity.name);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (isLoading) {
+            return;
+        }
+        Result result = results.get(position - 1);//-1 because of header view
+        Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
+        detailIntent.putExtra("result", result);
+        startActivity(detailIntent);
     }
 }

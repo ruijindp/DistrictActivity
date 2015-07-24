@@ -135,8 +135,9 @@ public class MessageActivity extends AppCompatActivity implements SwipeRefreshLa
                 }
                 if (currentPage == 1) {
                     messages = appendResults;
+                } else {
+                    messages.addAll(appendResults);
                 }
-                messages.addAll(appendResults);
                 if (appendResults == null || appendResults.size() != 15) {
                     hasMore = false;
                     ((TextView) foot_more.findViewById(R.id.foot_more_tv)).setText(R.string.no_more);

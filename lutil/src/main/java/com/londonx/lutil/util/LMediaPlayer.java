@@ -4,6 +4,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.SeekBar;
@@ -15,11 +16,12 @@ import java.util.TimerTask;
 /**
  * Created by london on 15/7/8.
  * 多媒体播放器
+ * Update at 2015-07-23 17:47:44
  */
 public class LMediaPlayer implements MediaPlayer.OnBufferingUpdateListener,
         MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener,
         Handler.Callback,
-        SurfaceHolder.Callback {
+        SurfaceHolder.Callback, SeekBar.OnSeekBarChangeListener {
     public MediaPlayer mediaPlayer;
     private SurfaceHolder surfaceHolder;
     private SeekBar skbProgress;
@@ -32,10 +34,12 @@ public class LMediaPlayer implements MediaPlayer.OnBufferingUpdateListener,
      */
     public LMediaPlayer(SurfaceView surfaceView, SeekBar skbProgress) {
         this.skbProgress = skbProgress;
+        skbProgress.setOnSeekBarChangeListener(this);
         if (surfaceView != null) {
             surfaceHolder = surfaceView.getHolder();
             surfaceHolder.addCallback(this);
         }
+        mediaPlayer = new MediaPlayer();
         Timer mTimer = new Timer();
         mTimer.schedule(mTimerTask, 0, 1000);
     }
@@ -69,13 +73,13 @@ public class LMediaPlayer implements MediaPlayer.OnBufferingUpdateListener,
     /**
      * online media url
      *
-     * @param videoUrl
+     * @param videoUrl media(video and mp3) url
      */
     public void playUrl(String videoUrl) {
         try {
             mediaPlayer.reset();
             mediaPlayer.setDataSource(videoUrl);
-            mediaPlayer.prepare();//prepare之后自动播放
+            mediaPlayer.prepareAsync();//prepare之后自动播放
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -106,7 +110,6 @@ public class LMediaPlayer implements MediaPlayer.OnBufferingUpdateListener,
     @Override
     public void surfaceCreated(SurfaceHolder arg0) {
         try {
-            mediaPlayer = new MediaPlayer();
             mediaPlayer.setDisplay(surfaceHolder);
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mediaPlayer.setOnBufferingUpdateListener(this);
@@ -148,9 +151,23 @@ public class LMediaPlayer implements MediaPlayer.OnBufferingUpdateListener,
         int duration = mediaPlayer.getDuration();
 
         if (duration > 0) {
-            long pos = skbProgress.getMax() * position / duration;
-            skbProgress.setProgress((int) pos);
+            skbProgress.setMax(duration);
+            skbProgress.setProgress(position);
         }
         return false;
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        mediaPlayer.seekTo(seekBar.getProgress());
+        Log.i("LondonX", "progress:" + seekBar.getProgress());
     }
 }

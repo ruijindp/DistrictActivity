@@ -1,5 +1,6 @@
 package com.ljmob.districtactivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -8,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -30,7 +32,7 @@ import java.util.List;
  * Created by london on 15/7/22.
  * 我的上传
  */
-public class MyUploadActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, LRequestTool.OnResponseListener, AbsListView.OnScrollListener {
+public class MyUploadActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, LRequestTool.OnResponseListener, AbsListView.OnScrollListener, AdapterView.OnItemClickListener {
     private static final int API_SEARCH_RESULT = 1;
 
     ListView activity_my_lv;
@@ -73,6 +75,7 @@ public class MyUploadActivity extends AppCompatActivity implements SwipeRefreshL
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimaryDark0);
         activity_my_lv.addFooterView(foot_more);
         activity_my_lv.setOnScrollListener(this);
+        activity_my_lv.setOnItemClickListener(this);
     }
 
     private void refreshData() {
@@ -129,8 +132,9 @@ public class MyUploadActivity extends AppCompatActivity implements SwipeRefreshL
                 }
                 if (currentPage == 1) {
                     results = appendResults;
+                }else {
+                    results.addAll(appendResults);
                 }
-                results.addAll(appendResults);
                 if (appendResults == null || appendResults.size() != 15) {
                     hasMore = false;
                     ((TextView) foot_more.findViewById(R.id.foot_more_tv)).setText(R.string.no_more);
@@ -164,5 +168,16 @@ public class MyUploadActivity extends AppCompatActivity implements SwipeRefreshL
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         isDivDPage = (firstVisibleItem + visibleItemCount == totalItemCount);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (isLoading){
+            return;
+        }
+        Result result = results.get(position);
+        Intent detailIntent = new Intent(this, DetailActivity.class);
+        detailIntent.putExtra("result", result);
+        startActivity(detailIntent);
     }
 }

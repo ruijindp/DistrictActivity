@@ -54,24 +54,27 @@ public class ShowcaseAdapter extends LAdapter {
                 if (item.file_url == null) {
                     continue;
                 }
-                if (!(item.file_url.endsWith(".jpg") || item.file_url.endsWith(".png"))) {
-                    continue;
+                if (item.file_url.endsWith(".jpg") || item.file_url.endsWith(".png")) {
+                    switch (previewCount) {
+                        case 0:
+                            imageLoader.displayImage(NetConst.ROOT_URL + item.file_url, holder.item_showcase_pic0);
+                            break;
+                        case 1:
+                            imageLoader.displayImage(NetConst.ROOT_URL + item.file_url, holder.item_showcase_pic1);
+                            break;
+                        case 2:
+                            imageLoader.displayImage(NetConst.ROOT_URL + item.file_url, holder.item_showcase_pic2);
+                            break;
+                    }
+                    previewCount++;
                 }
-                switch (previewCount) {
-                    case 0:
-                        imageLoader.displayImage(NetConst.ROOT_URL + item.file_url, holder.item_showcase_pic0);
-                        break;
-                    case 1:
-                        imageLoader.displayImage(NetConst.ROOT_URL + item.file_url, holder.item_showcase_pic1);
-                        break;
-                    case 2:
-                        imageLoader.displayImage(NetConst.ROOT_URL + item.file_url, holder.item_showcase_pic2);
-                        break;
-                }
-                previewCount++;
+
                 if (previewCount == 3) {
                     break;
                 }
+            }
+            if (previewCount > 0) {
+                holder.item_showcase_lnPictures.setVisibility(View.VISIBLE);
             }
             if (previewCount < 3) {
                 holder.item_showcase_pic2.setVisibility(View.INVISIBLE);

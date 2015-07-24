@@ -3,6 +3,7 @@ package com.ljmob.districtactivity.view;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -83,6 +84,7 @@ public class LoginDialog extends Dialog implements View.OnClickListener, LReques
                 HashMap<String, Object> params = new DefaultParams();
                 params.put("account_id", dialog_name_etUserName.getText().toString());
                 params.put("password", dialog_name_etPassword.getText().toString());
+                params.put("jpush_login", Build.VERSION.SDK_INT);
                 lRequestTool.doPost(NetConst.API_SIGN_IN, params, API_SIGN_IN);
                 isDoingLogin = true;
                 break;
