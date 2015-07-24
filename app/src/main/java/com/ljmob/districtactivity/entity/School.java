@@ -8,4 +8,5 @@ import com.londonx.lutil.entity.LEntity;
  */
 public class School extends LEntity {
     public String name;
+    public String district_name;
 }

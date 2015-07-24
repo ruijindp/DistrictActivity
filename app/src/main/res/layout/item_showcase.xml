@@ -12,55 +12,6 @@
         android:layout_marginRight="8dp"
         android:layout_marginTop="4dp"
         android:background="@color/card">
-        <!-- 公告-->
-        <LinearLayout
-            android:id="@+id/item_showcase_lnBroadcast"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp"
-            android:visibility="invisible">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginRight="6dp"
-                    android:contentDescription="@string/default_content_description"
-                    android:src="@color/test"
-                    android:tint="@color/broadcast" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/broadcast"
-                    android:textColor="@color/broadcast"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_margin="8dp"
-                android:background="@drawable/line_broadcast" />
-
-            <TextView
-                android:id="@+id/item_showcase_tvPreview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="12dp"
-                android:singleLine="true"
-                android:text="@string/test1"
-                android:textColor="@color/textColorContent"
-                android:textSize="16sp" />
-        </LinearLayout>
         <!-- 帖子-->
         <LinearLayout
             android:id="@+id/item_showcase_lnTopic"
@@ -146,6 +97,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:contentDescription="@string/default_content_description"
+                    android:scaleType="centerCrop"
                     android:src="@color/test" />
 
                 <ImageView
@@ -156,6 +108,7 @@
                     android:layout_marginRight="6dp"
                     android:layout_weight="1"
                     android:contentDescription="@string/default_content_description"
+                    android:scaleType="centerCrop"
                     android:src="@color/test" />
 
                 <ImageView
@@ -164,6 +117,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:contentDescription="@string/default_content_description"
+                    android:scaleType="centerCrop"
                     android:src="@color/test" />
             </LinearLayout>
 

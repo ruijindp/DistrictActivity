@@ -54,6 +54,9 @@
         <activity
             android:name=".DetailActivity"
             android:label="@string/activity_detail" />
+        <activity
+            android:name=".CategoryActivity"
+            android:label="@string/activity_category" />
 
         <!-- 图片裁剪-->
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />

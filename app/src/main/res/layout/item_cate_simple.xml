@@ -6,5 +6,6 @@
     android:gravity="center_vertical"
     android:orientation="vertical"
     android:paddingLeft="24dp"
+    android:paddingRight="24dp"
     android:text="@string/test_cate"
     android:textSize="14sp" />

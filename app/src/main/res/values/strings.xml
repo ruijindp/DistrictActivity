@@ -38,7 +38,7 @@
     <string name="to_your">对您的</string>
     <string name="praised">点了赞</string>
     <string name="praise_add">赞+1</string>
-    <string name="voted">投了一票</string>
+    <string name="voted">投票+1</string>
     <string name="had_voted">你已经投过一票了</string>
     <string name="had_praised">你已经赞过了</string>
     <string name="change_head">点击修改头像</string>
@@ -56,8 +56,14 @@
     <string name="user_">账号：</string>
     <string name="pass_">密码：</string>
     <string name="login_please">点击这里登录</string>
-    <string name="floor_">1楼 </string>
+    <string name="floor_">1楼</string>
     <string name="buffering">正在缓冲</string>
+
+    <string-array name="filter_method">
+        <item>全部作品</item>
+        <item>本校作品</item>
+        <item>本班作品</item>
+    </string-array>
 
     <string name="dialog_uploading">正在上传…</string>
 
@@ -73,6 +79,7 @@
     <string name="activity_message">消息</string>
     <string name="activity_joined">我参与的</string>
     <string name="activity_detail">作品详情</string>
+    <string name="activity_category">作品列表</string>
 
     <string name="tag_reply">评</string>
     <string name="tag_vote">票</string>

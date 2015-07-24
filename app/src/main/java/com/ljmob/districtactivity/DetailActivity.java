@@ -37,7 +37,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class DetailActivity extends AppCompatActivity implements View.OnClickListener, LoginDialog.LoginListener, LRequestTool.OnResponseListener {
     private static final int API_PRAISE = 1;
-    private static final int API_VOTE = 1;
+    private static final int API_VOTE = 2;
 
     ListView activity_detail_lvContent;
     TextView activity_detail_tvReply;
@@ -91,7 +91,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         }
         imageLoader.displayImage(NetConst.ROOT_URL + result.author.avatar, head_detail_imgHead);
         head_detail_tvAuthor.setText(result.author.name);
-        head_detail_tvFloorDate.setText(getString(R.string.floor_) + result.created_at);
+        head_detail_tvFloorDate.setText(getString(R.string.floor_) + " " + result.created_at);
         head_detail_tvTextContent.setText(result.items.size() == 0 ? result.description : result.items.get(0).content);
         head_detail_tvTitle.setText(result.title);
         foot_detail_tvPraise.setText(result.praise_count + "");
@@ -179,7 +179,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.foot_detail_lnPraise:
                 if (result.is_praise) {
-                    ToastUtil.show(R.string.had_voted);
+                    ToastUtil.show(R.string.had_praised);
                     return;
                 }
                 addPraiseCount();
@@ -242,6 +242,9 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         switch (response.requestCode) {
             case API_PRAISE:
                 ToastUtil.show(R.string.praise_add);
+                break;
+            case API_VOTE:
+                ToastUtil.show(R.string.voted);
                 break;
         }
     }

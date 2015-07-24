@@ -1,5 +1,6 @@
 package com.ljmob.districtactivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -8,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -15,6 +17,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.ljmob.districtactivity.adapter.JoinedResultAdapter;
 import com.ljmob.districtactivity.entity.MessageBox;
+import com.ljmob.districtactivity.entity.Result;
 import com.ljmob.districtactivity.net.NetConst;
 import com.ljmob.districtactivity.util.DefaultParams;
 import com.londonx.lutil.entity.LResponse;
@@ -29,7 +32,7 @@ import java.util.List;
  * Created by london on 15/7/22.
  * 我参与的
  */
-public class JoinedActivity extends AppCompatActivity implements LRequestTool.OnResponseListener, SwipeRefreshLayout.OnRefreshListener, AbsListView.OnScrollListener {
+public class JoinedActivity extends AppCompatActivity implements LRequestTool.OnResponseListener, SwipeRefreshLayout.OnRefreshListener, AbsListView.OnScrollListener, AdapterView.OnItemClickListener {
     private static final int API_MESSAGE = 1;
 
     ListView activity_join_lv;
@@ -70,6 +73,7 @@ public class JoinedActivity extends AppCompatActivity implements LRequestTool.On
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimaryDark0);
         activity_join_lv.addFooterView(foot_more);
         activity_join_lv.setOnScrollListener(this);
+        activity_join_lv.setOnItemClickListener(this);
     }
 
     private void refreshData() {
@@ -160,5 +164,14 @@ public class JoinedActivity extends AppCompatActivity implements LRequestTool.On
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         isDivDPage = (firstVisibleItem + visibleItemCount == totalItemCount);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        MessageBox messageBox = messages.get(position);
+        Result result = messageBox.activity_result;
+        Intent detailIntent = new Intent(this, DetailActivity.class);
+        detailIntent.putExtra("result", result);
+        startActivity(detailIntent);
     }
 }

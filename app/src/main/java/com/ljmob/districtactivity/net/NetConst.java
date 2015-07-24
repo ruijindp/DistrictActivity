@@ -14,6 +14,7 @@ public class NetConst {
     public static final String API_ACTIVITY = ROOT_URL + "/api/activities.json";
     public static final String API_DISTRICT = ROOT_URL + "/api/districts.json";
     public static final String API_SCHOOL = ROOT_URL + "/api/schools.json";
+    public static final String API_TEAM_CLASS = ROOT_URL + "/api/team_classes.json";
     public static final String API_GRADE = ROOT_URL + "/api/grades.json";
     public static final String API_PRAISE = ROOT_URL + "/api/praise.json";
     public static final String API_VOTE = ROOT_URL + "/api/vote.json";
@@ -22,4 +23,5 @@ public class NetConst {
     public static final String API_SEARCH_RESULT = ROOT_URL + "/api/search_results.json";
     public static final String API_SEARCH = ROOT_URL + "/api/search_results/search.json";
     public static final String API_MESSAGE = ROOT_URL + "/api/messages.json";
+    public static final String API_PUBLIC_NOTICES = ROOT_URL + "/api/public_notices.json";
 }

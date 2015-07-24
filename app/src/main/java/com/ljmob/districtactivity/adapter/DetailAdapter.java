@@ -30,10 +30,13 @@ public class DetailAdapter extends LAdapter {
 
     public DetailAdapter(List<? extends LEntity> lEntities) {
         super(lEntities);
-        lEntities.remove(0);
         players = new HashMap<>();
-        this.lEntities = lEntities;
         imageLoader = ImageLoader.getInstance();
+        if (lEntities.size() == 0) {
+            return;
+        }
+        lEntities.remove(0);
+        this.lEntities = lEntities;
     }
 
     @Override
@@ -64,10 +67,12 @@ public class DetailAdapter extends LAdapter {
                 lMediaPlayer = new LMediaPlayer(null, holder.item_media2_sb);
                 lMediaPlayer.playUrl(NetConst.ROOT_URL + item.file_url);
                 players.put(position, lMediaPlayer);
+                holder.item_media2_imgPlay.setOnClickListener(new PlayClickListener(lMediaPlayer));
             }
+//            lMediaPlayer.setSeekBar(holder.item_media2_sb);
             holder.item_media2_imgPlay.setImageResource(lMediaPlayer.mediaPlayer.isPlaying()
                     ? R.mipmap.icon_stop : R.mipmap.icon_start);
-            holder.item_media2_imgPlay.setOnClickListener(new PlayClickListener(lMediaPlayer));
+            ToastUtil.show(item.file_url);
         }
         return convertView;
     }
@@ -85,6 +90,8 @@ public class DetailAdapter extends LAdapter {
     private class PlayClickListener implements View.OnClickListener, MediaPlayer.OnPreparedListener {
         LMediaPlayer lMediaPlayer;
         boolean isPrepared = false;
+        boolean playWhenReady = false;
+        View v;
 
         public PlayClickListener(LMediaPlayer lMediaPlayer) {
             this.lMediaPlayer = lMediaPlayer;
@@ -93,7 +100,9 @@ public class DetailAdapter extends LAdapter {
 
         @Override
         public void onClick(View v) {
+            this.v = v;
             if (!isPrepared) {
+                playWhenReady = !playWhenReady;
                 ToastUtil.show(R.string.buffering);
                 return;
             }
@@ -109,6 +118,9 @@ public class DetailAdapter extends LAdapter {
         @Override
         public void onPrepared(MediaPlayer mp) {
             isPrepared = true;
+            if (playWhenReady) {
+                v.performClick();
+            }
         }
     }
 

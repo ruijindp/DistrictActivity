@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:baselineAligned="false"
-    android:orientation="horizontal"
-    android:paddingBottom="8dp"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingTop="8dp">
+    android:clickable="true"
+    android:orientation="horizontal">
 
     <FrameLayout
         android:id="@+id/head_filter_flLeft"
         android:layout_width="104dp"
         android:layout_height="32dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/shape_filter_left"
         android:clickable="true"
         android:elevation="2dp"
@@ -40,7 +40,10 @@
         android:id="@+id/head_filter_flRight"
         android:layout_width="0dp"
         android:layout_height="32dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
         android:layout_weight="1"
         android:background="@drawable/shape_filter_right"
         android:clickable="true"

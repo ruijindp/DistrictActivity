@@ -110,6 +110,13 @@ public class LoginDialog extends Dialog implements View.OnClickListener, LReques
                     ToastUtil.serverErr(response.responseCode);
                     return;
                 }
+                if (MyApplication.currentUser.token.contains("-")) {//jpush别名不可包含"-"
+                    HashMap<String, Object> params = new DefaultParams();
+                    params.put("jpush_out", 0);
+                    lRequestTool.doDelete(NetConst.API_SIGN_OUT, params, 0);
+                    dialog_name_tvLogin.performClick();
+                    return;
+                }
                 if (loginListener != null) {
                     loginListener.loginSuccess(this);
                 }

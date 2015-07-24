@@ -4,7 +4,6 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.SeekBar;
@@ -16,7 +15,7 @@ import java.util.TimerTask;
 /**
  * Created by london on 15/7/8.
  * 多媒体播放器
- * Update at 2015-07-23 17:47:44
+ * Update at 2015-07-24 17:26:11
  */
 public class LMediaPlayer implements MediaPlayer.OnBufferingUpdateListener,
         MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener,
@@ -33,8 +32,7 @@ public class LMediaPlayer implements MediaPlayer.OnBufferingUpdateListener,
      * @param skbProgress show play and buffering progress
      */
     public LMediaPlayer(SurfaceView surfaceView, SeekBar skbProgress) {
-        this.skbProgress = skbProgress;
-        skbProgress.setOnSeekBarChangeListener(this);
+        setSeekBar(skbProgress);
         if (surfaceView != null) {
             surfaceHolder = surfaceView.getHolder();
             surfaceHolder.addCallback(this);
@@ -42,6 +40,11 @@ public class LMediaPlayer implements MediaPlayer.OnBufferingUpdateListener,
         mediaPlayer = new MediaPlayer();
         Timer mTimer = new Timer();
         mTimer.schedule(mTimerTask, 0, 1000);
+    }
+
+    public void setSeekBar(SeekBar skbProgress) {
+        this.skbProgress = skbProgress;
+        skbProgress.setOnSeekBarChangeListener(this);
     }
 
     /**
@@ -168,6 +171,5 @@ public class LMediaPlayer implements MediaPlayer.OnBufferingUpdateListener,
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
         mediaPlayer.seekTo(seekBar.getProgress());
-        Log.i("LondonX", "progress:" + seekBar.getProgress());
     }
 }

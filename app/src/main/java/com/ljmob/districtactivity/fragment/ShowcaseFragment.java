@@ -16,11 +16,13 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.ljmob.districtactivity.CategoryActivity;
 import com.ljmob.districtactivity.DetailActivity;
 import com.ljmob.districtactivity.R;
 import com.ljmob.districtactivity.adapter.MainHeadPagerAdapter;
 import com.ljmob.districtactivity.adapter.ShowcaseAdapter;
 import com.ljmob.districtactivity.entity.Activity;
+import com.ljmob.districtactivity.entity.Notice;
 import com.ljmob.districtactivity.entity.Result;
 import com.ljmob.districtactivity.net.NetConst;
 import com.ljmob.districtactivity.util.DefaultParams;
@@ -36,16 +38,21 @@ import java.util.List;
  * Created by london on 15/7/17.
  * 作品展示
  */
-public class ShowcaseFragment extends Fragment implements LRequestTool.OnResponseListener, AbsListView.OnScrollListener, SwipeRefreshLayout.OnRefreshListener, MainHeadPagerAdapter.OnActivitySelectListener, AdapterView.OnItemClickListener {
+public class ShowcaseFragment extends Fragment implements LRequestTool.OnResponseListener, AbsListView.OnScrollListener, SwipeRefreshLayout.OnRefreshListener, MainHeadPagerAdapter.OnActivitySelectListener, AdapterView.OnItemClickListener, View.OnClickListener {
     private static final int API_SEARCH_RESULT = 1;
     private static final int API_ACTIVITY = 2;
+    private static final int API_PUBLIC_NOTICES = 3;
     public static boolean isResultChanged = false;
 
     View rootView;
-    ViewPager headView;
+    View headView;
     View footView;
     ListView fragment_showcase_lv;
     SwipeRefreshLayout swipeRefreshLayout;
+    ViewPager head_showcase_pager;
+    View head_showcase_lnBroadcast;
+    View head_showcase_cardBroadcast;
+    TextView head_showcase_tvPreview;
     LRequestTool lRequestTool;
     List<Result> results;
     ShowcaseAdapter showcaseAdapter;
@@ -73,14 +80,17 @@ public class ShowcaseFragment extends Fragment implements LRequestTool.OnRespons
         super.onResume();
         if (isResultChanged) {
             refreshData();
+            isResultChanged = false;
         }
     }
 
     private void initView(LayoutInflater inflater) {
         fragment_showcase_lv = (ListView) rootView.findViewById(R.id.fragment_showcase_lv);
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
-        headView = (ViewPager) inflater.inflate(R.layout.head_showcase, fragment_showcase_lv, false);
+        headView = inflater.inflate(R.layout.head_showcase, fragment_showcase_lv, false);
         footView = inflater.inflate(R.layout.foot_more, fragment_showcase_lv, false);
+
+        initVIewInHead();
 
         fragment_showcase_lv.addHeaderView(headView);
         fragment_showcase_lv.addFooterView(footView);
@@ -88,6 +98,15 @@ public class ShowcaseFragment extends Fragment implements LRequestTool.OnRespons
         fragment_showcase_lv.setOnItemClickListener(this);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimaryDark0);
         swipeRefreshLayout.setOnRefreshListener(this);
+    }
+
+    private void initVIewInHead() {
+        head_showcase_pager = (ViewPager) headView.findViewById(R.id.head_showcase_pager);
+        head_showcase_lnBroadcast = headView.findViewById(R.id.head_showcase_lnBroadcast);
+        head_showcase_cardBroadcast = headView.findViewById(R.id.head_showcase_cardBroadcast);
+        head_showcase_tvPreview = (TextView) headView.findViewById(R.id.head_showcase_tvPreview);
+
+        head_showcase_lnBroadcast.setOnClickListener(this);
     }
 
     private void refreshData() {
@@ -100,7 +119,12 @@ public class ShowcaseFragment extends Fragment implements LRequestTool.OnRespons
             }
         });
         loadActivities();
+        loadBroadcast();
         loadPage(currentPage);
+    }
+
+    private void loadBroadcast() {
+        lRequestTool.doGet(NetConst.API_PUBLIC_NOTICES, new DefaultParams(), API_PUBLIC_NOTICES);
     }
 
     private void loadActivities() {
@@ -113,6 +137,7 @@ public class ShowcaseFragment extends Fragment implements LRequestTool.OnRespons
         isLoading = true;
         HashMap<String, Object> params = new DefaultParams();
         params.put("page", page);
+        params.put("activity", 0);
         lRequestTool.doGet(NetConst.API_SEARCH_RESULT, params, API_SEARCH_RESULT);
     }
 
@@ -126,10 +151,20 @@ public class ShowcaseFragment extends Fragment implements LRequestTool.OnRespons
         }
         final Gson gson = new Gson();
         switch (response.requestCode) {
+            case API_PUBLIC_NOTICES:
+                List<Notice> notices = gson.fromJson(response.body, new TypeToken<List<Notice>>() {
+                }.getType());
+                if (notices.size() == 0) {
+                    head_showcase_cardBroadcast.setVisibility(View.GONE);
+                } else {
+                    head_showcase_cardBroadcast.setVisibility(View.VISIBLE);
+                    head_showcase_tvPreview.setText(notices.get(0).description);
+                }
+                break;
             case API_ACTIVITY://Head data
                 List<Activity> activities = gson.fromJson(response.body, new TypeToken<List<Activity>>() {
                 }.getType());
-                headView.setAdapter(new MainHeadPagerAdapter(activities, this));
+                head_showcase_pager.setAdapter(new MainHeadPagerAdapter(activities, this));
                 break;
             case API_SEARCH_RESULT:
                 List<Result> appendResults = gson.fromJson(response.body, new TypeToken<List<Result>>() {
@@ -139,7 +174,7 @@ public class ShowcaseFragment extends Fragment implements LRequestTool.OnRespons
                 }
                 if (currentPage == 1) {
                     results = appendResults;
-                }else {
+                } else {
                     results.addAll(appendResults);
                 }
                 if (appendResults == null || appendResults.size() != 15) {
@@ -184,6 +219,9 @@ public class ShowcaseFragment extends Fragment implements LRequestTool.OnRespons
     @Override
     public void onActivitySelected(MainHeadPagerAdapter adapter, Activity activity) {
         ToastUtil.show(activity.id + "" + activity.name);
+        Intent cateIntent = new Intent(getActivity(), CategoryActivity.class);
+        cateIntent.putExtra("activity", activity);
+        startActivity(cateIntent);
     }
 
     @Override
@@ -195,5 +233,14 @@ public class ShowcaseFragment extends Fragment implements LRequestTool.OnRespons
         Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
         detailIntent.putExtra("result", result);
         startActivity(detailIntent);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.head_showcase_lnBroadcast:
+                //TODO goto broadcast
+                break;
+        }
     }
 }

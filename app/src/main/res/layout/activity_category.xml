@@ -17,6 +17,7 @@
             android:id="@+id/activity_category_lv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:divider="@null"
             tools:listfooter="@layout/foot_more"
             tools:listheader="@layout/head_filter"
             tools:listitem="@layout/item_showcase" />

@@ -39,7 +39,6 @@ public class JoinedResultAdapter extends LAdapter {
         }
         MessageBox result = (MessageBox) lEntities.get(position);
         ViewHolder holder = (ViewHolder) convertView.getTag();
-        holder.item_showcase_lnBroadcast.setVisibility(View.INVISIBLE);
         holder.item_showcase_tvTitle.setText(result.activity_result.title);
         holder.item_showcase_tvDescription.setText(result.activity_result.description);
         holder.item_showcase_tvUser.setText(result.activity_result.author.name + " "
@@ -96,24 +95,28 @@ public class JoinedResultAdapter extends LAdapter {
                     break;
                 }
             }
-            if (previewCount < 3) {
-                holder.item_showcase_pic2.setVisibility(View.INVISIBLE);
-                if (previewCount < 2) {
-                    holder.item_showcase_pic1.setVisibility(View.INVISIBLE);
-                    if (previewCount < 1) {
-                        holder.item_showcase_lnPictures.setVisibility(View.GONE);
+            if (previewCount > 0) {
+                holder.item_showcase_lnPictures.setVisibility(View.VISIBLE);
+                holder.item_showcase_pic0.setVisibility(View.VISIBLE);
+                if (previewCount > 1) {
+                    holder.item_showcase_pic1.setVisibility(View.VISIBLE);
+                    if (previewCount > 2) {
+                        holder.item_showcase_pic2.setVisibility(View.VISIBLE);
+                    } else {
+                        holder.item_showcase_pic2.setVisibility(View.INVISIBLE);
                     }
+                } else {
+                    holder.item_showcase_pic1.setVisibility(View.INVISIBLE);
+                    holder.item_showcase_pic2.setVisibility(View.INVISIBLE);
                 }
+            } else {
+                holder.item_showcase_lnPictures.setVisibility(View.GONE);
             }
         }
         return convertView;
     }
 
     public class ViewHolder {
-        //广播
-        public final TextView item_showcase_tvPreview;
-        public final LinearLayout item_showcase_lnBroadcast;
-
         //内容
         public final TextView item_showcase_tvTitle;
         public final TextView item_showcase_tvDescription;
@@ -128,8 +131,6 @@ public class JoinedResultAdapter extends LAdapter {
         public final View root;
 
         public ViewHolder(View root) {
-            item_showcase_tvPreview = (TextView) root.findViewById(R.id.item_showcase_tvPreview);
-            item_showcase_lnBroadcast = (LinearLayout) root.findViewById(R.id.item_showcase_lnBroadcast);
             item_showcase_tvTitle = (TextView) root.findViewById(R.id.item_showcase_tvTitle);
             item_showcase_tvDescription = (TextView) root.findViewById(R.id.item_showcase_tvDescription);
             item_showcase_pic0 = (ImageView) root.findViewById(R.id.item_showcase_pic0);
