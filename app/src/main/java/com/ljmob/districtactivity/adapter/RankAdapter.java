@@ -43,7 +43,7 @@ public class RankAdapter extends LAdapter {
         }
         Result result = (Result) lEntities.get(position);
         ViewHolder holder = (ViewHolder) convertView.getTag();
-        holder.itemRankTvRank.setText(position + "");
+        holder.itemRankTvRank.setText((position + 1) + "");
         holder.itemRankTvVote.setText(result.vote_count + "");
         holder.itemRankTvTitle.setText(result.title + "");
         holder.itemRankTvName.setText(result.author.name + "");
