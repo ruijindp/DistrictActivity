@@ -125,7 +125,7 @@ public class RankFragment extends Fragment implements AbsListView.OnScrollListen
         if (isLoading) {
             return;
         }
-        Result result = results.get(position - 1);//-1 because of header view
+        Result result = results.get(position);
         Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
         detailIntent.putExtra("result", result);
         startActivity(detailIntent);
