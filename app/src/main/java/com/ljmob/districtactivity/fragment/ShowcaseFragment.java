@@ -26,7 +26,6 @@ import com.ljmob.districtactivity.entity.Notice;
 import com.ljmob.districtactivity.entity.Result;
 import com.ljmob.districtactivity.net.NetConst;
 import com.ljmob.districtactivity.util.DefaultParams;
-import com.ljmob.lemoji.LEmoji;
 import com.londonx.lutil.entity.LResponse;
 import com.londonx.lutil.util.LRequestTool;
 import com.londonx.lutil.util.ToastUtil;
@@ -92,7 +91,7 @@ public class ShowcaseFragment extends Fragment implements LRequestTool.OnRespons
         headView = inflater.inflate(R.layout.head_showcase, fragment_showcase_lv, false);
         footView = inflater.inflate(R.layout.foot_more, fragment_showcase_lv, false);
 
-        initVIewInHead();
+        initViewInHead();
 
         fragment_showcase_lv.addHeaderView(headView);
         fragment_showcase_lv.addFooterView(footView);
@@ -102,7 +101,7 @@ public class ShowcaseFragment extends Fragment implements LRequestTool.OnRespons
         swipeRefreshLayout.setOnRefreshListener(this);
     }
 
-    private void initVIewInHead() {
+    private void initViewInHead() {
         head_showcase_pager = (ViewPager) headView.findViewById(R.id.head_showcase_pager);
         head_showcase_lnBroadcast = headView.findViewById(R.id.head_showcase_lnBroadcast);
         head_showcase_cardBroadcast = headView.findViewById(R.id.head_showcase_cardBroadcast);

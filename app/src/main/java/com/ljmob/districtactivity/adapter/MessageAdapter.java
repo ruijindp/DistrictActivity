@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.ljmob.districtactivity.R;
 import com.ljmob.districtactivity.entity.MessageBox;
+import com.ljmob.lemoji.LEmoji;
 import com.londonx.lutil.adapter.LAdapter;
 import com.londonx.lutil.entity.LEntity;
 
@@ -61,7 +62,7 @@ public class MessageAdapter extends LAdapter {
                 holder.item_message_tvActionDesc.setVisibility(View.GONE);
                 holder.item_message_tvPreview.setVisibility(View.VISIBLE);
                 holder.item_message_tvTag.setBackgroundResource(R.drawable.shape_rect_reply);
-                holder.item_message_tvPreview.setText(messageBox.comment_description);
+                holder.item_message_tvPreview.setText(LEmoji.simplify(messageBox.comment_description));
                 break;
         }
         holder.item_message_tvUser.setText(messageBox.sender);

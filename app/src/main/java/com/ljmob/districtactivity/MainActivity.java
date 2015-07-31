@@ -90,6 +90,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initView();
         initFragment(Page.showcase);
         fetchMessage();
+        if (MyApplication.currentUser != null) {
+            JPushInterface.setAlias(this, MyApplication.currentUser.token, null);
+        }
         if (getIntent().getBooleanExtra("message", false) &&
                 MyApplication.currentUser != null) {
             startActivity(new Intent(this, MessageActivity.class));
@@ -113,6 +116,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         postMenuItem = menu.findItem(R.id.action_make_post);
+        if (MyApplication.currentUser != null && MyApplication.currentUser.roles.equals("teacher")) {
+            postMenuItem.setVisible(false);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -258,9 +264,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void loginSuccess(LoginDialog dialog) {
-//        if (MyApplication.currentUser != null) {
-//            restartActivity();
-//        }
+        if (MyApplication.currentUser != null &&
+                MyApplication.currentUser.roles.equals("teacher")) {//老师不能发帖
+            postMenuItem.setVisible(false);
+        } else {
+            postMenuItem.setVisible(true);
+        }
     }
 
     private void restartActivity() {
@@ -281,6 +290,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 imageLoader.displayImage(NetConst.ROOT_URL +
                         MyApplication.currentUser.user_avatar, activity_main_imgHead);
                 activity_main_tvUserName.setText(MyApplication.currentUser.user_name);
+                if (MyApplication.currentUser.roles.equals("teacher")) {//老师不能发帖
+                    activity_main_lnUpload.setVisibility(View.GONE);
+                    activity_main_tvMyUpload.setText(R.string.activity_myUpload_teacher);
+                } else {
+                    activity_main_lnUpload.setVisibility(View.VISIBLE);
+                    activity_main_tvMyUpload.setText(R.string.activity_myUpload);
+                }
             }
         }
     }
@@ -305,6 +321,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onPageSelected(int position) {
+        if (MyApplication.currentUser != null
+                && MyApplication.currentUser.roles.equals("teacher")) {// 老师不能发帖
+            postMenuItem.setVisible(false);
+            return;
+        }
         if (position == 0) {
             postMenuItem.setVisible(true);
         } else {

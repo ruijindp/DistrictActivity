@@ -111,7 +111,13 @@ public class SearchActivity extends AppCompatActivity implements
 
 
     private void loadPage(int page) {
-        if (keyWord.equals("?")) {
+        if (keyWord == null || keyWord.length() == 0 || keyWord.equals("?")) {
+            swipeRefreshLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            });
             return;
         }
         isLoading = true;

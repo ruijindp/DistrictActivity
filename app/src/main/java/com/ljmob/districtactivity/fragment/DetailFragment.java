@@ -116,7 +116,12 @@ public class DetailFragment extends Fragment implements View.OnClickListener, LR
         head_detail_tvAuthor.setText(result.author.name);
         head_detail_tvFloorDate.setText("1" + getString(R.string.floor_) + " " + result.created_at);
         String content = result.items.size() == 0 ? result.description : result.items.get(0).content;
-        head_detail_tvTextContent.setText(LEmoji.translate(content));
+        if (content.length() == 0) {
+            head_detail_tvTextContent.setVisibility(View.GONE);
+        } else {
+            head_detail_tvTextContent.setVisibility(View.VISIBLE);
+            head_detail_tvTextContent.setText(LEmoji.translate(content));
+        }
         head_detail_tvTitle.setText(result.title);
         foot_detail_tvPraise.setText(result.praise_count + "");
 

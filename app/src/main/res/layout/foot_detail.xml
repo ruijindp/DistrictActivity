@@ -16,8 +16,8 @@
         android:padding="8dp">
 
         <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:contentDescription="@string/default_content_description"
             android:src="@mipmap/icon_dianzan" />
 
@@ -25,7 +25,7 @@
             android:id="@+id/foot_detail_tvPraise"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
+            android:layout_marginLeft="12dp"
             android:layout_marginTop="4dp"
             android:text="@string/test_number"
             android:textColor="@color/textColorSecondary"

@@ -3,8 +3,10 @@ package com.ljmob.districtactivity.util;
 import android.app.Application;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 
 import com.google.gson.Gson;
+import com.ljmob.districtactivity.R;
 import com.ljmob.districtactivity.entity.User;
 import com.londonx.lutil.Lutil;
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
@@ -13,6 +15,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 
+import cn.jpush.android.api.BasicPushNotificationBuilder;
 import cn.jpush.android.api.JPushInterface;
 import cn.sharesdk.framework.ShareSDK;
 
@@ -51,21 +54,23 @@ public class MyApplication extends Application {
         JPushInterface.init(this);
 
         String userJson = Lutil.preferences.getString(Lutil.KEY_USER, "");
-        if (userJson != null && userJson.length() != 0) {
+        if (userJson.length() != 0) {
             currentUser = new Gson().fromJson(userJson, User.class);
-            JPushInterface.setAlias(this, currentUser.token, null);
+        } else {
+            JPushInterface.setAlias(this, "visitor", null);
+        }
+        if (Build.VERSION.SDK_INT>21) {//android 5.0以上才需要自定义通知栏
+            BasicPushNotificationBuilder notificationBuilder = new BasicPushNotificationBuilder(this);
+            notificationBuilder.statusBarDrawable = R.mipmap.icon_xiaoxi;
+            JPushInterface.setDefaultPushNotificationBuilder(notificationBuilder);
         }
         ShareSDK.initSDK(this);
-//        BasicPushNotificationBuilder notificationBuilder = new BasicPushNotificationBuilder(this);
-//        notificationBuilder.statusBarDrawable = R.mipmap.ic_launcher;
 
 //        this.layout = var2;
 //        this.layoutIconId = var3;
 //        this.layoutTitleId = var4;
 //        this.layoutContentId = var5;
 //        CustomPushNotificationBuilder notificationBuilder=new CustomPushNotificationBuilder(this,0,0,0,0);
-
-//        JPushInterface.setDefaultPushNotificationBuilder(notificationBuilder);
     }
 
     @Override

@@ -9,6 +9,7 @@
         android:id="@+id/fragment_rank_lv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:divider="@null"
         android:orientation="vertical"
         tools:listfooter="@layout/foot_more"
         tools:listitem="@layout/item_rank" />
