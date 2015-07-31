@@ -245,6 +245,17 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 new ShareTool(this, new QQ(this), shareable).share();
                 shareDialog.dismiss();
                 return;
+            case R.id.activity_detail_btnVote:
+                ToastUtil.show(R.string.cannot_vote);
+//                if (result.is_vote) {
+//                    ToastUtil.show(R.string.had_voted);
+//                    return;
+//                }
+//                addVoteCount();
+//                HashMap<String, Object> voteParams = new DefaultParams();
+//                voteParams.put("activity_result_id", result.id);
+//                lRequestTool.doPost(NetConst.API_VOTE, voteParams, API_VOTE);
+                return;
         }
         if (MyApplication.currentUser == null) {
             showLoginDialog();
@@ -293,16 +304,6 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 lRequestTool.doPost(NetConst.API_COMMENT, commentParams, API_COMMENT);
                 onBackPressed();//hide lnReply
                 hideKeyBoard();
-                break;
-            case R.id.activity_detail_btnVote:
-                if (result.is_vote) {
-                    ToastUtil.show(R.string.had_voted);
-                    return;
-                }
-                addVoteCount();
-                HashMap<String, Object> voteParams = new DefaultParams();
-                voteParams.put("activity_result_id", result.id);
-                lRequestTool.doPost(NetConst.API_VOTE, voteParams, API_VOTE);
                 break;
         }
     }

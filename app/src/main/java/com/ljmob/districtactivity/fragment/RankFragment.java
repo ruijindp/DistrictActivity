@@ -22,7 +22,7 @@ public class RankFragment extends Fragment {
         if (rootView != null) {
             return rootView;
         }
-        rootView = inflater.inflate(R.layout.fragment_rank, container, false);
+        rootView = inflater.inflate(R.layout.fragment_undone, container, false);
         return rootView;
     }
 }

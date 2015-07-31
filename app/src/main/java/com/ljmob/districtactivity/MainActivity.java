@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -18,6 +19,8 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.Theme;
 import com.astuetz.PagerSlidingTabStrip;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -28,6 +31,8 @@ import com.ljmob.districtactivity.net.NetConst;
 import com.ljmob.districtactivity.util.DefaultParams;
 import com.ljmob.districtactivity.util.MyApplication;
 import com.ljmob.districtactivity.view.LoginDialog;
+import com.ljmob.firimupdate.FirimUpdate;
+import com.ljmob.firimupdate.entity.Update;
 import com.londonx.lutil.Lutil;
 import com.londonx.lutil.entity.LResponse;
 import com.londonx.lutil.util.LRequestTool;
@@ -40,9 +45,9 @@ import cn.jpush.android.api.JPushInterface;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, LoginDialog.LoginListener, DrawerLayout.DrawerListener, ViewPager.OnPageChangeListener, LRequestTool.OnResponseListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, LoginDialog.LoginListener, DrawerLayout.DrawerListener, ViewPager.OnPageChangeListener, LRequestTool.OnResponseListener, FirimUpdate.OnUpdateListener {
     //firim token:e9400a3620552593c1851beecb8431a0
-    //firim appId:
+    //firim appId:55bb0e50692d65612d00000c
     private static final int API_MESSAGE = 1;
     public static boolean isOnFront;
 
@@ -92,6 +97,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 finish();
             }
         }
+        FirimUpdate firimUpdate = new FirimUpdate();
+        firimUpdate.check(this, "55bb0e50692d65612d00000c", "e9400a3620552593c1851beecb8431a0");
+        firimUpdate.setOnUpdateListener(this);
     }
 
     private void fetchMessage() {
@@ -328,6 +336,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
         }
+    }
+
+    @Override
+    public void onUpdateFound(final Update newUpdate) {
+        MaterialDialog updateDialog = new MaterialDialog.Builder(this)
+                .title(R.string.new_update)
+                .theme(Theme.LIGHT)
+                .content(newUpdate.changelog.length() == 0 ? getString(R.string.update_now) :
+                        (newUpdate.changelog + "\n" + getString(R.string.update_now)))
+                .positiveText(android.R.string.ok)
+                .negativeText(android.R.string.cancel)
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        super.onPositive(dialog);
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_VIEW);
+                        Uri content_url = Uri.parse(newUpdate.installUrl);
+                        intent.setData(content_url);
+                        startActivity(intent);
+                    }
+                })
+                .build();
+        updateDialog.show();
     }
 
     private class MainBroadcastReceiver extends BroadcastReceiver {
