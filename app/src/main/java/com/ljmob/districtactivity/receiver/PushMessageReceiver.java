@@ -21,8 +21,12 @@ public class PushMessageReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals(JPushInterface.ACTION_NOTIFICATION_OPENED)) {
+            if (MainActivity.isOnFront) {
+                return;
+            }
             Intent mainIntent = new Intent(context, MainActivity.class);
             mainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mainIntent.putExtra("message", true);
             context.startActivity(mainIntent);
             return;
         }

@@ -31,9 +31,10 @@
         <ImageView
             android:layout_width="12dp"
             android:layout_height="10dp"
+            android:tint="@android:color/white"
             android:layout_gravity="right|center_vertical"
             android:contentDescription="@string/default_content_description"
-            android:src="@color/test" />
+            android:src="@mipmap/icon_drop_down" />
     </FrameLayout>
 
     <FrameLayout
@@ -62,8 +63,9 @@
         <ImageView
             android:layout_width="12dp"
             android:layout_height="10dp"
+            android:tint="?colorPrimary"
             android:layout_gravity="right|center_vertical"
             android:contentDescription="@string/default_content_description"
-            android:src="@color/test" />
+            android:src="@mipmap/icon_drop_down" />
     </FrameLayout>
 </LinearLayout>

@@ -102,8 +102,9 @@ public class CategoryActivity extends AppCompatActivity implements
         String[] allMethod = getResources().getStringArray(R.array.filter_method);
         if (MyApplication.currentUser == null) {
             filterMethod.add(allMethod[0]);//未登录只能按学校排
+        } else {
+            Collections.addAll(filterMethod, allMethod);
         }
-        Collections.addAll(filterMethod, allMethod);
         popup.setSimpleStringListener(this);
         initViewInHead();
 
@@ -161,12 +162,14 @@ public class CategoryActivity extends AppCompatActivity implements
                 loadAllClassOfSchool(teamClass.school.id);
             }
         }
-        loadPage(schoolId, classId, currentPage);
+        loadPage(currentPage);
     }
 
     private void loadAllClassOfSchool(int mySchoolId) {
         HashMap<String, Object> params = new DefaultParams();
-        params.put("school_id", mySchoolId);
+        if (mySchoolId != 0) {
+            params.put("school_id", mySchoolId);
+        }
         lRequestTool.doGet(NetConst.API_TEAM_CLASS, params, API_TEAM_CLASS);
     }
 
@@ -175,7 +178,7 @@ public class CategoryActivity extends AppCompatActivity implements
     }
 
 
-    private void loadPage(int schoolId, int classId, int page) {
+    private void loadPage(int page) {
         isLoading = true;
         HashMap<String, Object> params = new DefaultParams();
         if (schoolId != 0) {//优先按学校排
@@ -184,15 +187,15 @@ public class CategoryActivity extends AppCompatActivity implements
             params.put("team_class_id", classId);
         }
         params.put("page", page);
-        params.put("activity", selectedActivity.id);
+        params.put((schoolId == 0 && classId == 0) ? "activity" : "activity_id", selectedActivity.id);
         lRequestTool.doGet(NetConst.API_SEARCH_RESULT, params, API_SEARCH_RESULT);
     }
 
     @Override
     public void onResponse(LResponse response) {
-        swipeRefreshLayout.setRefreshing(false);
         isLoading = false;
         if (response.responseCode != 200) {
+            swipeRefreshLayout.setRefreshing(false);
             ToastUtil.serverErr(response.responseCode);
             return;
         }
@@ -222,6 +225,7 @@ public class CategoryActivity extends AppCompatActivity implements
                 }
                 break;
             case API_SEARCH_RESULT:
+                swipeRefreshLayout.setRefreshing(false);
                 List<Result> appendResults = gson.fromJson(response.body, new TypeToken<List<Result>>() {
                 }.getType());
                 if (results == null) {
@@ -258,7 +262,7 @@ public class CategoryActivity extends AppCompatActivity implements
         if (isDivDPage && hasMore) {
             isDivDPage = false;
             currentPage++;
-            loadPage(schoolId, classId, currentPage);
+            loadPage(currentPage);
         }
     }
 
@@ -296,7 +300,9 @@ public class CategoryActivity extends AppCompatActivity implements
                 finish();
                 break;
             case R.id.action_search:
-                //TODO
+                Intent searchIntent = new Intent(this, SearchActivity.class);
+                searchIntent.putExtra("activity", selectedActivity);
+                startActivity(searchIntent);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -339,16 +345,26 @@ public class CategoryActivity extends AppCompatActivity implements
                 schoolId = 0;
                 classId = 0;
                 switch (index) {
-                    case 0:
+                    case 0://全部作品
                         head_filter_flRight.setVisibility(View.VISIBLE);
                         break;
-                    case 1:
+                    case 1://本校
                         head_filter_flRight.setVisibility(View.VISIBLE);
-                        schoolId = 0;
+                        if (MyApplication.currentUser == null) {
+                            ToastUtil.show(R.string.not_login);
+                            schoolId = 0;
+                        } else {
+                            schoolId = MyApplication.currentUser.team_class.get(0).school.id;
+                        }
                         break;
-                    case 2://本班查询
-                        head_filter_flRight.setVisibility(View.INVISIBLE);
-                        classId = 0;
+                    case 2://本班
+                        if (MyApplication.currentUser == null) {
+                            ToastUtil.show(R.string.not_login);
+                            schoolId = 0;
+                        } else {
+                            head_filter_flRight.setVisibility(View.INVISIBLE);
+                            classId = MyApplication.currentUser.team_class.get(0).id;
+                        }
                         break;
                 }
                 refreshData();

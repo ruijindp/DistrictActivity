@@ -25,7 +25,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="336dp"
                     android:contentDescription="@string/default_content_description"
-                    android:src="@color/test" />
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/bg_bg" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"

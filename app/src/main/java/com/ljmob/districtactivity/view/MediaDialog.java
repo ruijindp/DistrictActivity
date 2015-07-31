@@ -44,7 +44,7 @@ public class MediaDialog extends Dialog implements View.OnClickListener {
                 onTypeSelectListener.onTypeSelect(Type.picture);
                 break;
             case R.id.dialog_media_tvRecorder:
-                onTypeSelectListener.onTypeSelect(Type.recorder);
+                onTypeSelectListener.onTypeSelect(Type.audio);
                 break;
             case R.id.dialog_media_tvVideo:
                 onTypeSelectListener.onTypeSelect(Type.video);
@@ -62,6 +62,6 @@ public class MediaDialog extends Dialog implements View.OnClickListener {
     }
 
     public enum Type {
-        picture, recorder, video
+        picture, audio, video
     }
 }

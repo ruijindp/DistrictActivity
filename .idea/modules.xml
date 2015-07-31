@@ -5,8 +5,10 @@
       <module fileurl="file://$PROJECT_DIR$/DistrictActivity.iml" filepath="$PROJECT_DIR$/DistrictActivity.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/firimupdate/firimupdate.iml" filepath="$PROJECT_DIR$/firimupdate/firimupdate.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lemoji/lemoji.iml" filepath="$PROJECT_DIR$/lemoji/lemoji.iml" />
       <module fileurl="file://$PROJECT_DIR$/lutil/lutil.iml" filepath="$PROJECT_DIR$/lutil/lutil.iml" />
       <module fileurl="file://$PROJECT_DIR$/qiniuupload/qiniuupload.iml" filepath="$PROJECT_DIR$/qiniuupload/qiniuupload.iml" />
+      <module fileurl="file://$PROJECT_DIR$/quicksharesdk/quicksharesdk.iml" filepath="$PROJECT_DIR$/quicksharesdk/quicksharesdk.iml" />
       <module fileurl="file://$PROJECT_DIR$/richeditorfragment/richeditorfragment.iml" filepath="$PROJECT_DIR$/richeditorfragment/richeditorfragment.iml" />
     </modules>
   </component>

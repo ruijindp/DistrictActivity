@@ -11,6 +11,7 @@ import com.ljmob.districtactivity.R;
 import com.ljmob.districtactivity.entity.Item;
 import com.ljmob.districtactivity.entity.Result;
 import com.ljmob.districtactivity.net.NetConst;
+import com.ljmob.lemoji.LEmoji;
 import com.londonx.lutil.adapter.LAdapter;
 import com.londonx.lutil.entity.LEntity;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -23,6 +24,7 @@ import java.util.List;
  */
 public class ShowcaseAdapter extends LAdapter {
     ImageLoader imageLoader;
+    public boolean showCheckStatus = false;
 
     public ShowcaseAdapter(List<? extends LEntity> lEntities) {
         super(lEntities);
@@ -40,7 +42,25 @@ public class ShowcaseAdapter extends LAdapter {
         Result result = (Result) lEntities.get(position);
         ViewHolder holder = (ViewHolder) convertView.getTag();
         holder.item_showcase_tvTitle.setText(result.title);
-        holder.item_showcase_tvDescription.setText(result.description);
+        if (showCheckStatus) {
+            if (result.is_check) {
+                holder.item_showcase_tvChecked.setVisibility(View.VISIBLE);
+                holder.item_showcase_tvChecking.setVisibility(View.INVISIBLE);
+            } else {
+                holder.item_showcase_tvChecked.setVisibility(View.INVISIBLE);
+                holder.item_showcase_tvChecking.setVisibility(View.VISIBLE);
+            }
+        } else {
+            holder.item_showcase_tvChecked.setVisibility(View.INVISIBLE);
+            holder.item_showcase_tvChecking.setVisibility(View.INVISIBLE);
+        }
+        if (result.description.length() == 0) {
+            holder.item_showcase_tvDescription.setVisibility(View.GONE);
+        } else {
+            holder.item_showcase_tvDescription.setVisibility(View.VISIBLE);
+//            holder.item_showcase_tvDescription.setText(result.description);
+            holder.item_showcase_tvDescription.setText(LEmoji.simplify(result.description));
+        }
         holder.item_showcase_tvUser.setText(result.author.name + " "
                 + result.author.grade_school + " "
                 + result.author.team_class);
@@ -104,6 +124,8 @@ public class ShowcaseAdapter extends LAdapter {
         public final TextView item_showcase_tvUser;
         public final TextView item_showcase_tvDate;
         public final LinearLayout item_showcase_lnTopic;
+        public final View item_showcase_tvChecked;
+        public final View item_showcase_tvChecking;
         public final View root;
 
         public ViewHolder(View root) {
@@ -116,6 +138,8 @@ public class ShowcaseAdapter extends LAdapter {
             item_showcase_tvUser = (TextView) root.findViewById(R.id.item_showcase_tvUser);
             item_showcase_tvDate = (TextView) root.findViewById(R.id.item_showcase_tvDate);
             item_showcase_lnTopic = (LinearLayout) root.findViewById(R.id.item_showcase_lnTopic);
+            item_showcase_tvChecked = root.findViewById(R.id.item_showcase_tvChecked);
+            item_showcase_tvChecking = root.findViewById(R.id.item_showcase_tvChecking);
             this.root = root;
         }
     }

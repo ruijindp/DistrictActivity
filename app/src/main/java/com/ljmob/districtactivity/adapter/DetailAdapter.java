@@ -1,18 +1,22 @@
 package com.ljmob.districtactivity.adapter;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.ljmob.districtactivity.R;
 import com.ljmob.districtactivity.entity.Item;
 import com.ljmob.districtactivity.net.NetConst;
 import com.londonx.lutil.adapter.LAdapter;
 import com.londonx.lutil.entity.LEntity;
+import com.londonx.lutil.util.FileUtil;
 import com.londonx.lutil.util.LMediaPlayer;
 import com.londonx.lutil.util.ToastUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -50,29 +54,40 @@ public class DetailAdapter extends LAdapter {
         ViewHolder holder = (ViewHolder) convertView.getTag();
         Item item = (Item) lEntities.get(position);
         holder.hideAllViews();
-        if (item.file_url == null) {
+        if (item.file_url == null && item.basic_video_url == null) {
             return convertView;
         }
-        if (item.file_url.endsWith(".jpg") || item.file_url.endsWith(".png")) {
-            holder.item_media2_imgContent.setVisibility(View.VISIBLE);
-            holder.item_media2_imgContent.setAdjustViewBounds(true);
-            imageLoader.displayImage(NetConst.ROOT_URL + item.file_url, holder.item_media2_imgContent);
-        }
-        if (item.file_url.endsWith(".mp3")
-                || item.file_url.endsWith(".amr")
-                || item.file_url.endsWith(".wav")) {
-            holder.item_media2_linearPlayer.setVisibility(View.VISIBLE);
-            LMediaPlayer lMediaPlayer = players.get(position);
-            if (lMediaPlayer == null) {
-                lMediaPlayer = new LMediaPlayer(null, holder.item_media2_sb);
-                lMediaPlayer.playUrl(NetConst.ROOT_URL + item.file_url);
-                players.put(position, lMediaPlayer);
-                holder.item_media2_imgPlay.setOnClickListener(new PlayClickListener(lMediaPlayer));
+
+        if (item.basic_video_url != null) {
+            holder.item_media2_lnVideo.setVisibility(View.VISIBLE);
+            holder.item_media2_tvVideoUrl.setText(item.basic_video_url);
+            holder.item_media2_tvVideoUrl.setOnClickListener(new UrlClickListener(item.basic_video_url));
+        } else {
+            switch (FileUtil.getFileType(item.file_url)) {
+                case music:
+                    holder.item_media2_linearPlayer.setVisibility(View.VISIBLE);
+                    LMediaPlayer lMediaPlayer = players.get(position);
+                    if (lMediaPlayer == null) {
+                        lMediaPlayer = new LMediaPlayer(null, holder.item_media2_sb);
+                        lMediaPlayer.playUrl(NetConst.ROOT_URL + item.file_url);
+                        players.put(position, lMediaPlayer);
+                        holder.item_media2_imgPlay.setOnClickListener(new PlayClickListener(lMediaPlayer));
+                    }
+                    holder.item_media2_imgPlay.setImageResource(lMediaPlayer.mediaPlayer.isPlaying()
+                            ? R.mipmap.icon_stop : R.mipmap.icon_start);
+                    break;
+                case video:
+                    break;
+                case picture:
+                    holder.item_media2_imgContent.setVisibility(View.VISIBLE);
+                    holder.item_media2_imgContent.setAdjustViewBounds(true);
+                    imageLoader.displayImage(NetConst.ROOT_URL + item.file_url, holder.item_media2_imgContent);
+                    break;
+                case web:
+                    break;
+                case unknown:
+                    break;
             }
-//            lMediaPlayer.setSeekBar(holder.item_media2_sb);
-            holder.item_media2_imgPlay.setImageResource(lMediaPlayer.mediaPlayer.isPlaying()
-                    ? R.mipmap.icon_stop : R.mipmap.icon_start);
-            ToastUtil.show(item.file_url);
         }
         return convertView;
     }
@@ -129,6 +144,9 @@ public class DetailAdapter extends LAdapter {
         public final ImageView item_media2_imgPlay;
         public final SeekBar item_media2_sb;
         public final LinearLayout item_media2_linearPlayer;
+        public final LinearLayout item_media2_lnVideo;
+        public final TextView item_media2_tvVideoUrl;
+
         public final View root;
 
         public ViewHolder(View root) {
@@ -136,12 +154,28 @@ public class DetailAdapter extends LAdapter {
             item_media2_imgPlay = (ImageView) root.findViewById(R.id.item_media2_imgPlay);
             item_media2_sb = (SeekBar) root.findViewById(R.id.item_media2_sb);
             item_media2_linearPlayer = (LinearLayout) root.findViewById(R.id.item_media2_linearPlayer);
+            item_media2_lnVideo = (LinearLayout) root.findViewById(R.id.item_media2_lnVideo);
+            item_media2_tvVideoUrl = (TextView) root.findViewById(R.id.item_media2_tvVideoUrl);
             this.root = root;
         }
 
         public void hideAllViews() {
             item_media2_imgContent.setVisibility(View.GONE);
             item_media2_linearPlayer.setVisibility(View.GONE);
+            item_media2_lnVideo.setVisibility(View.GONE);
+        }
+    }
+
+    private class UrlClickListener implements View.OnClickListener {
+        String url;
+
+        public UrlClickListener(String url) {
+            this.url = url;
+        }
+
+        @Override
+        public void onClick(View v) {
+            v.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
         }
     }
 }

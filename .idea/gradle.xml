@@ -11,8 +11,10 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/firimupdate" />
+            <option value="$PROJECT_DIR$/lemoji" />
             <option value="$PROJECT_DIR$/lutil" />
             <option value="$PROJECT_DIR$/qiniuupload" />
+            <option value="$PROJECT_DIR$/quicksharesdk" />
             <option value="$PROJECT_DIR$/richeditorfragment" />
           </set>
         </option>

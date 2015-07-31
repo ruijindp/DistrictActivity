@@ -14,6 +14,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 
 import cn.jpush.android.api.JPushInterface;
+import cn.sharesdk.framework.ShareSDK;
 
 /**
  * Created by london on 15/7/9.
@@ -54,6 +55,7 @@ public class MyApplication extends Application {
             currentUser = new Gson().fromJson(userJson, User.class);
             JPushInterface.setAlias(this, currentUser.token, null);
         }
+        ShareSDK.initSDK(this);
 //        BasicPushNotificationBuilder notificationBuilder = new BasicPushNotificationBuilder(this);
 //        notificationBuilder.statusBarDrawable = R.mipmap.ic_launcher;
 
@@ -64,5 +66,11 @@ public class MyApplication extends Application {
 //        CustomPushNotificationBuilder notificationBuilder=new CustomPushNotificationBuilder(this,0,0,0,0);
 
 //        JPushInterface.setDefaultPushNotificationBuilder(notificationBuilder);
+    }
+
+    @Override
+    public void onTerminate() {
+        ShareSDK.stopSDK(this);
+        super.onTerminate();
     }
 }

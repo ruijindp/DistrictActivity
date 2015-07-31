@@ -1,1 +1,1 @@
-include ':app', ':firimupdate', ':richeditorfragment', ':qiniuupload', ':lutil'
+include ':app', ':firimupdate', ':richeditorfragment', ':qiniuupload', ':lutil', ':quicksharesdk', ':lemoji'

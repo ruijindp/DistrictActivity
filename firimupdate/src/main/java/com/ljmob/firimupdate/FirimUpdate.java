@@ -15,14 +15,14 @@ import org.json.JSONObject;
 /**
  * Created by london on 15/6/19.
  * check update from Fir.im
+ * Update at 2015-07-31 12:33:25
  */
 public class FirimUpdate {
     private OnUpdateListener onUpdateListener;
 
-    public void check(final Context context) {
-        FirimUpdate firimUpdate = new FirimUpdate();
+    public void check(final Context context, final String appId, final String token) {
         AsyncHttpClient client = new AsyncHttpClient();
-        String url = "http://fir.im/api/v2/app/version/" + context.getPackageName();
+        String url = " http://api.fir.im/apps/latest/" + appId + "?api_token=" + token;
         client.get(url, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {

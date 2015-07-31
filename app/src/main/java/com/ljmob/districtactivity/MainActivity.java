@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.ljmob.districtactivity.adapter.MainPagerAdapter;
 import com.ljmob.districtactivity.entity.MessageBox;
+import com.ljmob.districtactivity.fragment.ShowcaseFragment;
 import com.ljmob.districtactivity.net.NetConst;
 import com.ljmob.districtactivity.util.DefaultParams;
 import com.ljmob.districtactivity.util.MyApplication;
@@ -40,7 +41,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, LoginDialog.LoginListener, DrawerLayout.DrawerListener, ViewPager.OnPageChangeListener, LRequestTool.OnResponseListener {
+    //firim token:e9400a3620552593c1851beecb8431a0
+    //firim appId:
     private static final int API_MESSAGE = 1;
+    public static boolean isOnFront;
 
     Toolbar toolbar_root;
     PagerSlidingTabStrip activity_main_tabStrip;
@@ -52,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     LinearLayout activity_main_lnOptions;
     LinearLayout activity_main_lnUpload;
     LinearLayout activity_main_lnMyUpload;
+    TextView activity_main_tvMyUpload;
     LinearLayout activity_main_lnMessage;
     LinearLayout activity_main_lnJoined;
     LinearLayout activity_main_lnSettings;
@@ -80,6 +85,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initView();
         initFragment(Page.showcase);
         fetchMessage();
+        if (getIntent().getBooleanExtra("message", false) &&
+                MyApplication.currentUser != null) {
+            startActivity(new Intent(this, MessageActivity.class));
+            if (isOnFront) {
+                finish();
+            }
+        }
     }
 
     private void fetchMessage() {
@@ -100,6 +112,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_make_post:
+                if (ShowcaseFragment.activities == null) {
+                    break;
+                }
                 Intent intent = new Intent(this, UploadActivity.class);
                 startActivity(intent);
                 break;
@@ -126,6 +141,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         activity_main_lnOptions = (LinearLayout) findViewById(R.id.activity_main_lnOptions);
         activity_main_lnUpload = (LinearLayout) findViewById(R.id.activity_main_lnUpload);
         activity_main_lnMyUpload = (LinearLayout) findViewById(R.id.activity_main_lnMyUpload);
+        activity_main_tvMyUpload = (TextView) findViewById(R.id.activity_main_tvMyUpload);
         activity_main_lnMessage = (LinearLayout) findViewById(R.id.activity_main_lnMessage);
         activity_main_lnJoined = (LinearLayout) findViewById(R.id.activity_main_lnJoined);
         activity_main_lnSettings = (LinearLayout) findViewById(R.id.activity_main_lnSettings);
@@ -150,6 +166,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         activity_main_lnJoined.setOnClickListener(this);
         activity_main_lnSettings.setOnClickListener(this);
         activity_main_pager.addOnPageChangeListener(this);
+
+        if (MyApplication.currentUser == null) {
+            return;
+        }
+        if (MyApplication.currentUser.roles.equals("student")) {
+            activity_main_tvMyUpload.setText(R.string.activity_myUpload);
+        } else {
+            activity_main_tvMyUpload.setText(R.string.activity_myUpload_teacher);
+        }
     }
 
     @Override
@@ -165,6 +190,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
         JPushInterface.onResume(this);
+        isOnFront = true;
     }
 
     @Override
@@ -175,6 +201,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onDestroy() {
+        isOnFront = false;
         unregisterReceiver(receiver);
         super.onDestroy();
     }

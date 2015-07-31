@@ -24,4 +24,5 @@ public class NetConst {
     public static final String API_SEARCH = ROOT_URL + "/api/search_results/search.json";
     public static final String API_MESSAGE = ROOT_URL + "/api/messages.json";
     public static final String API_PUBLIC_NOTICES = ROOT_URL + "/api/public_notices.json";
+    public static final String PAGE_SHARE = ROOT_URL + "/qu/demo_details.html";
 }

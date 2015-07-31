@@ -4,7 +4,6 @@
     android:id="@+id/activity_post_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:context=".UploadActivity">
 
@@ -34,14 +33,21 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="64dp"
-                android:background="?selectableItemBackground"
-                android:clickable="true">
+                android:layout_height="64dp">
+
+                <View
+                    android:id="@+id/activity_post_viewAnchor"
+                    android:layout_width="168dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="8dp" />
 
                 <TextView
                     android:id="@+id/activity_post_tvCategory"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="?selectableItemBackground"
+                    android:clickable="true"
                     android:gravity="center_vertical"
                     android:hint="@string/hint_category"
                     android:paddingLeft="16dp" />
@@ -52,13 +58,13 @@
                     android:layout_gravity="right|center_vertical"
                     android:layout_marginRight="16dp"
                     android:contentDescription="@string/default_content_description"
-                    android:src="@color/test" />
+                    android:src="@mipmap/icon_drop_down" />
             </FrameLayout>
 
             <EditText
                 android:id="@+id/activity_post_etContent"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="314dp"
                 android:background="@android:color/transparent"
                 android:gravity="top"
                 android:hint="@string/hint_content"
@@ -74,6 +80,7 @@
         android:background="@color/div" />
 
     <LinearLayout
+        android:id="@+id/activity_post_lnAttachType"
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:background="@color/gray_snack"
@@ -86,8 +93,9 @@
             android:layout_height="48dp"
             android:layout_marginLeft="16dp"
             android:background="?selectableItemBackgroundBorderless"
+            android:clickable="true"
             android:contentDescription="@string/default_content_description"
-            android:src="@color/test2" />
+            android:src="@mipmap/icon_img" />
 
         <ImageView
             android:id="@+id/activity_post_imgEmotion"
@@ -95,8 +103,9 @@
             android:layout_height="48dp"
             android:layout_marginLeft="24dp"
             android:background="?selectableItemBackgroundBorderless"
+            android:clickable="true"
             android:contentDescription="@string/default_content_description"
-            android:src="@color/test2" />
+            android:src="@mipmap/icon_emoj" />
 
         <ImageView
             android:id="@+id/activity_post_imgAudio"
@@ -104,8 +113,9 @@
             android:layout_height="48dp"
             android:layout_marginLeft="24dp"
             android:background="?selectableItemBackgroundBorderless"
+            android:clickable="true"
             android:contentDescription="@string/default_content_description"
-            android:src="@color/test2" />
+            android:src="@mipmap/icon_audio" />
 
         <ImageView
             android:id="@+id/activity_post_imgVideo"
@@ -113,21 +123,35 @@
             android:layout_height="48dp"
             android:layout_marginLeft="24dp"
             android:background="?selectableItemBackgroundBorderless"
+            android:clickable="true"
             android:contentDescription="@string/default_content_description"
-            android:src="@color/test2" />
+            android:src="@mipmap/icon_video" />
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/div" />
+
+    <GridView
+        android:id="@+id/activity_post_gvEmoji"
+        android:layout_width="match_parent"
+        android:layout_height="144dp"
+        android:numColumns="7"
+        android:visibility="gone"
+        tools:listitem="@layout/item_emoji" />
 
     <HorizontalScrollView
         android:id="@+id/activity_post_scAttached"
         android:layout_width="match_parent"
-        android:layout_height="144dp">
+        android:layout_height="144dp"
+        android:background="@color/gray_snack"
+        android:visibility="gone">
 
         <LinearLayout
             android:id="@+id/activity_post_lnAttached"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-
-            <include layout="@layout/item_detail_attach" />
-        </LinearLayout>
+            android:layout_height="match_parent"
+            android:orientation="horizontal" />
     </HorizontalScrollView>
 </LinearLayout>

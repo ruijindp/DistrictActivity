@@ -69,6 +69,9 @@ public class MyUploadActivity extends AppCompatActivity implements SwipeRefreshL
         ActionBar ab = getSupportActionBar();
         if (ab != null) {
             ab.setDisplayHomeAsUpEnabled(true);
+            if (MyApplication.currentUser.roles.equals("teacher")) {
+                ab.setTitle(R.string.activity_myUpload_teacher);
+            }
         }
 
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -132,7 +135,7 @@ public class MyUploadActivity extends AppCompatActivity implements SwipeRefreshL
                 }
                 if (currentPage == 1) {
                     results = appendResults;
-                }else {
+                } else {
                     results.addAll(appendResults);
                 }
                 if (appendResults == null || appendResults.size() != 15) {
@@ -144,6 +147,7 @@ public class MyUploadActivity extends AppCompatActivity implements SwipeRefreshL
                 }
                 if (showcaseAdapter == null) {
                     showcaseAdapter = new ShowcaseAdapter(results);
+                    showcaseAdapter.showCheckStatus = true;
                     activity_my_lv.setAdapter(showcaseAdapter);
                 } else {
                     showcaseAdapter.setNewData(results);
@@ -172,7 +176,7 @@ public class MyUploadActivity extends AppCompatActivity implements SwipeRefreshL
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (isLoading){
+        if (isLoading) {
             return;
         }
         Result result = results.get(position);

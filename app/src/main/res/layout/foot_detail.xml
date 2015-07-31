@@ -19,7 +19,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:contentDescription="@string/default_content_description"
-            android:src="@color/test" />
+            android:src="@mipmap/icon_dianzan" />
 
         <TextView
             android:id="@+id/foot_detail_tvPraise"

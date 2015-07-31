@@ -15,7 +15,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 22
         versionCode 1
-        versionName "1.0"
+        versionName "0.9"
     }
     buildTypes {
         release {
@@ -35,10 +35,12 @@ dependencies {
     compile project(':firimupdate')
     compile project(':richeditorfragment')
     compile project(':qiniuupload')
+    compile project(':quicksharesdk')
+    compile project(':lemoji')
 
-    compile 'com.android.support:appcompat-v7:22.2.0'
-    compile 'com.android.support:cardview-v7:22.2.0'
-    compile 'com.android.support:recyclerview-v7:22.2.0'
+    compile 'com.android.support:appcompat-v7:22.2.1'
+    compile 'com.android.support:cardview-v7:22.2.1'
+    compile 'com.android.support:recyclerview-v7:22.2.1'
     
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.4'
     compile 'com.qiniu:qiniu-android-sdk:7.0.7'
@@ -46,4 +48,6 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:1.3.0'
     compile 'com.jpardogo.materialtabstrip:library:1.1.0'
     compile 'com.soundcloud.android:android-crop:1.0.0@aar'
+    compile 'com.github.castorflex.verticalviewpager:library:19.0.1'
+    compile 'com.afollestad:material-dialogs:0.7.7.0'
 }

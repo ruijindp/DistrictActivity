@@ -11,6 +11,7 @@ import com.ljmob.districtactivity.R;
 import com.ljmob.districtactivity.entity.Item;
 import com.ljmob.districtactivity.entity.MessageBox;
 import com.ljmob.districtactivity.net.NetConst;
+import com.ljmob.lemoji.LEmoji;
 import com.londonx.lutil.adapter.LAdapter;
 import com.londonx.lutil.entity.LEntity;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -40,7 +41,7 @@ public class JoinedResultAdapter extends LAdapter {
         MessageBox result = (MessageBox) lEntities.get(position);
         ViewHolder holder = (ViewHolder) convertView.getTag();
         holder.item_showcase_tvTitle.setText(result.activity_result.title);
-        holder.item_showcase_tvDescription.setText(result.activity_result.description);
+        holder.item_showcase_tvDescription.setText(LEmoji.simplify(result.activity_result.description));
         holder.item_showcase_tvUser.setText(result.activity_result.author.name + " "
                 + result.activity_result.author.grade_school + " "
                 + result.activity_result.author.team_class);

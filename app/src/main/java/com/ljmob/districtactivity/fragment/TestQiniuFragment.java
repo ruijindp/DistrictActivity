@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,7 +73,7 @@ public class TestQiniuFragment extends Fragment
                 intent.putExtra("crop", true);
                 requestCode = 1;
                 break;
-            case recorder:
+            case audio:
                 intent.setType("audio/*");
                 requestCode = 2;
                 break;

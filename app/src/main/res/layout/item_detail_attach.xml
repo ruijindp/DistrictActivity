@@ -1,15 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:background="?selectableItemBackground"
     android:clickable="true"
     android:orientation="vertical"
     android:padding="16dp">
 
+    <TextView
+        android:id="@+id/item_detail_attach_tvAttach"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:maxWidth="72dp"
+        android:text="@string/no_preview"
+        android:textColor="@color/div"
+        android:textSize="12sp" />
+
     <ImageView
         android:id="@+id/item_detail_attach_imgAttach"
         android:layout_width="80dp"
         android:layout_height="104dp"
-        android:background="@drawable/shape_attach" />
-</LinearLayout>
+        android:background="@drawable/shape_attach"
+        android:contentDescription="@string/default_content_description"
+        android:scaleType="centerCrop" />
+
+    <ImageView
+        android:id="@+id/item_detail_attach_imgDelete"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="right"
+        android:background="?selectableItemBackgroundBorderless"
+        android:contentDescription="@string/default_content_description"
+        android:padding="4dp"
+        android:src="@drawable/abc_ic_clear_mtrl_alpha" />
+</FrameLayout>

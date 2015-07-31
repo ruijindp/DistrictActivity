@@ -44,8 +44,7 @@
                     android:layout_height="20dp"
                     android:layout_marginRight="6dp"
                     android:contentDescription="@string/default_content_description"
-                    android:src="@color/test"
-                    android:tint="@color/broadcast" />
+                    android:src="@mipmap/icon_notice" />
 
                 <TextView
                     android:layout_width="wrap_content"

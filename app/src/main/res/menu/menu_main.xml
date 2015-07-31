@@ -4,6 +4,7 @@
     tools:context=".MainActivity">
     <item
         android:id="@+id/action_make_post"
+        android:icon="@drawable/layer_add"
         android:title="@string/action_make_post"
         app:showAsAction="always" />
 </menu>

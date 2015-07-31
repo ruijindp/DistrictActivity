@@ -26,6 +26,7 @@ import com.ljmob.districtactivity.entity.Notice;
 import com.ljmob.districtactivity.entity.Result;
 import com.ljmob.districtactivity.net.NetConst;
 import com.ljmob.districtactivity.util.DefaultParams;
+import com.ljmob.lemoji.LEmoji;
 import com.londonx.lutil.entity.LResponse;
 import com.londonx.lutil.util.LRequestTool;
 import com.londonx.lutil.util.ToastUtil;
@@ -61,6 +62,7 @@ public class ShowcaseFragment extends Fragment implements LRequestTool.OnRespons
     boolean isDivDPage;
     boolean isLoading;
     boolean hasMore;
+    public static List<Activity> activities;
 
     @Nullable
     @Override
@@ -143,9 +145,9 @@ public class ShowcaseFragment extends Fragment implements LRequestTool.OnRespons
 
     @Override
     public void onResponse(LResponse response) {
-        swipeRefreshLayout.setRefreshing(false);
         isLoading = false;
         if (response.responseCode != 200) {
+            swipeRefreshLayout.setRefreshing(false);
             ToastUtil.serverErr(response.responseCode);
             return;
         }
@@ -162,11 +164,12 @@ public class ShowcaseFragment extends Fragment implements LRequestTool.OnRespons
                 }
                 break;
             case API_ACTIVITY://Head data
-                List<Activity> activities = gson.fromJson(response.body, new TypeToken<List<Activity>>() {
+                activities = gson.fromJson(response.body, new TypeToken<List<Activity>>() {
                 }.getType());
                 head_showcase_pager.setAdapter(new MainHeadPagerAdapter(activities, this));
                 break;
             case API_SEARCH_RESULT:
+                swipeRefreshLayout.setRefreshing(false);
                 List<Result> appendResults = gson.fromJson(response.body, new TypeToken<List<Result>>() {
                 }.getType());
                 if (results == null) {
@@ -218,7 +221,6 @@ public class ShowcaseFragment extends Fragment implements LRequestTool.OnRespons
 
     @Override
     public void onActivitySelected(MainHeadPagerAdapter adapter, Activity activity) {
-        ToastUtil.show(activity.id + "" + activity.name);
         Intent cateIntent = new Intent(getActivity(), CategoryActivity.class);
         cateIntent.putExtra("activity", activity);
         startActivity(cateIntent);

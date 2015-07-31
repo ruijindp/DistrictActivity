@@ -58,7 +58,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:contentDescription="@string/default_content_description"
-                    android:src="@color/test" />
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/bg_bg" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -110,7 +111,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:contentDescription="@string/default_content_description"
-                        android:src="@color/test"
+                        android:src="@mipmap/icon_shangchuan"
                         app:border_color="@android:color/white"
                         app:border_width="0px" />
 
@@ -133,11 +134,12 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:contentDescription="@string/default_content_description"
-                        android:src="@color/test"
+                        android:src="@mipmap/icon_wodezuopin"
                         app:border_color="@android:color/white"
                         app:border_width="0px" />
 
                     <TextView
+                        android:id="@+id/activity_main_tvMyUpload"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="22dp"
@@ -163,7 +165,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:contentDescription="@string/default_content_description"
-                        android:src="@color/test"
+                        android:src="@mipmap/icon_xiaoxi"
                         app:border_color="@android:color/white"
                         app:border_width="0px" />
 
@@ -195,7 +197,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:contentDescription="@string/default_content_description"
-                        android:src="@color/test"
+                        android:src="@mipmap/icon_wocanyude"
                         app:border_color="@android:color/white"
                         app:border_width="0px" />
 
@@ -225,7 +227,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:contentDescription="@string/default_content_description"
-                        android:src="@color/test"
+                        android:src="@mipmap/icon_setting"
                         app:border_color="@android:color/white"
                         app:border_width="0px" />
 
