@@ -1,44 +1,48 @@
 package com.ljmob.districtactivity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Menu;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
-import com.ljmob.districtactivity.adapter.DetailPagerAdapter;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.ljmob.districtactivity.adapter.EmojiAdapter;
+import com.ljmob.districtactivity.adapter.FloorItemAdapter;
+import com.ljmob.districtactivity.entity.Author;
+import com.ljmob.districtactivity.entity.Comment;
+import com.ljmob.districtactivity.entity.FloorItem;
 import com.ljmob.districtactivity.entity.Item;
 import com.ljmob.districtactivity.entity.Result;
 import com.ljmob.districtactivity.entity.Shareable;
-import com.ljmob.districtactivity.fragment.CommentFragment;
-import com.ljmob.districtactivity.fragment.DetailFragment;
-import com.ljmob.districtactivity.fragment.ShowcaseFragment;
 import com.ljmob.districtactivity.net.NetConst;
 import com.ljmob.districtactivity.subView.AttachView;
 import com.ljmob.districtactivity.util.DefaultParams;
 import com.ljmob.districtactivity.util.MyApplication;
 import com.ljmob.districtactivity.util.ShareTool;
-import com.ljmob.districtactivity.view.InsiderVerticalViewPage;
 import com.ljmob.districtactivity.view.LoginDialog;
 import com.ljmob.districtactivity.view.MediaDialog;
 import com.ljmob.lemoji.LEmoji;
@@ -47,13 +51,14 @@ import com.londonx.lutil.entity.LResponse;
 import com.londonx.lutil.util.FileUtil;
 import com.londonx.lutil.util.LRequestTool;
 import com.londonx.lutil.util.ToastUtil;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import cn.sharesdk.sina.weibo.SinaWeibo;
 import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.wechat.friends.Wechat;
@@ -63,57 +68,88 @@ import cn.sharesdk.wechat.moments.WechatMoments;
  * Created by london on 15/7/23.
  * 帖子详情和评论
  */
-public class DetailActivity extends AppCompatActivity implements View.OnClickListener, LoginDialog.LoginListener, LRequestTool.OnResponseListener, TextWatcher, MediaDialog.OnTypeSelectListener, AttachView.AttachViewDeleteListener, ViewPager.OnPageChangeListener, AdapterView.OnItemClickListener {
+public class DetailActivity extends AppCompatActivity implements
+        LRequestTool.OnResponseListener,
+        SwipeRefreshLayout.OnRefreshListener,
+        LoginDialog.LoginListener,
+        AbsListView.OnScrollListener,
+        View.OnClickListener,
+        TextWatcher,
+        AdapterView.OnItemClickListener, AttachView.AttachViewDeleteListener {
     private static final int RESULT_GET = 1;
     private static final int API_PRAISE = 1;
     private static final int API_VOTE = 2;
     private static final int API_COMMENT = 3;
+    private static final int API_COMMENT_SEND = 4;
 
-    View activity_detail_btnReply;
-    View activity_detail_btnVote;
-    View activity_detail_btnEmoji;
-    TextView activity_detail_tvVote;
-    LinearLayout activity_detail_lnOptions;
-    ImageView activity_detail_btnAttach;
-    EditText activity_detail_etComment;
-    ImageView activity_detail_btnSend;
-    LinearLayout activity_detail_lnAttached;
-    HorizontalScrollView activity_detail_scAttached;
-    LinearLayout activity_detail_lnReply;
-    InsiderVerticalViewPage activity_detail_pagerContent;
-    GridView activity_detail_gvEmoji;
+    @InjectView(R.id.toolbar_root)
+    Toolbar toolbarRoot;
+    @InjectView(R.id.activity_detail_lv)
+    ListView activityDetailLv;
+    @InjectView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
+    @InjectView(R.id.activity_detail_btnReply)
+    FrameLayout activityDetailBtnReply;
+    @InjectView(R.id.activity_detail_tvVote)
+    TextView activityDetailTvVote;
+    @InjectView(R.id.activity_detail_btnVote)
+    FrameLayout activityDetailBtnVote;
+    @InjectView(R.id.activity_detail_lnOptions)
+    LinearLayout activityDetailLnOptions;
+    @InjectView(R.id.activity_detail_btnAttach)
+    ImageView activityDetailBtnAttach;
+    @InjectView(R.id.activity_detail_etComment)
+    EditText activityDetailEtComment;
+    @InjectView(R.id.activity_detail_btnEmoji)
+    ImageView activityDetailBtnEmoji;
+    @InjectView(R.id.activity_detail_btnSend)
+    ImageView activityDetailBtnSend;
+    @InjectView(R.id.activity_detail_lnAttached)
+    LinearLayout activityDetailLnAttached;
+    @InjectView(R.id.activity_detail_scAttached)
+    HorizontalScrollView activityDetailScAttached;
+    @InjectView(R.id.activity_detail_gvEmoji)
+    GridView activityDetailGvEmoji;
+    @InjectView(R.id.activity_detail_lnReply)
+    LinearLayout activityDetailLnReply;
 
-    MediaDialog mediaDialog;
-    DetailFragment detailFragment;
-    CommentFragment commentFragment;
+    View footView;
+    TextView foot_more_tv;
     MaterialDialog shareDialog;
-
     LoginDialog loginDialog;
-    LRequestTool lRequestTool;
-    EmojiAdapter emojiAdapter;
-    Result result;
-    ImageLoader imageLoader;
-    List<AttachView> attachViews;
-    Shareable shareable;
-    List<Emoji> emojiList;
     MaterialDialog exitDialog;
+    ProgressDialog commentDialog;
+
+    LRequestTool lRequestTool;
+    Result result;
+    FloorItemAdapter floorItemAdapter;
+    Gson gson;
+    List<FloorItem> floorItems;
+    Shareable shareable;
+    List<AttachView> attachViews;
+    List<Emoji> emojiList;
+    EmojiAdapter emojiAdapter;
+
+    int currentPage = 1;
+    boolean isLoading;
+    int currentMaxFloor = 1;
+    boolean isDivDPage;
+    boolean hasMore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         result = (Result) getIntent().getSerializableExtra("result");
-        imageLoader = ImageLoader.getInstance();
+        if (result == null) {
+            ToastUtil.show("result:null");
+            finish();
+            return;
+        }
         lRequestTool = new LRequestTool(this);
-        loginDialog = new LoginDialog(this);
-        mediaDialog = new MediaDialog(this);
+        floorItems = new ArrayList<>();
         attachViews = new ArrayList<>();
 
-        mediaDialog.setOnTypeSelectListener(this);
-        loginDialog.setLoginListener(this);
-        if (result == null) {
-            finish();
-        }
         shareable = new Shareable();
         shareable.title = result.title;
         shareable.content = result.description;
@@ -124,87 +160,228 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             }
         }
-
-        initView();
-        resetVoteCount();
-        initPager();
+        init();
+        initViewsWithResult();
+        loadComment(currentPage);
     }
 
-    private void initView() {
-        activity_detail_btnReply = findViewById(R.id.activity_detail_btnReply);
-        activity_detail_btnVote = findViewById(R.id.activity_detail_btnVote);
-        activity_detail_btnEmoji = findViewById(R.id.activity_detail_btnEmoji);
-        activity_detail_tvVote = (TextView) findViewById(R.id.activity_detail_tvVote);
-        activity_detail_lnOptions = (LinearLayout) findViewById(R.id.activity_detail_lnOptions);
-        activity_detail_btnAttach = (ImageView) findViewById(R.id.activity_detail_btnAttach);
-        activity_detail_etComment = (EditText) findViewById(R.id.activity_detail_etComment);
-        activity_detail_btnSend = (ImageView) findViewById(R.id.activity_detail_btnSend);
-        activity_detail_lnAttached = (LinearLayout) findViewById(R.id.activity_detail_lnAttached);
-        activity_detail_scAttached = (HorizontalScrollView) findViewById(R.id.activity_detail_scAttached);
-        activity_detail_lnReply = (LinearLayout) findViewById(R.id.activity_detail_lnReply);
-        activity_detail_pagerContent = (InsiderVerticalViewPage) findViewById(R.id.activity_detail_pagerContent);
-        activity_detail_gvEmoji = (GridView) findViewById(R.id.activity_detail_gvEmoji);
-
-        activity_detail_lnReply.setVisibility(View.GONE);
-
-        Toolbar toolbar_root = (Toolbar) findViewById(R.id.toolbar_root);
-        setSupportActionBar(toolbar_root);
+    private void init() {
+        ButterKnife.inject(this);
+        setSupportActionBar(toolbarRoot);
         ActionBar ab = getSupportActionBar();
         if (ab != null) {
             ab.setDisplayHomeAsUpEnabled(true);
         }
 
-        activity_detail_btnReply.setOnClickListener(this);
-        activity_detail_btnVote.setOnClickListener(this);
-        activity_detail_btnAttach.setOnClickListener(this);
-        activity_detail_btnSend.setOnClickListener(this);
-        activity_detail_etComment.addTextChangedListener(this);
-        activity_detail_gvEmoji.setOnItemClickListener(this);
-        activity_detail_btnEmoji.setOnClickListener(this);
+        footView = LayoutInflater.from(this).inflate(R.layout.foot_more, activityDetailLv, false);
+        foot_more_tv = (TextView) footView.findViewById(R.id.foot_more_tv);
 
-        activity_detail_pagerContent.setOnPageChangeListener(this);
+        activityDetailLv.addFooterView(footView);
+        footView.setVisibility(View.INVISIBLE);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimaryDark0);
+        activityDetailTvVote.setText(result.vote_count + getString(R.string._vote));
+
+        swipeRefreshLayout.setOnRefreshListener(this);
+        activityDetailBtnReply.setOnClickListener(this);
+        activityDetailBtnVote.setOnClickListener(this);
+        activityDetailBtnAttach.setOnClickListener(this);
+        activityDetailBtnSend.setOnClickListener(this);
+        activityDetailEtComment.addTextChangedListener(this);
+        activityDetailGvEmoji.setOnItemClickListener(this);
+        activityDetailBtnEmoji.setOnClickListener(this);
     }
 
-    private void resetVoteCount() {
-        if (result.vote_count < 999) {
-            String _vote = getString(R.string._vote);
-            activity_detail_tvVote.setText(result.vote_count + _vote);
-        } else {
-            activity_detail_tvVote.setText(result.vote_count + "");
+    private void initViewsWithResult() {
+        //第一行（标题和用户信息）
+        FloorItem floorItemUser = new FloorItem();
+        floorItemUser.title = result.title;
+        floorItemUser.author = result.author;
+        floorItemUser.floor = currentMaxFloor;//1楼
+        floorItemUser.created_at = result.created_at;
+        floorItemUser.itemType = FloorItem.ItemType.userInfo;
+        currentMaxFloor++;//变为2楼
+        floorItems.add(floorItemUser);
+        //内容行（多行）
+        for (Item item : result.items) {
+            FloorItem floorItem = new FloorItem();
+            floorItem.item = item;
+            floorItem.itemType = FloorItem.ItemType.normal;
+            floorItems.add(floorItem);
         }
-    }
+        //点赞键（行）
+        FloorItem floorItemOption = new FloorItem();
+        floorItemOption.itemType = FloorItem.ItemType.options;
+        floorItemOption.resultId = result.id;
+        floorItemOption.isPraised = result.is_praise;
+        floorItemOption.praiseCount = result.praise_count;
+        floorItems.add(floorItemOption);
 
-    private void initPager() {
-        detailFragment = new DetailFragment();//内容页
-        detailFragment.setResult(result);
-
-        commentFragment = new CommentFragment();//评论页
-        commentFragment.setResult(result);
-
-        List<Fragment> fragments = new ArrayList<>(2);
-        fragments.add(detailFragment);
-        fragments.add(commentFragment);
-        activity_detail_pagerContent.setAdapter(new DetailPagerAdapter(result,
-                getSupportFragmentManager(), this, fragments));
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_detail, menu);
-        return super.onCreateOptionsMenu(menu);
+        floorItemAdapter = new FloorItemAdapter(floorItems, lRequestTool, API_PRAISE);
+        activityDetailLv.setAdapter(floorItemAdapter);
+        activityDetailLv.setOnScrollListener(this);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_share:
-                showShare();
-                break;
             case android.R.id.home:
                 finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onResponse(LResponse response) {
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+        if (commentDialog != null && commentDialog.isShowing()) {
+            commentDialog.dismiss();
+        }
+        isLoading = false;
+        if (response.responseCode == 401) {
+            showLoginDialog();
+            return;
+        }
+        if (response.responseCode != 200) {
+            ToastUtil.serverErr(response.responseCode);
+            return;
+        }
+        if (gson == null) {
+            gson = new Gson();
+        }
+        switch (response.requestCode) {
+            case API_PRAISE:
+                ToastUtil.show(R.string.praise_add);
+                break;
+            case API_VOTE:
+                ToastUtil.show(R.string.vote_add);
+                break;
+            case API_COMMENT_SEND:
+                ToastUtil.show(R.string.commented);
+                activityDetailEtComment.setText("");
+                activityDetailLnAttached.removeAllViews();
+                attachViews.clear();
+                hideReply();
+                if (currentPage == 1) {
+                    onRefresh();
+                }
+                break;
+            case API_COMMENT:
+                footView.setVisibility(View.VISIBLE);
+                List<Comment> comments = gson.fromJson(response.body,
+                        new TypeToken<List<Comment>>() {
+                        }.getType());
+                hasMore = comments.size() == 15;
+                if (comments.size() == 0) {
+                    foot_more_tv.setText(currentPage == 1 ? R.string.no_comment : R.string.no_more);
+                    break;
+                }
+                if (hasMore) {
+                    foot_more_tv.setText(R.string.load_more);
+                } else {
+                    foot_more_tv.setText(R.string.no_more);
+                }
+                if (currentPage == 1) {
+                    currentMaxFloor = 2;
+                    boolean isComment = false;
+                    List<FloorItem> toBeRemove = new ArrayList<>();
+                    for (FloorItem floorItem : floorItems) {
+                        if (!isComment) {
+                            isComment = floorItem.itemType == FloorItem.ItemType.options;
+                            continue;
+                        }
+                        toBeRemove.add(floorItem);
+                    }
+                    floorItems.removeAll(toBeRemove);
+                }
+                for (Comment comment : comments) {
+                    FloorItem commentUserFloorItem = new FloorItem();
+                    commentUserFloorItem.itemType = FloorItem.ItemType.userInfo;
+                    Author author = new Author();
+                    author.avatar = comment.reviewer_avatar;
+                    author.name = comment.reviewer;
+                    commentUserFloorItem.author = author;
+                    commentUserFloorItem.created_at = comment.created_at;
+                    commentUserFloorItem.floor = currentMaxFloor;
+                    currentMaxFloor++;
+                    floorItems.add(commentUserFloorItem);
+
+                    FloorItem textFloorItem = new FloorItem();//纯文本
+                    textFloorItem.itemType = FloorItem.ItemType.normal;
+                    Item textItem = new Item();
+                    textItem.content = comment.content;
+                    textFloorItem.item = textItem;
+                    floorItems.add(textFloorItem);
+                    if (comment.comment_item != null) {
+                        for (Item item : comment.comment_item) {
+                            FloorItem commentItemFloorItem = new FloorItem();
+                            commentItemFloorItem.itemType = FloorItem.ItemType.normal;
+                            commentItemFloorItem.item = item;
+                            floorItems.add(commentItemFloorItem);
+                        }
+                    }
+                }
+                floorItemAdapter.setNewData(floorItems);
+                break;
+        }
+    }
+
+    @Override
+    public void onRefresh() {
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefreshLayout.setRefreshing(true);
+            }
+        });
+        currentPage = 1;
+        loadComment(currentPage);
+    }
+
+    private void loadComment(int page) {
+        HashMap<String, Object> params = new DefaultParams();
+        isLoading = true;
+        params.put("page", page);
+        params.put("activity_result_id", result.id);
+        lRequestTool.doGet(NetConst.API_COMMENT, params, API_COMMENT);
+    }
+
+    private void showLoginDialog() {
+        if (loginDialog == null) {
+            loginDialog = new LoginDialog(this);
+            loginDialog.setLoginListener(this);
+        }
+        loginDialog.show();
+    }
+
+    @Override
+    public void loginSuccess(LoginDialog dialog) {
+        if (MyApplication.currentUser != null) {
+            ToastUtil.show(R.string.login_ed);
+        }
+    }
+
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+        if (scrollState != SCROLL_STATE_IDLE || isLoading) {
+            return;
+        }
+        if (isDivDPage && hasMore) {
+            isDivDPage = false;
+            currentPage++;
+            loadComment(currentPage);
+        }
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        isDivDPage = (firstVisibleItem + visibleItemCount == totalItemCount);
     }
 
     private void showShare() {
@@ -263,16 +440,15 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         }
         switch (v.getId()) {
             case R.id.activity_detail_btnReply:
-                activity_detail_pagerContent.setCurrentItem(1);
-                activity_detail_lnReply.setVisibility(View.VISIBLE);
-                activity_detail_lnOptions.setVisibility(View.GONE);
-                activity_detail_etComment.requestFocus();
+                activityDetailLnReply.setVisibility(View.VISIBLE);
+                activityDetailLnOptions.setVisibility(View.GONE);
+                activityDetailEtComment.requestFocus();
                 showKeyBoard();
                 break;
             case R.id.activity_detail_btnAttach:
-                activity_detail_gvEmoji.setVisibility(View.GONE);
+                activityDetailGvEmoji.setVisibility(View.GONE);
                 if (attachViews.size() != 0) {
-                    activity_detail_scAttached.setVisibility(View.VISIBLE);
+                    activityDetailScAttached.setVisibility(View.VISIBLE);
                 }
                 onTypeSelect(MediaDialog.Type.picture);
                 break;
@@ -280,16 +456,21 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 if (emojiAdapter == null) {
                     emojiList = LEmoji.getAllEmoji();
                     emojiAdapter = new EmojiAdapter(emojiList);
-                    activity_detail_gvEmoji.setAdapter(emojiAdapter);
+                    activityDetailGvEmoji.setAdapter(emojiAdapter);
                 }
-                activity_detail_scAttached.setVisibility(View.GONE);
-                activity_detail_gvEmoji.setVisibility(View.VISIBLE);
+                activityDetailScAttached.setVisibility(View.GONE);
+                activityDetailGvEmoji.setVisibility(View.VISIBLE);
                 hideKeyBoard();
                 break;
             case R.id.activity_detail_btnSend:
-                if (activity_detail_etComment.getText().length() == 0) {
+                if (activityDetailEtComment.getText().length() == 0) {
                     break;
                 }
+                if (commentDialog == null) {
+                    commentDialog = new ProgressDialog(this);
+                    commentDialog.setMessage(getString(R.string.dialog_uploading));
+                }
+                commentDialog.show();
                 HashMap<String, Object> commentParams = new DefaultParams();
                 commentParams.put("activity_result_id", result.id);
                 for (int i = 0; i < attachViews.size(); i++) {
@@ -299,55 +480,14 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                     filePath = filePath.substring(0, filePath.lastIndexOf("."));
                     commentParams.put("file_name_" + i, filePath);
                 }
-                commentParams.put("content", activity_detail_etComment.getText().toString());
+                commentParams.put("content", activityDetailEtComment.getText().toString());
                 commentParams.put("file_size", attachViews.size());
-                lRequestTool.doPost(NetConst.API_COMMENT, commentParams, API_COMMENT);
+                lRequestTool.doPost(NetConst.API_COMMENT, commentParams, API_COMMENT_SEND);
                 onBackPressed();//hide lnReply
                 hideKeyBoard();
+                //TODO
                 break;
         }
-    }
-
-    @Override
-    public void onResponse(LResponse response) {
-        if (response.responseCode == 401) {
-            showLoginDialog();
-            return;
-        }
-        if (response.responseCode != 200) {
-            ToastUtil.serverErr(response.responseCode);
-            return;
-        }
-        ShowcaseFragment.isResultChanged = true;
-        switch (response.requestCode) {
-            case API_PRAISE:
-                ToastUtil.show(R.string.praise_add);
-                break;
-            case API_VOTE:
-                ToastUtil.show(R.string.vote_add);
-                break;
-            case API_COMMENT:
-                ToastUtil.show(R.string.commented);
-                activity_detail_etComment.setText("");
-                activity_detail_lnAttached.removeAllViews();
-                attachViews.clear();
-                hideReply();
-                break;
-        }
-    }
-
-    private void addVoteCount() {
-        result.vote_count++;
-        result.is_vote = true;
-        resetVoteCount();
-    }
-
-    private void showLoginDialog() {
-        if (loginDialog == null) {
-            loginDialog = new LoginDialog(this);
-            loginDialog.setLoginListener(this);
-        }
-        loginDialog.show();
     }
 
     @Override
@@ -366,8 +506,16 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-
     @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Emoji emoji = emojiList.get(position);
+        int index = activityDetailEtComment.getSelectionStart();
+        Editable editable = activityDetailEtComment.getText();
+        editable.insert(index, emoji.tag);
+        activityDetailEtComment.setText(LEmoji.translate(editable.toString()));
+        activityDetailEtComment.setSelection(index + emoji.tag.length());
+    }
+
     public void onTypeSelect(MediaDialog.Type type) {
         Intent fileIntent = new Intent(Intent.ACTION_GET_CONTENT);
         switch (type) {
@@ -383,6 +531,24 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         }
         fileIntent.putExtra("return-data", true);
         startActivityForResult(fileIntent, RESULT_GET);
+    }
+
+
+    private void hideKeyBoard() {
+        ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).
+                hideSoftInputFromWindow(activityDetailEtComment.getWindowToken(),
+                        InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+    private void showKeyBoard() {
+        ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).
+                hideSoftInputFromWindow(activityDetailEtComment.getWindowToken(),
+                        InputMethodManager.SHOW_FORCED);
+    }
+
+    private void hideReply() {
+        activityDetailLnReply.setVisibility(View.GONE);
+        activityDetailLnOptions.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -404,36 +570,26 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             ToastUtil.show(R.string.toast_file_err);
             return;
         }
-        AttachView attachView = new AttachView(this, activity_detail_lnAttached, this);
+        AttachView attachView = new AttachView(this, activityDetailLnAttached, this);
         attachView.setMedia(selectedFile);
         attachViews.add(attachView);
-        activity_detail_lnAttached.addView(attachView.getView());
-        activity_detail_scAttached.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void onDeleted(AttachView attachView) {
-        int index = attachViews.indexOf(attachView);
-        activity_detail_lnAttached.removeViewAt(index);
-        attachViews.remove(index);
-        if (attachViews.size() == 0) {
-            activity_detail_scAttached.setVisibility(View.GONE);
-        }
+        activityDetailLnAttached.addView(attachView.getView());
+        activityDetailScAttached.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onBackPressed() {
-        if (activity_detail_gvEmoji.getVisibility() == View.VISIBLE) {
-            activity_detail_gvEmoji.setVisibility(View.GONE);
+        if (activityDetailGvEmoji.getVisibility() == View.VISIBLE) {
+            activityDetailGvEmoji.setVisibility(View.GONE);
             if (attachViews.size() != 0) {
-                activity_detail_scAttached.setVisibility(View.VISIBLE);
+                activityDetailScAttached.setVisibility(View.VISIBLE);
             }
             return;
         }
-        if (activity_detail_lnReply.getVisibility() == View.VISIBLE) {
+        if (activityDetailLnReply.getVisibility() == View.VISIBLE) {
             hideReply();
         } else {
-            if (activity_detail_etComment.getText().length() != 0
+            if (activityDetailEtComment.getText().length() != 0
                     || attachViews.size() != 0) {
                 if (exitDialog == null) {
                     exitDialog = new MaterialDialog.Builder(this)
@@ -464,50 +620,12 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     @Override
-    public void loginSuccess(LoginDialog dialog) {
-        if (MyApplication.currentUser != null) {
-            ToastUtil.show(R.string.login_ed);
+    public void onDeleted(AttachView attachView) {
+        int index = attachViews.indexOf(attachView);
+        activityDetailLnAttached.removeViewAt(index);
+        attachViews.remove(index);
+        if (attachViews.size() == 0) {
+            activityDetailScAttached.setVisibility(View.GONE);
         }
     }
-
-    private void hideKeyBoard() {
-        ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).
-                hideSoftInputFromWindow(activity_detail_etComment.getWindowToken(),
-                        InputMethodManager.HIDE_NOT_ALWAYS);
-    }
-
-    private void showKeyBoard() {
-        ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).
-                hideSoftInputFromWindow(activity_detail_etComment.getWindowToken(),
-                        InputMethodManager.SHOW_FORCED);
-    }
-
-    private void hideReply() {
-        activity_detail_lnReply.setVisibility(View.GONE);
-        activity_detail_lnOptions.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-        activity_detail_pagerContent.needToStop = false;
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Emoji emoji = emojiList.get(position);
-        int index = activity_detail_etComment.getSelectionStart();
-        Editable editable = activity_detail_etComment.getText();
-        editable.insert(index, emoji.tag);
-        activity_detail_etComment.setText(LEmoji.translate(editable.toString()));
-        activity_detail_etComment.setSelection(index + emoji.tag.length());
-    }
-
 }

@@ -59,7 +59,7 @@ public class ShowcaseAdapter extends LAdapter {
         } else {
             holder.item_showcase_tvDescription.setVisibility(View.VISIBLE);
 //            holder.item_showcase_tvDescription.setText(result.description);
-            holder.item_showcase_tvDescription.setText(LEmoji.simplify(result.description));
+            holder.item_showcase_tvDescription.setText(LEmoji.simplify(result.description.replace("&nbsp;", " ")));
         }
         holder.item_showcase_tvUser.setText(result.author.name + " "
                 + result.author.grade_school + " "

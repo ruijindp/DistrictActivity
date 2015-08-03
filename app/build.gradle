@@ -41,7 +41,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:cardview-v7:22.2.1'
     compile 'com.android.support:recyclerview-v7:22.2.1'
-    
+
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.4'
     compile 'com.qiniu:qiniu-android-sdk:7.0.7'
     compile 'jp.wasabeef:richeditor-android:0.1@aar'

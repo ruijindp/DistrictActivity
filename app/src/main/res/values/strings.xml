@@ -75,6 +75,7 @@
     <string name="update_now">是否现在更新？</string>
     <string name="cannot_vote">投票开始时间为8月15日</string>
     <string name="undone">各位小伙伴们可以通过暑期社会实践活动平台，上传你的暑期作品（学习生活、旅游见闻等等），优秀及有趣的作品将被教师审核并推荐至排行榜，你可以为同伴的作品点赞并投票，暑期结束后，我们将为获奖者提供奖品，期待你的参加！（作品投票以及排行榜公示将于8月15日开放）</string>
+    <string name="no_comment">暂时还没有评论</string>
 
     <string-array name="filter_method">
         <item>全部作品</item>
