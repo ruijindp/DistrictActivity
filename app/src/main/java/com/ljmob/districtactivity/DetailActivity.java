@@ -485,7 +485,6 @@ public class DetailActivity extends AppCompatActivity implements
                 lRequestTool.doPost(NetConst.API_COMMENT, commentParams, API_COMMENT_SEND);
                 onBackPressed();//hide lnReply
                 hideKeyBoard();
-                //TODO
                 break;
         }
     }
