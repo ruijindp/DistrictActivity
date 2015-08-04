@@ -111,6 +111,8 @@
     <string name="activity_category">作品列表</string>
     <string name="activity_search">搜索</string>
     <string name="activity_filter">筛选</string>
+    <string name="activity_notice_list">公告</string>
+    <string name="activity_notice">公告详情</string>
 
     <string name="tag_reply">评</string>
     <string name="tag_vote">票</string>

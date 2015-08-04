@@ -70,6 +70,12 @@
         <activity
             android:name=".FilterActivity"
             android:label="@string/activity_filter" />
+        <activity
+            android:name=".NoticeListActivity"
+            android:label="@string/activity_notice_list" />
+        <activity
+            android:name=".NoticeActivity"
+            android:label="@string/activity_notice" />
         <!-- share SDK-->
         <activity
             android:name="com.mob.tools.MobUIShell"

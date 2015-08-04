@@ -1,7 +1,6 @@
 package com.ljmob.districtactivity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -16,13 +15,10 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.ljmob.districtactivity.adapter.MessageAdapter;
-import com.ljmob.districtactivity.entity.MessageBox;
-import com.ljmob.districtactivity.entity.Result;
+import com.ljmob.districtactivity.adapter.NoticeAdapter;
+import com.ljmob.districtactivity.entity.Notice;
 import com.ljmob.districtactivity.net.NetConst;
 import com.ljmob.districtactivity.util.DefaultParams;
-import com.ljmob.districtactivity.util.MyApplication;
-import com.londonx.lutil.Lutil;
 import com.londonx.lutil.entity.LResponse;
 import com.londonx.lutil.util.LRequestTool;
 import com.londonx.lutil.util.ToastUtil;
@@ -32,24 +28,23 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by london on 15/7/22.
- * 消息
+ * Created by london on 15/8/4.
+ * 公告列表
  */
-public class MessageActivity extends AppCompatActivity implements
+public class NoticeListActivity extends AppCompatActivity implements
         SwipeRefreshLayout.OnRefreshListener,
         AbsListView.OnScrollListener,
         LRequestTool.OnResponseListener,
         AdapterView.OnItemClickListener {
-    public static final String KEY_MESSAGE_COUNT = "message_count";
-    private static final int API_MESSAGE = 1;
+    private static final int API_PUBLIC_NOTICES = 1;
 
-    ListView activity_message_lv;
+    ListView activity_broadcast_list_lv;
     SwipeRefreshLayout swipeRefreshLayout;
     View foot_more;
 
     LRequestTool lRequestTool;
-    List<MessageBox> messages;
-    MessageAdapter messageAdapter;
+    List<Notice> notices;
+    NoticeAdapter noticeAdapter;
 
     int currentPage;
     boolean hasMore;
@@ -59,22 +54,16 @@ public class MessageActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_message);
+        setContentView(R.layout.activity_notice_list);
         lRequestTool = new LRequestTool(this);
         initView();
         refreshData();
     }
 
-    private void resetMessage(int messageSize) {
-        SharedPreferences.Editor editor = Lutil.preferences.edit();
-        editor.putInt(MessageActivity.KEY_MESSAGE_COUNT, messageSize);
-        editor.apply();
-    }
-
     private void initView() {
-        activity_message_lv = (ListView) findViewById(R.id.activity_message_lv);
+        activity_broadcast_list_lv = (ListView) findViewById(R.id.activity_broadcast_list_lv);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-        foot_more = getLayoutInflater().inflate(R.layout.foot_more, activity_message_lv, false);
+        foot_more = getLayoutInflater().inflate(R.layout.foot_more, activity_broadcast_list_lv, false);
 
         Toolbar toolbar_root = (Toolbar) findViewById(R.id.toolbar_root);
         setSupportActionBar(toolbar_root);
@@ -85,9 +74,9 @@ public class MessageActivity extends AppCompatActivity implements
 
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimaryDark0);
-        activity_message_lv.addFooterView(foot_more);
-        activity_message_lv.setOnScrollListener(this);
-        activity_message_lv.setOnItemClickListener(this);
+        activity_broadcast_list_lv.addFooterView(foot_more);
+        activity_broadcast_list_lv.setOnScrollListener(this);
+        activity_broadcast_list_lv.setOnItemClickListener(this);
     }
 
     private void refreshData() {
@@ -104,10 +93,8 @@ public class MessageActivity extends AppCompatActivity implements
 
     private void loadPage(int page) {
         HashMap<String, Object> params = new DefaultParams();
-        params.put("user_id", MyApplication.currentUser.id);
-        params.put("roles", MyApplication.currentUser.roles);
         params.put("page", page);
-        lRequestTool.doGet(NetConst.API_MESSAGE, params, API_MESSAGE);
+        lRequestTool.doGet(NetConst.API_PUBLIC_NOTICES, params, API_PUBLIC_NOTICES);
     }
 
     @Override
@@ -135,16 +122,16 @@ public class MessageActivity extends AppCompatActivity implements
         }
         final Gson gson = new Gson();
         switch (response.requestCode) {
-            case API_MESSAGE:
-                List<MessageBox> appendResults = gson.fromJson(response.body, new TypeToken<List<MessageBox>>() {
+            case API_PUBLIC_NOTICES:
+                List<Notice> appendResults = gson.fromJson(response.body, new TypeToken<List<Notice>>() {
                 }.getType());
-                if (messages == null) {
-                    messages = new ArrayList<>();
+                if (notices == null) {
+                    notices = new ArrayList<>();
                 }
                 if (currentPage == 1) {
-                    messages = appendResults;
+                    notices = appendResults;
                 } else {
-                    messages.addAll(appendResults);
+                    notices.addAll(appendResults);
                 }
                 if (appendResults == null || appendResults.size() != 15) {
                     hasMore = false;
@@ -153,14 +140,12 @@ public class MessageActivity extends AppCompatActivity implements
                     hasMore = true;
                     ((TextView) foot_more.findViewById(R.id.foot_more_tv)).setText(R.string.load_more);
                 }
-                if (messageAdapter == null) {
-                    messageAdapter = new MessageAdapter(messages);
-                    activity_message_lv.setAdapter(messageAdapter);
+                if (noticeAdapter == null) {
+                    noticeAdapter = new NoticeAdapter(notices);
+                    activity_broadcast_list_lv.setAdapter(noticeAdapter);
                 } else {
-                    messageAdapter.setNewData(messages);
+                    noticeAdapter.setNewData(notices);
                 }
-                int messageSize = messages.size() == 0 ? 0 : messages.get(0).message_size;
-                resetMessage(messageSize);
                 break;
         }
     }
@@ -185,10 +170,9 @@ public class MessageActivity extends AppCompatActivity implements
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        MessageBox messageBox = messages.get(position);
-        Result result = messageBox.activity_result;
-        Intent detailIntent = new Intent(this, DetailActivity.class);
-        detailIntent.putExtra("result", result);
+        Notice notice = notices.get(position);
+        Intent detailIntent = new Intent(this, NoticeActivity.class);
+        detailIntent.putExtra("notice", notice);
         startActivity(detailIntent);
     }
 }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context=".BroadcastListActivity">
+
+    <include layout="@layout/tool_bar_root" />
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/activity_broadcast_list_lv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listfooter="@layout/foot_more"
+            tools:listitem="@layout/item_broadcast_list" />
+    </android.support.v4.widget.SwipeRefreshLayout>
+</LinearLayout>

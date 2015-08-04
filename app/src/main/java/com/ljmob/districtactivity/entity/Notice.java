@@ -9,4 +9,5 @@ import com.londonx.lutil.entity.LEntity;
 public class Notice extends LEntity {
     public String title;
     public String description;
+    public String created_at;
 }

@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.ljmob.districtactivity.CategoryActivity;
 import com.ljmob.districtactivity.DetailActivity;
+import com.ljmob.districtactivity.NoticeListActivity;
 import com.ljmob.districtactivity.R;
 import com.ljmob.districtactivity.adapter.MainHeadPagerAdapter;
 import com.ljmob.districtactivity.adapter.ShowcaseAdapter;
@@ -168,7 +169,7 @@ public class ShowcaseFragment extends Fragment implements LRequestTool.OnRespons
                     head_showcase_cardBroadcast.setVisibility(View.GONE);
                 } else {
                     head_showcase_cardBroadcast.setVisibility(View.VISIBLE);
-                    head_showcase_tvPreview.setText(notices.get(0).description);
+                    head_showcase_tvPreview.setText(notices.get(0).title);
                 }
                 break;
             case API_ACTIVITY://Head data
@@ -268,6 +269,8 @@ public class ShowcaseFragment extends Fragment implements LRequestTool.OnRespons
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_showcase_lnBroadcast:
+                Intent noticeListIntent = new Intent(getActivity(), NoticeListActivity.class);
+                startActivity(noticeListIntent);
                 break;
         }
     }
