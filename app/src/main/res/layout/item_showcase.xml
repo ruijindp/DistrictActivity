@@ -57,6 +57,17 @@
                     android:visibility="invisible" />
 
                 <TextView
+                    android:id="@+id/item_showcase_tvUnchecked"
+                    android:layout_width="56dp"
+                    android:layout_height="18dp"
+                    android:layout_gravity="center_vertical|right"
+                    android:background="@drawable/shape_unchecked"
+                    android:gravity="center"
+                    android:text="@string/unchecked"
+                    android:textColor="@color/check"
+                    android:visibility="invisible" />
+
+                <TextView
                     android:id="@+id/item_showcase_tvTag"
                     android:layout_width="24dp"
                     android:layout_height="24dp"

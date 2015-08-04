@@ -323,11 +323,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 imageLoader.displayImage(NetConst.ROOT_URL +
                         MyApplication.currentUser.user_avatar, activity_main_imgHead);
                 activity_main_tvUserName.setText(MyApplication.currentUser.user_name);
-                if (MyApplication.currentUser.roles.equals("teacher")) {//老师不能发帖
+                if (MyApplication.currentUser.roles.equals("teacher")) {//老师不能发帖，也没有消息列表
                     activity_main_lnUpload.setVisibility(View.GONE);
+                    activity_main_lnMessage.setVisibility(View.GONE);
                     activity_main_tvMyUpload.setText(R.string.activity_myUpload_teacher);
                 } else {
                     activity_main_lnUpload.setVisibility(View.VISIBLE);
+                    activity_main_lnMessage.setVisibility(View.VISIBLE);
                     activity_main_tvMyUpload.setText(R.string.activity_myUpload);
                 }
             }

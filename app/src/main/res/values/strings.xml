@@ -35,6 +35,7 @@
     <string name="_vote">票</string>
     <string name="checking">待审核</string>
     <string name="checked">已通过</string>
+    <string name="unchecked">未通过</string>
     <string name="replied">评论了您的</string>
     <string name="to_your">对您的</string>
     <string name="praised">点了赞</string>
@@ -79,11 +80,20 @@
     <string name="no_comment">暂时还没有评论</string>
     <string name="teacher_cannot_post">老师不能发帖</string>
     <string name="invaluable">不可用</string>
+    <string name="btn_checked">审核通过</string>
+    <string name="btn_unchecked">谢谢参与</string>
+    <string name="visible_level">选择发布区域</string>
+    <string name="visible_level_please">请选择发布区域</string>
 
     <string-array name="filter_method">
         <item>全部作品</item>
         <item>本校作品</item>
         <item>本班作品</item>
+    </string-array>
+    <string-array name="visible_level">
+        <item>全部可见</item>
+        <item>本校可见</item>
+        <item>本班可见</item>
     </string-array>
 
     <string name="dialog_uploading">正在上传…</string>
@@ -94,6 +104,8 @@
     <string name="dialog_positive">确定</string>
     <string name="dialog_exit">确认退出</string>
     <string name="dialog_exit_desc">你还没有提交，确定退出编辑？</string>
+    <string name="dialog_confirm">请确认</string>
+    <string name="dialog_unchecked">是否取消该作品参赛资格</string>
 
     <string name="err_login">用户名或密码错误</string>
     <string name="err_name">名字不能为空</string>
@@ -147,6 +159,7 @@
     <string name="toast_err_cate">请选择栏目</string>
     <string name="toast_err_content">请输入内容</string>
     <string name="toast_uploaded">发表成功</string>
+    <string name="toast_checked">审核成功</string>
 
     <string name="test_user">测试学生</string>
     <string name="test1">9月29日正式开发区级朗读排行榜，敬请期待。</string>

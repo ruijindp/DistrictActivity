@@ -32,7 +32,13 @@ import java.util.List;
  * Created by london on 15/7/22.
  * 我的上传
  */
-public class MyUploadActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, LRequestTool.OnResponseListener, AbsListView.OnScrollListener, AdapterView.OnItemClickListener {
+public class MyUploadActivity extends AppCompatActivity implements
+        SwipeRefreshLayout.OnRefreshListener,
+        LRequestTool.OnResponseListener,
+        AbsListView.OnScrollListener,
+        AdapterView.OnItemClickListener {
+
+    public static boolean isResultChanged = false;
     private static final int API_SEARCH_RESULT = 1;
 
     ListView activity_my_lv;
@@ -57,6 +63,14 @@ public class MyUploadActivity extends AppCompatActivity implements SwipeRefreshL
         lRequestTool = new LRequestTool(this);
         initView();
         refreshData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (isResultChanged) {
+            refreshData();
+        }
     }
 
     private void initView() {

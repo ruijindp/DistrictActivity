@@ -20,7 +20,7 @@ public class Result extends LEntity {
     public int praise_count;
     public boolean is_vote;
     public boolean is_praise;
-    public boolean is_check;
+    public String is_check;
     public Author author;
     public List<Item> items;
 }

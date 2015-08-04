@@ -24,6 +24,43 @@
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <LinearLayout
+        android:id="@+id/activity_detail_lnCheck"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="@android:color/white"
+        android:elevation="6dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/activity_detail_tvCheck"
+            android:layout_width="104dp"
+            android:layout_height="40dp"
+            android:background="@drawable/selector_reply"
+            android:clickable="true"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:text="@string/btn_checked"
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/activity_detail_tvUnchecked"
+            android:layout_width="104dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="40dp"
+            android:background="@drawable/selector_vote"
+            android:clickable="true"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:text="@string/btn_unchecked"
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/activity_detail_lnOptions"
         android:layout_width="match_parent"
         android:layout_height="64dp"

@@ -43,12 +43,19 @@ public class ShowcaseAdapter extends LAdapter {
         ViewHolder holder = (ViewHolder) convertView.getTag();
         holder.item_showcase_tvTitle.setText(result.title);
         if (showCheckStatus) {
-            if (result.is_check) {
-                holder.item_showcase_tvChecked.setVisibility(View.VISIBLE);
-                holder.item_showcase_tvChecking.setVisibility(View.INVISIBLE);
-            } else {
-                holder.item_showcase_tvChecked.setVisibility(View.INVISIBLE);
-                holder.item_showcase_tvChecking.setVisibility(View.VISIBLE);
+            holder.item_showcase_tvChecked.setVisibility(View.INVISIBLE);
+            holder.item_showcase_tvChecking.setVisibility(View.INVISIBLE);
+            holder.item_showcase_tvUnChecked.setVisibility(View.INVISIBLE);
+            switch (result.is_check) {
+                case "checking":
+                    holder.item_showcase_tvChecking.setVisibility(View.VISIBLE);
+                    break;
+                case "true":
+                    holder.item_showcase_tvChecked.setVisibility(View.VISIBLE);
+                    break;
+                case "false":
+                    holder.item_showcase_tvUnChecked.setVisibility(View.VISIBLE);
+                    break;
             }
         } else {
             holder.item_showcase_tvChecked.setVisibility(View.INVISIBLE);
@@ -126,6 +133,7 @@ public class ShowcaseAdapter extends LAdapter {
         public final LinearLayout item_showcase_lnTopic;
         public final View item_showcase_tvChecked;
         public final View item_showcase_tvChecking;
+        public final View item_showcase_tvUnChecked;
         public final View root;
 
         public ViewHolder(View root) {
@@ -140,6 +148,7 @@ public class ShowcaseAdapter extends LAdapter {
             item_showcase_lnTopic = (LinearLayout) root.findViewById(R.id.item_showcase_lnTopic);
             item_showcase_tvChecked = root.findViewById(R.id.item_showcase_tvChecked);
             item_showcase_tvChecking = root.findViewById(R.id.item_showcase_tvChecking);
+            item_showcase_tvUnChecked = root.findViewById(R.id.item_showcase_tvUnchecked);
             this.root = root;
         }
     }

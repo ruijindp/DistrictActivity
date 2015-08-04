@@ -1,5 +1,6 @@
 package com.ljmob.districtactivity;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -81,6 +82,7 @@ public class DetailActivity extends AppCompatActivity implements
     private static final int API_VOTE = 2;
     private static final int API_COMMENT = 3;
     private static final int API_COMMENT_SEND = 4;
+    private static final int API_CHECK = 5;
 
     @InjectView(R.id.toolbar_root)
     Toolbar toolbarRoot;
@@ -112,12 +114,20 @@ public class DetailActivity extends AppCompatActivity implements
     GridView activityDetailGvEmoji;
     @InjectView(R.id.activity_detail_lnReply)
     LinearLayout activityDetailLnReply;
+    @InjectView(R.id.activity_detail_tvCheck)
+    TextView activityDetailTvCheck;
+    @InjectView(R.id.activity_detail_tvUnchecked)
+    TextView activityDetailTvUnchecked;
+    @InjectView(R.id.activity_detail_lnCheck)
+    LinearLayout activityDetailLnCheck;
 
     View footView;
     TextView foot_more_tv;
     MaterialDialog shareDialog;
     LoginDialog loginDialog;
     MaterialDialog exitDialog;
+    MaterialDialog checkDialog;
+    MaterialDialog uncheckedDialog;
     ProgressDialog commentDialog;
 
     LRequestTool lRequestTool;
@@ -132,9 +142,10 @@ public class DetailActivity extends AppCompatActivity implements
 
     int currentPage = 1;
     boolean isLoading;
-    int currentMaxFloor = 1;
+    int currentMaxFloor;
     boolean isDivDPage;
     boolean hasMore;
+    String checkVisibleLevel = "all";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,9 +200,24 @@ public class DetailActivity extends AppCompatActivity implements
         activityDetailEtComment.addTextChangedListener(this);
         activityDetailGvEmoji.setOnItemClickListener(this);
         activityDetailBtnEmoji.setOnClickListener(this);
+        activityDetailTvCheck.setOnClickListener(this);
+        activityDetailTvUnchecked.setOnClickListener(this);
     }
 
     private void initViewsWithResult() {
+        activityDetailLnCheck.setVisibility(View.GONE);
+        activityDetailLnOptions.setVisibility(View.GONE);
+        switch (result.is_check) {
+            case "checking":
+                activityDetailLnCheck.setVisibility(View.VISIBLE);
+                break;
+            case "true":
+                activityDetailLnOptions.setVisibility(View.VISIBLE);
+                break;
+            case "false":
+                break;
+        }
+        currentMaxFloor = 1;
         //第一行（标题和用户信息）
         FloorItem floorItemUser = new FloorItem();
         floorItemUser.title = result.title;
@@ -327,6 +353,12 @@ public class DetailActivity extends AppCompatActivity implements
                     }
                 }
                 floorItemAdapter.setNewData(floorItems);
+                break;
+            case API_CHECK:
+                ToastUtil.show(R.string.toast_checked);
+                MyUploadActivity.isResultChanged = true;
+                initViewsWithResult();
+                //TODO
                 break;
         }
     }
@@ -486,6 +518,74 @@ public class DetailActivity extends AppCompatActivity implements
                 onBackPressed();//hide lnReply
                 hideKeyBoard();
                 break;
+            case R.id.activity_detail_tvCheck:
+                checkDialog = new MaterialDialog.Builder(this)
+                        .theme(Theme.LIGHT)
+                        .title(R.string.visible_level)
+                        .items(R.array.visible_level)
+                        .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog materialDialog,
+                                                       View view, int i, CharSequence charSequence) {
+                                switch (i) {
+                                    case 0:
+                                        checkVisibleLevel = "all";
+                                        break;
+                                    case 1:
+                                        checkVisibleLevel = "school";
+                                        break;
+                                    case 2:
+                                        checkVisibleLevel = "team_class";
+                                        break;
+                                }
+                                return false;
+                            }
+                        })
+                        .positiveText(android.R.string.ok)
+                        .negativeText(android.R.string.cancel)
+                        .callback(new MaterialDialog.ButtonCallback() {
+                            @Override
+                            public void onPositive(MaterialDialog dialog) {
+                                if (checkVisibleLevel == null) {
+                                    ToastUtil.show(R.string.visible_level_please);
+                                    return;
+                                }
+                                HashMap<String, Object> params = new DefaultParams();
+                                params.put("activity_result_id", result.id);
+                                params.put("is_check", "true");
+                                params.put("level", checkVisibleLevel);
+                                result.is_check = "true";
+                                lRequestTool.doPost(NetConst.API_CHECK, params, API_CHECK);
+                                super.onPositive(dialog);
+                            }
+                        })
+                        .build();
+                checkDialog.setSelectedIndex(0);
+                checkDialog.show();
+                break;
+            case R.id.activity_detail_tvUnchecked:
+                if (uncheckedDialog == null) {
+                    uncheckedDialog = new MaterialDialog.Builder(this)
+                            .theme(Theme.LIGHT)
+                            .title(R.string.dialog_confirm)
+                            .content(R.string.dialog_unchecked)
+                            .positiveText(android.R.string.yes)
+                            .negativeText(android.R.string.no)
+                            .callback(new MaterialDialog.ButtonCallback() {
+                                @Override
+                                public void onPositive(MaterialDialog dialog) {
+                                    HashMap<String, Object> params = new DefaultParams();
+                                    params.put("activity_result_id", result.id);
+                                    params.put("is_check", "false");
+                                    result.is_check = "false";
+                                    lRequestTool.doPost(NetConst.API_CHECK, params, API_CHECK);
+                                    super.onPositive(dialog);
+                                }
+                            })
+                            .build();
+                }
+                uncheckedDialog.show();
+                break;
         }
     }
 
@@ -552,7 +652,7 @@ public class DetailActivity extends AppCompatActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        if (resultCode != android.app.Activity.RESULT_OK) {
+        if (resultCode != Activity.RESULT_OK) {
             return;
         }
         File selectedFile = null;
