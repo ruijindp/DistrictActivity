@@ -204,12 +204,10 @@ public class CategoryActivity extends AppCompatActivity implements
             case API_TEAM_CLASS:
                 List<TeamClass> appendData = gson.fromJson(response.body, new TypeToken<List<TeamClass>>() {
                 }.getType());
-                if (teamClasses == null) {
-                    teamClasses = new ArrayList<>(appendData.size());
-                    TeamClass defaultClass = new TeamClass();
-                    defaultClass.name = getString(R.string.str_default);
-                    teamClasses.add(0, defaultClass);
-                }
+                teamClasses = new ArrayList<>(appendData.size());
+                TeamClass defaultClass = new TeamClass();
+                defaultClass.name = getString(R.string.str_default);
+                teamClasses.add(0, defaultClass);
                 teamClasses.addAll(appendData);
                 break;
             case API_SCHOOL:

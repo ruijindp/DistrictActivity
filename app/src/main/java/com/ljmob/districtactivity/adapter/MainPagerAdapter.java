@@ -19,13 +19,16 @@ import java.util.List;
 public class MainPagerAdapter extends FragmentPagerAdapter {
     public Context context;
     public List<Fragment> fragments;
+    public RankFragment rankFragment;
 
     public MainPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
         this.context = context;
         fragments = new ArrayList<>(2);
+        rankFragment = new RankFragment();
+
         fragments.add(new ShowcaseFragment());
-        fragments.add(new RankFragment());
+        fragments.add(rankFragment);
     }
 
     @Override

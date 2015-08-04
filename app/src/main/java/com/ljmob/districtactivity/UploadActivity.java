@@ -103,6 +103,9 @@ public class UploadActivity extends AppCompatActivity implements
         activities = ShowcaseFragment.activities;
         activityNames = new ArrayList<>();
         for (Activity activity : activities) {
+            if (activity.id == 0) {
+                continue;
+            }
             activityNames.add(activity.name);
         }
     }
@@ -158,6 +161,10 @@ public class UploadActivity extends AppCompatActivity implements
                 finish();
                 break;
             case R.id.action_post:
+                if (MyApplication.currentUser != null && MyApplication.currentUser.roles.equals("teacher")) {
+                    ToastUtil.show(R.string.teacher_cannot_post);
+                    break;
+                }
                 send();
                 break;
         }
@@ -378,6 +385,9 @@ public class UploadActivity extends AppCompatActivity implements
                 || activity_post_tvCategory.getText().length() != 0
                 || activity_post_etContent.length() != 0
                 || attaches.size() != 0) {
+            if (MyApplication.currentUser != null && MyApplication.currentUser.roles.equals("teacher")) {
+                finish();
+            }
             if (exitDialog == null) {
                 exitDialog = new MaterialDialog.Builder(this)
                         .theme(Theme.LIGHT)

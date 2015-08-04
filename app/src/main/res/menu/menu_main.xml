@@ -7,4 +7,9 @@
         android:icon="@drawable/layer_add"
         android:title="@string/action_make_post"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/action_filter"
+        android:icon="@drawable/layer_filter"
+        android:title="@string/action_filter"
+        app:showAsAction="ifRoom" />
 </menu>

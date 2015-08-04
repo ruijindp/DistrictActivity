@@ -18,6 +18,7 @@ import com.google.gson.reflect.TypeToken;
 import com.ljmob.districtactivity.DetailActivity;
 import com.ljmob.districtactivity.R;
 import com.ljmob.districtactivity.adapter.RankAdapter;
+import com.ljmob.districtactivity.entity.FilterCondition;
 import com.ljmob.districtactivity.entity.Result;
 import com.ljmob.districtactivity.net.NetConst;
 import com.ljmob.districtactivity.util.DefaultParams;
@@ -53,6 +54,8 @@ public class RankFragment extends Fragment implements AbsListView.OnScrollListen
     private LRequestTool lRequestTool;
     private List<Result> results;
     private RankAdapter rankAdapter;
+
+    private FilterCondition filterCondition;
 
     @Nullable
     @Override
@@ -93,8 +96,25 @@ public class RankFragment extends Fragment implements AbsListView.OnScrollListen
     private void loadPage(int page) {
         isLoading = true;
         HashMap<String, Object> params = new DefaultParams();
+        if (filterCondition != null) {
+            params.put("activity_id", filterCondition.activityId);
+            if (filterCondition.districtId != 0) {
+                params.put("district_id", filterCondition.districtId);
+                params.put("district", 0);
+            } else if (filterCondition.schoolId != 0) {
+                params.put("school_id", filterCondition.schoolId);
+                params.put("school", 0);
+            } else {
+                params.put("activity", 0);
+            }
+        }
         params.put("page", page);
         lRequestTool.doGet(NetConst.API_RANK, params, API_RANK);
+    }
+
+    public void setFilterCondition(FilterCondition filterCondition) {
+        this.filterCondition = filterCondition;
+        refreshData();
     }
 
     @Override

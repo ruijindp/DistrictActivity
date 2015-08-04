@@ -47,7 +47,8 @@
                     android:layout_width="12dp"
                     android:layout_height="10dp"
                     android:layout_gravity="right|center_vertical"
-                    android:src="@color/test" />
+                    android:contentDescription="@string/default_content_description"
+                    android:src="@mipmap/icon_drop_down" />
             </FrameLayout>
         </LinearLayout>
 
@@ -84,7 +85,8 @@
                     android:layout_width="12dp"
                     android:layout_height="10dp"
                     android:layout_gravity="right|center_vertical"
-                    android:src="@color/test" />
+                    android:contentDescription="@string/default_content_description"
+                    android:src="@mipmap/icon_drop_down" />
             </FrameLayout>
         </LinearLayout>
 
@@ -121,7 +123,8 @@
                     android:layout_width="12dp"
                     android:layout_height="10dp"
                     android:layout_gravity="right|center_vertical"
-                    android:src="@color/test" />
+                    android:contentDescription="@string/default_content_description"
+                    android:src="@mipmap/icon_drop_down" />
             </FrameLayout>
         </LinearLayout>
     </LinearLayout>

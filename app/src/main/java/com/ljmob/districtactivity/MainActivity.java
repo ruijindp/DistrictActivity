@@ -1,5 +1,6 @@
 package com.ljmob.districtactivity;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +26,7 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.ljmob.districtactivity.adapter.MainPagerAdapter;
+import com.ljmob.districtactivity.entity.FilterCondition;
 import com.ljmob.districtactivity.entity.MessageBox;
 import com.ljmob.districtactivity.fragment.ShowcaseFragment;
 import com.ljmob.districtactivity.net.NetConst;
@@ -48,6 +50,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, LoginDialog.LoginListener, DrawerLayout.DrawerListener, ViewPager.OnPageChangeListener, LRequestTool.OnResponseListener, FirimUpdate.OnUpdateListener {
     //firim token:e9400a3620552593c1851beecb8431a0
     //firim appId:55bb0e50692d65612d00000c
+    private static final int INTENT_FILTER = 1;
     private static final int API_MESSAGE = 1;
     public static boolean isOnFront;
 
@@ -72,11 +75,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     LoginDialog loginDialog;
     ImageLoader imageLoader;
     MainBroadcastReceiver receiver;
+    MainPagerAdapter mainPagerAdapter;
 
     List<MessageBox> messages;
 
     boolean willInitDrawer = true;
     MenuItem postMenuItem;
+    MenuItem filterMenuItem;
     int messageSize;
 
     @Override
@@ -112,13 +117,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         lRequestTool.doGet(NetConst.API_MESSAGE, new DefaultParams(), API_MESSAGE);
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         postMenuItem = menu.findItem(R.id.action_make_post);
+        filterMenuItem = menu.findItem(R.id.action_filter);
         if (MyApplication.currentUser != null && MyApplication.currentUser.roles.equals("teacher")) {
             postMenuItem.setVisible(false);
         }
+        filterMenuItem.setVisible(false);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -132,8 +140,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent intent = new Intent(this, UploadActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.action_filter:
+                Intent filterIntent = new Intent(this, FilterActivity.class);
+                startActivityForResult(filterIntent, INTENT_FILTER);
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        if (requestCode != INTENT_FILTER) {
+            return;
+        }
+        FilterCondition filterCondition = (FilterCondition) data.getSerializableExtra("filterCondition");
+        if (mainPagerAdapter.rankFragment == null) {
+            return;
+        }
+        mainPagerAdapter.rankFragment.setFilterCondition(filterCondition);
     }
 
     private void initFragment(Page page) {
@@ -169,7 +197,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         activity_main_drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        activity_main_pager.setAdapter(new MainPagerAdapter(getSupportFragmentManager(), this));
+        mainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), this);
+        activity_main_pager.setAdapter(mainPagerAdapter);
         activity_main_tabStrip.setViewPager(activity_main_pager);
         activity_main_flUserInfo.setOnClickListener(this);
         activity_main_drawer.setDrawerListener(this);
@@ -321,14 +350,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onPageSelected(int position) {
-        if (MyApplication.currentUser != null
-                && MyApplication.currentUser.roles.equals("teacher")) {// 老师不能发帖
-            postMenuItem.setVisible(false);
-            return;
-        }
         if (position == 0) {
-            postMenuItem.setVisible(true);
+            filterMenuItem.setVisible(false);
+            if (MyApplication.currentUser != null
+                    && MyApplication.currentUser.roles.equals("teacher")) {// 老师不能发帖
+                postMenuItem.setVisible(false);
+            } else {
+                postMenuItem.setVisible(true);
+            }
         } else {
+            filterMenuItem.setVisible(true);
             postMenuItem.setVisible(false);
         }
     }
