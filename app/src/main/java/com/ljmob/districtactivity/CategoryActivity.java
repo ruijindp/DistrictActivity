@@ -179,21 +179,33 @@ public class CategoryActivity extends AppCompatActivity implements
 
 
     private void loadPage(int page) {
-        isLoading = true;
         HashMap<String, Object> params = new DefaultParams();
-        if (schoolId != 0) {//优先按学校排
-            params.put("school_id", schoolId);
+        boolean isLeveled = false;
+        if (schoolId != 0) {
             if (MyApplication.currentUser != null) {
-                params.put("level", "school");
+                for (TeamClass teamClass : MyApplication.currentUser.team_class) {
+                    if (teamClass.school.id == schoolId) {
+                        params.put("level", "school");
+                        isLeveled = true;
+                        break;
+                    }
+                }
+            }
+            if (!isLeveled) {
+                params.put("school_id", schoolId);
             }
         } else if (classId != 0) {
-            params.put("team_class_id", classId);
             if (MyApplication.currentUser != null) {
-                params.put("level", "team_class");
+                for (TeamClass teamClass : MyApplication.currentUser.team_class) {
+                    if (teamClass.id == classId) {
+                        params.put("level", "team_class");
+                        isLeveled = true;
+                        break;
+                    }
+                }
             }
-        } else {
-            if (MyApplication.currentUser != null) {
-                params.put("level", "all");
+            if (!isLeveled) {
+                params.put("team_class_id", classId);
             }
         }
         params.put("page", page);

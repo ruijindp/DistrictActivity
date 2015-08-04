@@ -5,8 +5,8 @@ package com.ljmob.districtactivity.net;
  * 网络常量
  */
 public class NetConst {
-//    public static final String ROOT_URL = "http://192.168.31.148:3100";
-    public static final String ROOT_URL = "http://disact.ljmob.com";
+    public static final String ROOT_URL = "http://192.168.31.148:3100";
+//    public static final String ROOT_URL = "http://disact.ljmob.com";
 
     public static final String API_USER = ROOT_URL + "/users.json";
     public static final String API_SIGN_IN = ROOT_URL + "/users/sign_in.json";
