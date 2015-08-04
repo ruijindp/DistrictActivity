@@ -16,6 +16,8 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -29,6 +31,7 @@ import com.ljmob.districtactivity.adapter.MainPagerAdapter;
 import com.ljmob.districtactivity.entity.FilterCondition;
 import com.ljmob.districtactivity.entity.MessageBox;
 import com.ljmob.districtactivity.fragment.ShowcaseFragment;
+import com.ljmob.districtactivity.impl.UiChangeRequest;
 import com.ljmob.districtactivity.net.NetConst;
 import com.ljmob.districtactivity.util.DefaultParams;
 import com.ljmob.districtactivity.util.MyApplication;
@@ -47,7 +50,7 @@ import cn.jpush.android.api.JPushInterface;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, LoginDialog.LoginListener, DrawerLayout.DrawerListener, ViewPager.OnPageChangeListener, LRequestTool.OnResponseListener, FirimUpdate.OnUpdateListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, LoginDialog.LoginListener, DrawerLayout.DrawerListener, ViewPager.OnPageChangeListener, LRequestTool.OnResponseListener, FirimUpdate.OnUpdateListener, UiChangeRequest {
     //firim token:e9400a3620552593c1851beecb8431a0
     //firim appId:55bb0e50692d65612d00000c
     private static final int INTENT_FILTER = 1;
@@ -57,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Toolbar toolbar_root;
     PagerSlidingTabStrip activity_main_tabStrip;
     ViewPager activity_main_pager;
-    FrameLayout activity_main_fl;
     FrameLayout activity_main_flUserInfo;
     CircleImageView activity_main_imgHead;
     TextView activity_main_tvUserName;
@@ -83,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     MenuItem postMenuItem;
     MenuItem filterMenuItem;
     int messageSize;
+    boolean isShowingUi = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,7 +179,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initView() {
         activity_main_tabStrip = (PagerSlidingTabStrip) findViewById(R.id.activity_main_tabStrip);
         activity_main_pager = (ViewPager) findViewById(R.id.activity_main_pager);
-        activity_main_fl = (FrameLayout) findViewById(R.id.activity_main_fl);
         activity_main_flUserInfo = (FrameLayout) findViewById(R.id.activity_main_flUserInfo);
         activity_main_imgHead = (CircleImageView) findViewById(R.id.activity_main_imgHead);
         activity_main_tvUserName = (TextView) findViewById(R.id.activity_main_tvUserName);
@@ -209,6 +211,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         activity_main_lnJoined.setOnClickListener(this);
         activity_main_lnSettings.setOnClickListener(this);
         activity_main_pager.addOnPageChangeListener(this);
+        mainPagerAdapter.showcaseFragment.setUiChangeRequest(this);
+        mainPagerAdapter.rankFragment.setUiChangeRequest(this);
 
         if (MyApplication.currentUser == null) {
             return;
@@ -346,6 +350,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        onShow();
     }
 
     @Override
@@ -412,6 +417,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 })
                 .build();
         updateDialog.show();
+    }
+
+    @Override
+    public void onHide() {
+        if (!isShowingUi) {
+            return;
+        }
+        toolbar_root.animate().translationY(-toolbar_root.getBottom())
+                .setInterpolator(new AccelerateInterpolator()).start();
+        activity_main_tabStrip.animate().translationY(-activity_main_tabStrip.getBottom())
+                .setInterpolator(new AccelerateInterpolator()).start();
+        isShowingUi = false;
+    }
+
+    @Override
+    public void onShow() {
+        if (isShowingUi) {
+            return;
+        }
+        toolbar_root.animate().translationY(0)
+                .setInterpolator(new DecelerateInterpolator()).start();
+        activity_main_tabStrip.animate().translationY(0)
+                .setInterpolator(new DecelerateInterpolator()).start();
+        isShowingUi = true;
     }
 
     private class MainBroadcastReceiver extends BroadcastReceiver {

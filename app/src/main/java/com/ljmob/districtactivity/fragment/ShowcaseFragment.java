@@ -24,6 +24,7 @@ import com.ljmob.districtactivity.adapter.ShowcaseAdapter;
 import com.ljmob.districtactivity.entity.Activity;
 import com.ljmob.districtactivity.entity.Notice;
 import com.ljmob.districtactivity.entity.Result;
+import com.ljmob.districtactivity.impl.UiChangeRequest;
 import com.ljmob.districtactivity.net.NetConst;
 import com.ljmob.districtactivity.util.DefaultParams;
 import com.londonx.lutil.entity.LResponse;
@@ -45,6 +46,7 @@ public class ShowcaseFragment extends Fragment implements LRequestTool.OnRespons
     public static boolean isResultChanged = false;
 
     View rootView;
+    View headViewEmpty;
     View headView;
     View footView;
     ListView fragment_showcase_lv;
@@ -56,12 +58,15 @@ public class ShowcaseFragment extends Fragment implements LRequestTool.OnRespons
     LRequestTool lRequestTool;
     List<Result> results;
     ShowcaseAdapter showcaseAdapter;
+    UiChangeRequest uiChangeRequest;
 
     int currentPage;
     boolean isDivDPage;
     boolean isLoading;
     boolean hasMore;
     public static List<Activity> activities;
+    float dp;
+    int firstIndex = -1;
 
     @Nullable
     @Override
@@ -71,6 +76,7 @@ public class ShowcaseFragment extends Fragment implements LRequestTool.OnRespons
         }
         rootView = inflater.inflate(R.layout.fragment_showcase, container, false);
         lRequestTool = new LRequestTool(this);
+        dp = getResources().getDimension(R.dimen.one);
         initView(inflater);
         refreshData();
         return rootView;
@@ -88,17 +94,20 @@ public class ShowcaseFragment extends Fragment implements LRequestTool.OnRespons
     private void initView(LayoutInflater inflater) {
         fragment_showcase_lv = (ListView) rootView.findViewById(R.id.fragment_showcase_lv);
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
+        headViewEmpty = inflater.inflate(R.layout.head_main_empty, fragment_showcase_lv, false);
         headView = inflater.inflate(R.layout.head_showcase, fragment_showcase_lv, false);
         footView = inflater.inflate(R.layout.foot_more, fragment_showcase_lv, false);
 
         initViewInHead();
 
+        fragment_showcase_lv.addHeaderView(headViewEmpty);//空的头部
         fragment_showcase_lv.addHeaderView(headView);
         fragment_showcase_lv.addFooterView(footView);
         fragment_showcase_lv.setOnScrollListener(this);
         fragment_showcase_lv.setOnItemClickListener(this);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimaryDark0);
         swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setProgressViewOffset(false, (int) (56 * dp), (int) (128 * dp));
     }
 
     private void initViewInHead() {
@@ -208,9 +217,28 @@ public class ShowcaseFragment extends Fragment implements LRequestTool.OnRespons
         }
     }
 
+    public void setUiChangeRequest(UiChangeRequest uiChangeRequest) {
+        this.uiChangeRequest = uiChangeRequest;
+    }
+
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         isDivDPage = (firstVisibleItem + visibleItemCount == totalItemCount);
+        //收起toolbar
+        if (uiChangeRequest == null) {
+            return;
+        }
+        if (firstIndex == -1) {
+            firstIndex = firstVisibleItem;
+            return;
+        }
+        if (firstIndex < firstVisibleItem) {
+            uiChangeRequest.onHide();
+
+        } else if (firstIndex > firstVisibleItem) {
+            uiChangeRequest.onShow();
+        }
+        firstIndex = firstVisibleItem;
     }
 
     @Override
@@ -230,7 +258,7 @@ public class ShowcaseFragment extends Fragment implements LRequestTool.OnRespons
         if (isLoading) {
             return;
         }
-        Result result = results.get(position - 1);//-1 because of header view
+        Result result = results.get(position - 2);//-2 because of 2 header view
         Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
         detailIntent.putExtra("result", result);
         startActivity(detailIntent);
@@ -240,7 +268,6 @@ public class ShowcaseFragment extends Fragment implements LRequestTool.OnRespons
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_showcase_lnBroadcast:
-                //TODO goto broadcast
                 break;
         }
     }

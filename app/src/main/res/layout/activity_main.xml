@@ -8,10 +8,14 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/activity_main_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
         <include layout="@layout/tool_bar_root" />
 
@@ -19,20 +23,12 @@
             android:id="@+id/activity_main_tabStrip"
             android:layout_width="match_parent"
             android:layout_height="48dp"
+            android:layout_marginTop="?actionBarSize"
             android:background="?attr/colorPrimary"
             android:elevation="4dp"
             app:pstsShouldExpand="true" />
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/activity_main_pager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <FrameLayout
-            android:id="@+id/activity_main_fl"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </LinearLayout>
+    </FrameLayout>
 
     <!--android:layout_gravity="start"-->
     <ScrollView

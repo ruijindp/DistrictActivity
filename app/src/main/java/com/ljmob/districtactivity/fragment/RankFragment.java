@@ -20,6 +20,7 @@ import com.ljmob.districtactivity.R;
 import com.ljmob.districtactivity.adapter.RankAdapter;
 import com.ljmob.districtactivity.entity.FilterCondition;
 import com.ljmob.districtactivity.entity.Result;
+import com.ljmob.districtactivity.impl.UiChangeRequest;
 import com.ljmob.districtactivity.net.NetConst;
 import com.ljmob.districtactivity.util.DefaultParams;
 import com.londonx.lutil.entity.LResponse;
@@ -41,6 +42,7 @@ public class RankFragment extends Fragment implements AbsListView.OnScrollListen
     private static final int API_RANK = 1;
 
     View rootView;
+    View headView;
     View footView;
     @InjectView(R.id.fragment_rank_lv)
     ListView fragmentRankLv;
@@ -57,6 +59,10 @@ public class RankFragment extends Fragment implements AbsListView.OnScrollListen
 
     private FilterCondition filterCondition;
 
+    UiChangeRequest uiChangeRequest;
+    int firstIndex = -1;
+    float dp;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,6 +71,7 @@ public class RankFragment extends Fragment implements AbsListView.OnScrollListen
         }
         lRequestTool = new LRequestTool(this);
         rootView = inflater.inflate(R.layout.fragment_rank, container, false);
+        dp = getResources().getDimension(R.dimen.one);
         initView(inflater);
         refreshData();
         return rootView;
@@ -72,13 +79,16 @@ public class RankFragment extends Fragment implements AbsListView.OnScrollListen
 
     private void initView(LayoutInflater inflater) {
         ButterKnife.inject(this, rootView);
+        headView = inflater.inflate(R.layout.head_main_empty, fragmentRankLv, false);
         footView = inflater.inflate(R.layout.foot_more, fragmentRankLv, false);
 
+        fragmentRankLv.addHeaderView(headView);
         fragmentRankLv.addFooterView(footView);
         fragmentRankLv.setOnScrollListener(this);
         fragmentRankLv.setOnItemClickListener(this);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimaryDark0);
         swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setProgressViewOffset(false, (int) (56 * dp), (int) (128 * dp));
     }
 
     private void refreshData() {
@@ -123,6 +133,10 @@ public class RankFragment extends Fragment implements AbsListView.OnScrollListen
         ButterKnife.reset(this);
     }
 
+    public void setUiChangeRequest(UiChangeRequest uiChangeRequest) {
+        this.uiChangeRequest = uiChangeRequest;
+    }
+
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         if (scrollState != SCROLL_STATE_IDLE || isLoading) {
@@ -138,6 +152,21 @@ public class RankFragment extends Fragment implements AbsListView.OnScrollListen
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         isDivPage = (firstVisibleItem + visibleItemCount == totalItemCount);
+        //收起toolbar
+        if (uiChangeRequest == null) {
+            return;
+        }
+        if (firstIndex == -1) {
+            firstIndex = firstVisibleItem;
+            return;
+        }
+        if (firstIndex < firstVisibleItem) {
+            uiChangeRequest.onHide();
+
+        } else if (firstIndex > firstVisibleItem) {
+            uiChangeRequest.onShow();
+        }
+        firstIndex = firstVisibleItem;
     }
 
     @Override
@@ -145,7 +174,7 @@ public class RankFragment extends Fragment implements AbsListView.OnScrollListen
         if (isLoading) {
             return;
         }
-        Result result = results.get(position);
+        Result result = results.get(position - 1);//-1 headView
         Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
         detailIntent.putExtra("result", result);
         startActivity(detailIntent);
