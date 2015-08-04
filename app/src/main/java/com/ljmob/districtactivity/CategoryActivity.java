@@ -183,12 +183,18 @@ public class CategoryActivity extends AppCompatActivity implements
         HashMap<String, Object> params = new DefaultParams();
         if (schoolId != 0) {//优先按学校排
             params.put("school_id", schoolId);
-            params.put("level", "school");
+            if (MyApplication.currentUser != null) {
+                params.put("level", "school");
+            }
         } else if (classId != 0) {
             params.put("team_class_id", classId);
-            params.put("level", "team_class");
-        }else{
-            params.put("level", "all");
+            if (MyApplication.currentUser != null) {
+                params.put("level", "team_class");
+            }
+        } else {
+            if (MyApplication.currentUser != null) {
+                params.put("level", "all");
+            }
         }
         params.put("page", page);
         params.put((schoolId == 0 && classId == 0) ? "activity" : "activity_id", selectedActivity.id);

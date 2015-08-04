@@ -207,9 +207,13 @@ public class DetailActivity extends AppCompatActivity implements
     private void initViewsWithResult() {
         activityDetailLnCheck.setVisibility(View.GONE);
         activityDetailLnOptions.setVisibility(View.GONE);
+        boolean isTeacher = MyApplication.currentUser != null &&
+                MyApplication.currentUser.roles.equals("teacher");
         switch (result.is_check) {
             case "checking":
-                activityDetailLnCheck.setVisibility(View.VISIBLE);
+                if (isTeacher) {
+                    activityDetailLnCheck.setVisibility(View.VISIBLE);
+                }
                 break;
             case "true":
                 activityDetailLnOptions.setVisibility(View.VISIBLE);
@@ -217,6 +221,7 @@ public class DetailActivity extends AppCompatActivity implements
             case "false":
                 break;
         }
+
         currentMaxFloor = 1;
         //第一行（标题和用户信息）
         FloorItem floorItemUser = new FloorItem();
@@ -228,12 +233,17 @@ public class DetailActivity extends AppCompatActivity implements
         currentMaxFloor++;//变为2楼
         floorItems.add(floorItemUser);
         //内容行（多行）
-        for (Item item : result.items) {
+        for (
+                Item item
+                : result.items)
+
+        {
             FloorItem floorItem = new FloorItem();
             floorItem.item = item;
             floorItem.itemType = FloorItem.ItemType.normal;
             floorItems.add(floorItem);
         }
+
         //点赞键（行）
         FloorItem floorItemOption = new FloorItem();
         floorItemOption.itemType = FloorItem.ItemType.options;
@@ -242,7 +252,10 @@ public class DetailActivity extends AppCompatActivity implements
         floorItemOption.praiseCount = result.praise_count;
         floorItems.add(floorItemOption);
 
-        floorItemAdapter = new FloorItemAdapter(floorItems, lRequestTool, API_PRAISE);
+        floorItemAdapter = new
+
+                FloorItemAdapter(floorItems, lRequestTool, API_PRAISE);
+
         activityDetailLv.setAdapter(floorItemAdapter);
         activityDetailLv.setOnScrollListener(this);
     }

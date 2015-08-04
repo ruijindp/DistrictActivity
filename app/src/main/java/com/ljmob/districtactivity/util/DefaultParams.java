@@ -10,6 +10,8 @@ public class DefaultParams extends HashMap<String, Object> {
     public DefaultParams() {
         if (MyApplication.currentUser != null) {
             put("token", MyApplication.currentUser.token);
+        } else {
+            put("token", "");
         }
     }
 }
