@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -76,9 +77,8 @@ public class DetailActivity extends AppCompatActivity implements
         AbsListView.OnScrollListener,
         View.OnClickListener,
         TextWatcher,
-        AdapterView.OnItemClickListener, AttachView.AttachViewDeleteListener {
+        AdapterView.OnItemClickListener, AttachView.AttachViewDeleteListener, FloorItemAdapter.LoginRequestListener {
     private static final int RESULT_GET = 1;
-    private static final int API_PRAISE = 1;
     private static final int API_VOTE = 2;
     private static final int API_COMMENT = 3;
     private static final int API_COMMENT_SEND = 4;
@@ -163,7 +163,7 @@ public class DetailActivity extends AppCompatActivity implements
 
         shareable = new Shareable();
         shareable.title = result.title;
-        shareable.content = result.description;
+        shareable.content = LEmoji.simplify(result.description);
         shareable.url = NetConst.PAGE_SHARE + "?id=" + result.id;
         for (Item item : result.items) {
             if (FileUtil.getFileType(item.file_url) == FileUtil.FileType.picture) {
@@ -223,6 +223,7 @@ public class DetailActivity extends AppCompatActivity implements
         }
 
         currentMaxFloor = 1;
+        floorItems.clear();
         //第一行（标题和用户信息）
         FloorItem floorItemUser = new FloorItem();
         floorItemUser.title = result.title;
@@ -233,11 +234,7 @@ public class DetailActivity extends AppCompatActivity implements
         currentMaxFloor++;//变为2楼
         floorItems.add(floorItemUser);
         //内容行（多行）
-        for (
-                Item item
-                : result.items)
-
-        {
+        for (Item item : result.items) {
             FloorItem floorItem = new FloorItem();
             floorItem.item = item;
             floorItem.itemType = FloorItem.ItemType.normal;
@@ -253,11 +250,16 @@ public class DetailActivity extends AppCompatActivity implements
         floorItems.add(floorItemOption);
 
         floorItemAdapter = new
-
-                FloorItemAdapter(floorItems, lRequestTool, API_PRAISE);
+                FloorItemAdapter(floorItems, this);
 
         activityDetailLv.setAdapter(floorItemAdapter);
         activityDetailLv.setOnScrollListener(this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_detail, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -265,6 +267,9 @@ public class DetailActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                break;
+            case R.id.action_share:
+                showShare();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -294,9 +299,6 @@ public class DetailActivity extends AppCompatActivity implements
             gson = new Gson();
         }
         switch (response.requestCode) {
-            case API_PRAISE:
-                ToastUtil.show(R.string.praise_add);
-                break;
             case API_VOTE:
                 ToastUtil.show(R.string.vote_add);
                 break;
@@ -371,7 +373,6 @@ public class DetailActivity extends AppCompatActivity implements
                 ToastUtil.show(R.string.toast_checked);
                 MyUploadActivity.isResultChanged = true;
                 initViewsWithResult();
-                //TODO
                 break;
         }
     }
@@ -410,7 +411,6 @@ public class DetailActivity extends AppCompatActivity implements
             ToastUtil.show(R.string.login_ed);
         }
     }
-
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -453,18 +453,22 @@ public class DetailActivity extends AppCompatActivity implements
         switch (v.getId()) {
             case R.id.dialog_share_lnWechat:
                 new ShareTool(this, new Wechat(this), shareable).share();
+                ToastUtil.show(R.string.sharing);
                 shareDialog.dismiss();
                 return;
             case R.id.dialog_share_lnMoment:
                 new ShareTool(this, new WechatMoments(this), shareable).share();
+                ToastUtil.show(R.string.sharing);
                 shareDialog.dismiss();
                 return;
             case R.id.dialog_share_lnWeibo:
                 new ShareTool(this, new SinaWeibo(this), shareable).share();
+                ToastUtil.show(R.string.sharing);
                 shareDialog.dismiss();
                 return;
             case R.id.dialog_share_lnQQ:
                 new ShareTool(this, new QQ(this), shareable).share();
+                ToastUtil.show(R.string.sharing);
                 shareDialog.dismiss();
                 return;
             case R.id.activity_detail_btnVote:
@@ -732,6 +736,12 @@ public class DetailActivity extends AppCompatActivity implements
     }
 
     @Override
+    protected void onDestroy() {
+        floorItemAdapter.stopAllMusics();
+        super.onDestroy();
+    }
+
+    @Override
     public void onDeleted(AttachView attachView) {
         int index = attachViews.indexOf(attachView);
         activityDetailLnAttached.removeViewAt(index);
@@ -739,5 +749,10 @@ public class DetailActivity extends AppCompatActivity implements
         if (attachViews.size() == 0) {
             activityDetailScAttached.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void requestLogin(FloorItemAdapter floorItemAdapter) {
+        showLoginDialog();
     }
 }

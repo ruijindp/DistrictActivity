@@ -224,6 +224,14 @@ public class ShowcaseFragment extends Fragment implements LRequestTool.OnRespons
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        if (!isLoading && swipeRefreshLayout.isRefreshing()) {
+            swipeRefreshLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            });
+        }
         isDivDPage = (firstVisibleItem + visibleItemCount == totalItemCount);
         //收起toolbar
         if (uiChangeRequest == null) {

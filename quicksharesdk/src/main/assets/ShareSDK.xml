@@ -35,7 +35,7 @@
 
     <!-- ShareByAppClient标识是否使用微博客户端分享，默认是false -->
     <SinaWeibo AppKey="2505577691" AppSecret="06389f88240d466a014f585d2f47f2d2" Enable="true" Id="1"
-        RedirectUrl="http://192.168.31.148:3100/qu/index" ShareByAppClient="false" SortId="1" />
+        RedirectUrl="http://disact.ljmob.com" ShareByAppClient="false" SortId="1" />
 
     <!-- 
 		BypassApproval是绕过审核的标记，设置为true后仅限于分享文字和图片，不能分享其他类型，

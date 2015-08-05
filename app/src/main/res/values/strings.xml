@@ -84,6 +84,9 @@
     <string name="btn_unchecked">谢谢参与</string>
     <string name="visible_level">选择发布区域</string>
     <string name="visible_level_please">请选择发布区域</string>
+    <string name="sharing">正在准备分享内容</string>
+    <string name="shared">分享成功</string>
+    <string name="share_err">分享失败</string>
 
     <string-array name="filter_method">
         <item>全部作品</item>

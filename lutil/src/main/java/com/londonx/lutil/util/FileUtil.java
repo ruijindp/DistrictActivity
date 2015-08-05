@@ -25,7 +25,11 @@ public class FileUtil {
         if (fileUrl == null) {
             return FileType.unknown;
         }
-        if (fileUrl.endsWith(".mp3") || fileUrl.endsWith(".amr") || fileUrl.endsWith(".wav")) {
+        if (fileUrl.endsWith(".mp3") ||
+                fileUrl.endsWith(".amr") ||
+                fileUrl.endsWith(".wav") ||
+                fileUrl.endsWith(".m4a") ||
+                fileUrl.endsWith(".flac")) {
             return FileType.music;
         }
         if (fileUrl.endsWith(".mp4") || fileUrl.endsWith(".3gp")) {

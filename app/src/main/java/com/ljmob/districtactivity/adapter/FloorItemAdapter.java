@@ -18,6 +18,7 @@ import com.ljmob.districtactivity.util.DefaultParams;
 import com.ljmob.lemoji.LEmoji;
 import com.londonx.lutil.adapter.LAdapter;
 import com.londonx.lutil.entity.LEntity;
+import com.londonx.lutil.entity.LResponse;
 import com.londonx.lutil.util.FileUtil;
 import com.londonx.lutil.util.LMediaPlayer;
 import com.londonx.lutil.util.LRequestTool;
@@ -35,21 +36,28 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by london on 15/8/3.
  * 帖子楼层和评论
  */
-public class FloorItemAdapter extends LAdapter {
+public class FloorItemAdapter extends LAdapter implements LRequestTool.OnResponseListener {
+    private static final int API_PRAISE = 1;
+
     HashMap<Integer, LMediaPlayer> players;
+    HashMap<Integer, PlayClickListener> clickListeners;
     LRequestTool lRequestTool;
+    LoginRequestListener loginRequestListener;
     ImageLoader imageLoader;
     String floor;
-    int praiseRequestCode;
+
+    TextView tvPraise;
     int praiseCount = 0;
+    boolean isPraised;
 
 
-    public FloorItemAdapter(List<? extends LEntity> lEntities, LRequestTool lRequestTool, int praiseRequestCode) {
+    public FloorItemAdapter(List<? extends LEntity> lEntities, LoginRequestListener loginRequestListener) {
         super(lEntities);
-        this.praiseRequestCode = praiseRequestCode;
-        this.lRequestTool = lRequestTool;
+        this.loginRequestListener = loginRequestListener;
+        this.lRequestTool = new LRequestTool(this);
         imageLoader = ImageLoader.getInstance();
         players = new HashMap<>();
+        clickListeners = new HashMap<>();
     }
 
     @Override
@@ -108,8 +116,15 @@ public class FloorItemAdapter extends LAdapter {
                         lMediaPlayer = new LMediaPlayer(null, holder.itemFloorSb);
                         lMediaPlayer.playUrl(NetConst.ROOT_URL + floorItem.item.file_url);
                         players.put(position, lMediaPlayer);
-                        holder.itemFloorImgPlay.setOnClickListener(new PlayClickListener(lMediaPlayer));
+//                        lMediaPlayer.setSeekBar(new SeekBar(parent.getContext()));
                     }
+                    PlayClickListener listener = clickListeners.get(position);
+                    if (listener == null) {
+                        listener = new PlayClickListener(lMediaPlayer);
+                        clickListeners.put(position, listener);
+                    }
+                    lMediaPlayer.setSeekBar(holder.itemFloorSb);
+                    holder.itemFloorImgPlay.setOnClickListener(listener);
                     holder.itemFloorImgPlay.setImageResource(lMediaPlayer.mediaPlayer.isPlaying()
                             ? R.mipmap.icon_stop : R.mipmap.icon_start);
                 }
@@ -126,6 +141,31 @@ public class FloorItemAdapter extends LAdapter {
         }
 
         return convertView;
+    }
+
+    @Override
+    public void onResponse(LResponse response) {
+        if (response.responseCode != 200) {
+            praiseCount--;
+            isPraised = false;
+            tvPraise.setText(praiseCount + "");
+            if (response.responseCode == 401) {
+                loginRequestListener.requestLogin(this);
+                return;
+            }
+            ToastUtil.serverErr(response.responseCode);
+        }
+        switch (response.requestCode) {
+            case API_PRAISE:
+                ToastUtil.show(R.string.praise_add);
+                break;
+        }
+    }
+
+    public void stopAllMusics() {
+        for (int key : players.keySet()) {
+            players.get(key).stop();
+        }
     }
 
     /**
@@ -250,25 +290,29 @@ public class FloorItemAdapter extends LAdapter {
 
     private class PraiseClickListener implements View.OnClickListener {
         FloorItem floorItem;
-        TextView tvPraiseCount;
 
         public PraiseClickListener(FloorItem floorItem, TextView tvPraiseCount) {
             this.floorItem = floorItem;
-            this.tvPraiseCount = tvPraiseCount;
+            isPraised = floorItem.isPraised;
+            tvPraise = tvPraiseCount;
         }
 
         @Override
         public void onClick(View v) {
-            if (floorItem.isPraised) {
+            if (isPraised) {
                 ToastUtil.show(R.string.had_praised);
                 return;
             }
             praiseCount++;
-            floorItem.isPraised = true;
-            tvPraiseCount.setText(praiseCount + "");
+            isPraised = true;
+            tvPraise.setText(praiseCount + "");
             HashMap<String, Object> praiseParams = new DefaultParams();
             praiseParams.put("activity_result_id", floorItem.resultId);
-            lRequestTool.doPost(NetConst.API_PRAISE, praiseParams, praiseRequestCode);
+            lRequestTool.doPost(NetConst.API_PRAISE, praiseParams, API_PRAISE);
         }
+    }
+
+    public interface LoginRequestListener {
+        void requestLogin(FloorItemAdapter floorItemAdapter);
     }
 }

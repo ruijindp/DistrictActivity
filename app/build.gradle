@@ -14,8 +14,8 @@ android {
         applicationId "com.ljmob.districtactivity"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 6
-        versionName "0.9.5 2015-08-04 22:27:44"
+        versionCode 7
+        versionName "0.9.6 2015-08-05 20:39:48"
     }
     buildTypes {
         release {
