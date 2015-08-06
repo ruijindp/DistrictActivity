@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.ljmob.districtactivity.MyUploadActivity;
 import com.ljmob.districtactivity.R;
 import com.ljmob.districtactivity.entity.FloorItem;
 import com.ljmob.districtactivity.net.NetConst;
@@ -157,6 +158,7 @@ public class FloorItemAdapter extends LAdapter implements LRequestTool.OnRespons
         }
         switch (response.requestCode) {
             case API_PRAISE:
+                MyUploadActivity.isResultChanged = true;
                 ToastUtil.show(R.string.praise_add);
                 break;
         }

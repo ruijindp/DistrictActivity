@@ -158,8 +158,14 @@ public class CategoryActivity extends AppCompatActivity implements
         if (MyApplication.currentUser == null) {
             loadAllClassOfSchool(0);
         } else {
+            List<Integer> schoolIds = new ArrayList<>();
             for (TeamClass teamClass : MyApplication.currentUser.team_class) {
-                loadAllClassOfSchool(teamClass.school.id);
+                if (!schoolIds.contains(teamClass.school.id)) {
+                    schoolIds.add(teamClass.school.id);
+                }
+            }
+            for (int mySchool : schoolIds) {
+                loadAllClassOfSchool(mySchool);
             }
         }
         loadPage(currentPage);
