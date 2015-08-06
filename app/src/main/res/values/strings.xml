@@ -71,6 +71,7 @@
     <string name="video_url_">播放链接：</string>
     <string name="video_url">优酷链接</string>
     <string name="video_url_err">视频地址不正确</string>
+    <string name="video_source">视频来源</string>
     <string name="web_video">优酷\n视频</string>
     <string name="not_login">您尚未登录，不能进行此筛选</string>
     <string name="new_update">发现新版本</string>
@@ -98,6 +99,10 @@
         <item>全部可见</item>
         <item>本校可见</item>
         <item>本班可见</item>
+    </string-array>
+    <string-array name="video_source">
+        <item>优酷链接</item>
+        <item>相册</item>
     </string-array>
 
     <string name="dialog_uploading">正在上传…</string>
@@ -164,6 +169,7 @@
     <string name="toast_err_content">请输入内容</string>
     <string name="toast_uploaded">发表成功</string>
     <string name="toast_checked">审核成功</string>
+    <string name="toast_file_not_support">格式错误，该文件不能上传</string>
 
     <string name="test_user">测试学生</string>
     <string name="test1">9月29日正式开发区级朗读排行榜，敬请期待。</string>

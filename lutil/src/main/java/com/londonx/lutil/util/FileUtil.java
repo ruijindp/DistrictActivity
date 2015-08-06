@@ -16,7 +16,7 @@ import java.io.IOException;
 /**
  * Created by 英伦 on 2015/3/17.
  * FileUtil
- * Update at 2015-07-29 20:14:56
+ * Update at 2015-08-06 16:52:22 video uri
  */
 public class FileUtil {
     private static File cacheFolder = null;
@@ -62,6 +62,10 @@ public class FileUtil {
                     column, sel, new String[]{id}, null);
             if (cursor.getCount() == 0) {
                 cursor = Lutil.context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                        column, sel, new String[]{id}, null);
+            }
+            if (cursor.getCount() == 0) {
+                cursor = Lutil.context.getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
                         column, sel, new String[]{id}, null);
             }
             int columnIndex = cursor.getColumnIndex(column[0]);

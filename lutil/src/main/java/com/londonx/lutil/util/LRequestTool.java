@@ -199,7 +199,6 @@ public class LRequestTool {
                     entity.writeTo(os);
                     os.close();
                 }
-
                 lResponse.requestCode = requestCode;
                 lResponse.responseCode = urlConnection.getResponseCode();
                 lResponse.url = url.toString();

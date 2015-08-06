@@ -29,6 +29,7 @@ import com.ljmob.districtactivity.fragment.ShowcaseFragment;
 import com.ljmob.districtactivity.net.NetConst;
 import com.ljmob.districtactivity.subView.AttachView;
 import com.ljmob.districtactivity.util.DefaultParams;
+import com.ljmob.districtactivity.util.FileTypeChecker;
 import com.ljmob.districtactivity.util.MyApplication;
 import com.ljmob.districtactivity.view.LoginDialog;
 import com.ljmob.districtactivity.view.SimpleStringPopup;
@@ -237,19 +238,40 @@ public class UploadActivity extends AppCompatActivity implements
                 break;
             case R.id.activity_post_imgVideo://选择视频
                 int titleRes = videoAttachView == null ? R.string.dialog_video : R.string.dialog_video_replace;
-
                 if (materialDialog == null) {
                     materialDialog = new MaterialDialog.Builder(this)
                             .title(titleRes)
                             .theme(Theme.LIGHT)
-//                            .content(R.string.dialog_video_desc)
                             .positiveText(R.string.dialog_positive)
                             .customView(dialog_video, false)
                             .callback(new PositiveClickListener())
-                            .show();
+                            .build();
                 }
                 materialDialog.setTitle(titleRes);
-                materialDialog.show();
+                MaterialDialog videoTypeDialog = new MaterialDialog.Builder(this)
+                        .theme(Theme.LIGHT)
+                        .title(R.string.video_source)
+                        .items(R.array.video_source)
+                        .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog materialDialog, View view,
+                                                       int i, CharSequence charSequence) {
+                                switch (i) {
+                                    case 0://优酷
+                                        UploadActivity.this.materialDialog.show();
+                                        break;
+                                    case 1://相册
+                                        Intent audioIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                                        audioIntent.setType("video/*");
+                                        audioIntent.putExtra("return-data", true);
+                                        startActivityForResult(audioIntent, RESULT_GET);
+                                        break;
+                                }
+                                return true;
+                            }
+                        })
+                        .build();
+                videoTypeDialog.show();
                 break;
         }
     }
@@ -305,6 +327,10 @@ public class UploadActivity extends AppCompatActivity implements
         }
         if (selectedFile == null || selectedFile.length() == 0) {
             ToastUtil.show(R.string.toast_file_err);
+            return;
+        }
+        if (!FileTypeChecker.isFileTypeAvailable(selectedFile.getAbsolutePath())) {
+            ToastUtil.show(R.string.toast_file_not_support);
             return;
         }
         AttachView attachView = new AttachView(this, activity_post_lnAttached, this);

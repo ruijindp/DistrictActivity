@@ -43,6 +43,7 @@ import com.ljmob.districtactivity.entity.Shareable;
 import com.ljmob.districtactivity.net.NetConst;
 import com.ljmob.districtactivity.subView.AttachView;
 import com.ljmob.districtactivity.util.DefaultParams;
+import com.ljmob.districtactivity.util.FileTypeChecker;
 import com.ljmob.districtactivity.util.MyApplication;
 import com.ljmob.districtactivity.util.ShareTool;
 import com.ljmob.districtactivity.view.LoginDialog;
@@ -684,6 +685,10 @@ public class DetailActivity extends AppCompatActivity implements
         }
         if (selectedFile == null || selectedFile.length() == 0) {
             ToastUtil.show(R.string.toast_file_err);
+            return;
+        }
+        if (!FileTypeChecker.isFileTypeAvailable(selectedFile.getAbsolutePath())) {
+            ToastUtil.show(R.string.toast_file_not_support);
             return;
         }
         AttachView attachView = new AttachView(this, activityDetailLnAttached, this);
