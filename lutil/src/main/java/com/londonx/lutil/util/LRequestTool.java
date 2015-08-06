@@ -1,6 +1,7 @@
 package com.londonx.lutil.util;
 
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 
@@ -26,6 +27,7 @@ import java.util.HashMap;
  * Created by london on 15/6/2.
  * LRequestTool
  * Update in 2015-08-04 21:50:33 DELETE not working
+ * Update in 2015-08-06 11:17:52 onPostExecute not calling in pre-JELLYBEAN
  */
 public class LRequestTool {
     private static HashMap<String, HttpURLConnection> lConnectionPool;
@@ -147,6 +149,7 @@ public class LRequestTool {
 
         private static final int WHAT_DOWNLOAD_START = 1;
         private static final int WHAT_DOWNLOADING = 2;
+        private static final int WHAT_POST_EXECUTE = 3;
 
         private String strUrl;
         private String requestMethod;
@@ -239,17 +242,26 @@ public class LRequestTool {
                     urlConnection.disconnect();
                 }
             }
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                Message message = handler.obtainMessage();
+                message.what = WHAT_POST_EXECUTE;
+                message.obj = lResponse;
+                handler.sendMessage(message);
+            }
             return lResponse;
         }
 
         @Override
         protected void onPostExecute(LResponse response) {
-            super.onPostExecute(response);
+            if (response == null) {
+                return;
+            }
             if (response.downloadFile == null) {
                 onResponseListener.onResponse(lResponse);
             } else {
                 onDownloadListener.onDownloaded(lResponse);
             }
+            super.onPostExecute(response);
         }
 
         @Override
@@ -264,6 +276,12 @@ public class LRequestTool {
                     if (onDownloadListener != null) {
                         onDownloadListener.onDownloading((Float) msg.obj);
                     }
+                    break;
+                case WHAT_POST_EXECUTE:
+                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
+                        return false;
+                    }
+                    onPostExecute((LResponse) msg.obj);
                     break;
             }
             return false;
