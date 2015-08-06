@@ -69,11 +69,13 @@ public class RankFragment extends Fragment implements AbsListView.OnScrollListen
         if (rootView != null) {
             return rootView;
         }
-        lRequestTool = new LRequestTool(this);
-        rootView = inflater.inflate(R.layout.fragment_rank, container, false);
-        dp = getResources().getDimension(R.dimen.one);
-        initView(inflater);
-        refreshData();
+        rootView = inflater.inflate(R.layout.fragment_undone, container, false);
+        // TODO: 8.15
+//        lRequestTool = new LRequestTool(this);
+//        rootView = inflater.inflate(R.layout.fragment_rank, container, false);
+//        dp = getResources().getDimension(R.dimen.one);
+//        initView(inflater);
+//        refreshData();
         return rootView;
     }
 

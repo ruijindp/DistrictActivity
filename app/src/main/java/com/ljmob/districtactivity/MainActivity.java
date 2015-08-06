@@ -368,7 +368,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 postMenuItem.setVisible(true);
             }
         } else {
-            filterMenuItem.setVisible(true);
+            filterMenuItem.setVisible(false);
+            //TODO: 8.15  filterMenuItem.setVisible(true);
             postMenuItem.setVisible(false);
         }
     }
