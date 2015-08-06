@@ -364,12 +364,12 @@ public class CategoryActivity extends AppCompatActivity implements
 
     @Override
     public void selectStringAt(SimpleStringPopup popup, int index) {
+        schoolId = 0;
+        classId = 0;
         switch (popup.lastAnchor.getId()) {
             case R.id.head_filter_flLeft://左边
                 head_filter_tvLeft.setText(filterMethod.get(index));
                 head_filter_tvRight.setText(R.string.str_default);
-                schoolId = 0;
-                classId = 0;
                 switch (index) {
                     case 0://全部作品
                         head_filter_flRight.setVisibility(View.VISIBLE);
@@ -396,14 +396,16 @@ public class CategoryActivity extends AppCompatActivity implements
                 refreshData();
                 break;
             case R.id.head_filter_flRight://右边
-                schoolId = 0;
-                classId = 0;
                 if (head_filter_tvLeft.getText().toString().equals(filterMethod.get(0))) {//按学校
                     head_filter_tvRight.setText(schoolNames.get(index));
                     schoolId = schools.get(index).id;
                 } else {//按班级
-                    head_filter_tvRight.setText(teamClassNames.get(index));
-                    classId = teamClasses.get(index).id;
+                    if (index == 0) {//默认
+                        schoolId = MyApplication.currentUser.team_class.get(0).school.id;
+                    } else {
+                        head_filter_tvRight.setText(teamClassNames.get(index));
+                        classId = teamClasses.get(index).id;
+                    }
                 }
                 refreshData();
                 break;
