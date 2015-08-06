@@ -87,6 +87,7 @@
     <string name="sharing">正在准备分享内容</string>
     <string name="shared">分享成功</string>
     <string name="share_err">分享失败</string>
+    <string name="token_err">登录超时，请重新登录</string>
 
     <string-array name="filter_method">
         <item>全部作品</item>

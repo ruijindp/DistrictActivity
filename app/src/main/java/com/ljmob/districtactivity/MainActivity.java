@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -114,7 +115,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void fetchMessage() {
-        if (MyApplication.currentUser == null) {
+        if (MyApplication.currentUser == null ||
+                MyApplication.currentUser.roles.equals("teacher")) {//教师没有消息列表
             return;
         }
         lRequestTool.doGet(NetConst.API_MESSAGE, new DefaultParams(), API_MESSAGE);
@@ -377,6 +379,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onResponse(LResponse response) {
+        if (response.responseCode == 401) {
+            ToastUtil.show(R.string.token_err);
+            SharedPreferences.Editor editor = Lutil.preferences.edit();
+            editor.remove(Lutil.KEY_USER);
+            editor.remove(MessageActivity.KEY_MESSAGE_COUNT);
+            MyApplication.currentUser = null;
+            editor.apply();
+            restartActivity();
+            return;
+        }
         if (response.responseCode != 200) {
             ToastUtil.serverErr(response.responseCode);
             return;

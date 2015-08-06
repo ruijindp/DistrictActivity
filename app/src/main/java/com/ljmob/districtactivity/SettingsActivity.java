@@ -118,9 +118,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 activity_settings_swPush.setChecked(!activity_settings_swPush.isChecked());
                 break;
             case R.id.activity_settings_flLogout:
-                HashMap<String, Object> params = new DefaultParams();
-                params.put("jpush_out", 0);
-                lRequestTool.doDelete(NetConst.API_SIGN_OUT, params, 0);
+//                HashMap<String, Object> params = new DefaultParams();
+//                params.put("jpush_out", 0);
+//                lRequestTool.doDelete(NetConst.API_SIGN_OUT, params, 0);
                 SharedPreferences.Editor editor = Lutil.preferences.edit();
                 editor.remove(Lutil.KEY_USER);
                 editor.remove(MessageActivity.KEY_MESSAGE_COUNT);
