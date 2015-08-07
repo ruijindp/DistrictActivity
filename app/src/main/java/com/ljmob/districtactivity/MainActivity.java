@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     LinearLayout activity_main_lnSettings;
     DrawerLayout activity_main_drawer;
     View activity_main_dotMessage;
+    View activity_main_div0;
 
     LRequestTool lRequestTool;
     LoginDialog loginDialog;
@@ -115,11 +116,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void fetchMessage() {
-        if (MyApplication.currentUser == null ||
-                MyApplication.currentUser.roles.equals("teacher")) {//教师没有消息列表
-            return;
+        if (MyApplication.currentUser != null &&
+                MyApplication.currentUser.roles.equals("student")) {//只有学生有消息列表
+            lRequestTool.doGet(NetConst.API_MESSAGE, new DefaultParams(), API_MESSAGE);
         }
-        lRequestTool.doGet(NetConst.API_MESSAGE, new DefaultParams(), API_MESSAGE);
     }
 
 
@@ -128,10 +128,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getMenuInflater().inflate(R.menu.menu_main, menu);
         postMenuItem = menu.findItem(R.id.action_make_post);
         filterMenuItem = menu.findItem(R.id.action_filter);
-        if (MyApplication.currentUser != null && MyApplication.currentUser.roles.equals("teacher")) {
+        if (MyApplication.currentUser != null &&
+                MyApplication.currentUser.roles.equals("student")) {//只有学生能发帖
+            postMenuItem.setVisible(true);
+            postMenuItem.setVisible(true);
+        } else {
             postMenuItem.setVisible(false);
+            filterMenuItem.setVisible(false);
         }
-        filterMenuItem.setVisible(false);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -194,6 +198,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         activity_main_drawer = (DrawerLayout) findViewById(R.id.activity_main_drawer);
         toolbar_root = (Toolbar) findViewById(R.id.toolbar_root);
         activity_main_dotMessage = findViewById(R.id.activity_main_dotMessage);
+        activity_main_div0 = findViewById(R.id.activity_main_div0);
 
         setSupportActionBar(toolbar_root);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -300,10 +305,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void loginSuccess(LoginDialog dialog) {
         if (MyApplication.currentUser != null &&
-                MyApplication.currentUser.roles.equals("teacher")) {//老师不能发帖
-            postMenuItem.setVisible(false);
-        } else {
+                MyApplication.currentUser.roles.equals("student")) {//只有学生能发帖
             postMenuItem.setVisible(true);
+        } else {
+            postMenuItem.setVisible(false);
         }
     }
 
@@ -325,14 +330,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 imageLoader.displayImage(NetConst.ROOT_URL +
                         MyApplication.currentUser.user_avatar, activity_main_imgHead);
                 activity_main_tvUserName.setText(MyApplication.currentUser.user_name);
-                if (MyApplication.currentUser.roles.equals("teacher")) {//老师不能发帖，也没有消息列表
-                    activity_main_lnUpload.setVisibility(View.GONE);
-                    activity_main_lnMessage.setVisibility(View.GONE);
-                    activity_main_tvMyUpload.setText(R.string.activity_myUpload_teacher);
-                } else {
-                    activity_main_lnUpload.setVisibility(View.VISIBLE);
-                    activity_main_lnMessage.setVisibility(View.VISIBLE);
-                    activity_main_tvMyUpload.setText(R.string.activity_myUpload);
+                switch (MyApplication.currentUser.roles) {
+                    case "visitor":
+                        activity_main_lnUpload.setVisibility(View.GONE);
+                        activity_main_lnMessage.setVisibility(View.GONE);
+                        activity_main_lnMyUpload.setVisibility(View.GONE);
+                        activity_main_div0.setVisibility(View.GONE);
+                        break;
+                    case "student":
+                        activity_main_lnUpload.setVisibility(View.VISIBLE);
+                        activity_main_lnMessage.setVisibility(View.VISIBLE);
+                        activity_main_lnMyUpload.setVisibility(View.VISIBLE);
+                        activity_main_div0.setVisibility(View.VISIBLE);
+                        activity_main_tvMyUpload.setText(R.string.activity_myUpload);
+                        break;
+                    default://老师不能发帖，也没有消息列表
+                        activity_main_lnUpload.setVisibility(View.GONE);
+                        activity_main_lnMessage.setVisibility(View.GONE);
+                        activity_main_lnMyUpload.setVisibility(View.VISIBLE);
+                        activity_main_div0.setVisibility(View.VISIBLE);
+                        activity_main_tvMyUpload.setText(R.string.activity_myUpload_teacher);
+                        break;
                 }
             }
         }
@@ -361,11 +379,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onPageSelected(int position) {
         if (position == 0) {
             filterMenuItem.setVisible(false);
-            if (MyApplication.currentUser != null
-                    && MyApplication.currentUser.roles.equals("teacher")) {// 老师不能发帖
-                postMenuItem.setVisible(false);
-            } else {
+            if (MyApplication.currentUser == null) {
                 postMenuItem.setVisible(true);
+            } else {
+                if (MyApplication.currentUser.roles.equals("student")) {// 只有学生能发帖
+                    postMenuItem.setVisible(true);
+                } else {
+                    postMenuItem.setVisible(false);
+                }
             }
         } else {
             filterMenuItem.setVisible(false);

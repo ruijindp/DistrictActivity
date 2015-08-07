@@ -162,8 +162,26 @@ public class UploadActivity extends AppCompatActivity implements
                 finish();
                 break;
             case R.id.action_post:
-                if (MyApplication.currentUser != null && MyApplication.currentUser.roles.equals("teacher")) {
-                    ToastUtil.show(R.string.teacher_cannot_post);
+                if (MyApplication.currentUser == null) {
+                    showLoginDialog();
+                    break;
+                }
+                if (!MyApplication.currentUser.roles.equals("student")) {
+                    MaterialDialog userDialog = new MaterialDialog.Builder(this)
+                            .theme(Theme.LIGHT)
+                            .title(R.string.dialog_switch_user)
+                            .content(R.string.dialog_switch_user_desc)
+                            .positiveText(android.R.string.ok)
+                            .negativeText(android.R.string.cancel)
+                            .callback(new MaterialDialog.ButtonCallback() {
+                                @Override
+                                public void onPositive(MaterialDialog dialog) {
+                                    showLoginDialog();
+                                    super.onPositive(dialog);
+                                }
+                            })
+                            .build();
+                    userDialog.show();
                     break;
                 }
                 send();
@@ -412,7 +430,8 @@ public class UploadActivity extends AppCompatActivity implements
                 || activity_post_tvCategory.getText().length() != 0
                 || activity_post_etContent.length() != 0
                 || attaches.size() != 0) {
-            if (MyApplication.currentUser != null && MyApplication.currentUser.roles.equals("teacher")) {
+            if (MyApplication.currentUser == null ||
+                    !MyApplication.currentUser.roles.equals("student")) {
                 finish();
             }
             if (exitDialog == null) {

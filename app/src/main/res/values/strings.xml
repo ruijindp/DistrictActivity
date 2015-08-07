@@ -79,7 +79,7 @@
     <string name="cannot_vote">投票开始时间为8月15日</string>
     <string name="undone">各位小伙伴们可以通过暑期社会实践活动平台，上传你的暑期作品（学习生活、旅游见闻等等），优秀及有趣的作品将被教师审核并推荐至排行榜，你可以为同伴的作品点赞并投票，暑期结束后，我们将为获奖者提供奖品，期待你的参加！（作品投票以及排行榜公示将于8月15日开放）</string>
     <string name="no_comment">暂时还没有评论</string>
-    <string name="teacher_cannot_post">老师不能发帖</string>
+    <string name="teacher_cannot_post">只有学生才能发帖</string>
     <string name="invaluable">不可用</string>
     <string name="btn_checked">审核通过</string>
     <string name="btn_unchecked">谢谢参与</string>
@@ -115,6 +115,8 @@
     <string name="dialog_exit_desc">你还没有提交，确定退出编辑？</string>
     <string name="dialog_confirm">请确认</string>
     <string name="dialog_unchecked">是否取消该作品参赛资格</string>
+    <string name="dialog_switch_user">切换用户</string>
+    <string name="dialog_switch_user_desc">当前用户不是学生，不能发帖。是否切换到其他用户？</string>
 
     <string name="err_login">用户名或密码错误</string>
     <string name="err_name">名字不能为空</string>
