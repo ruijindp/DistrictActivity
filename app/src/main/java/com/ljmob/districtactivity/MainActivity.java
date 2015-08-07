@@ -131,11 +131,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (MyApplication.currentUser != null &&
                 MyApplication.currentUser.roles.equals("student")) {//只有学生能发帖
             postMenuItem.setVisible(true);
-            postMenuItem.setVisible(true);
         } else {
             postMenuItem.setVisible(false);
-            filterMenuItem.setVisible(false);
         }
+        filterMenuItem.setVisible(false);//第一页永远不显示筛选
         return super.onCreateOptionsMenu(menu);
     }
 
