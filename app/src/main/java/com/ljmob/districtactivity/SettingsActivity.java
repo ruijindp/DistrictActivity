@@ -128,6 +128,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 MyApplication.currentUser = null;
                 editor.apply();
                 finish();
+                JPushInterface.setAlias(this, "visitor", null);
                 sendBroadcast(new Intent(ACTION_LOGOUT));
                 break;
             case R.id.activity_settings_imgHead:
