@@ -40,6 +40,7 @@ import com.ljmob.districtactivity.entity.FloorItem;
 import com.ljmob.districtactivity.entity.Item;
 import com.ljmob.districtactivity.entity.Result;
 import com.ljmob.districtactivity.entity.Shareable;
+import com.ljmob.districtactivity.fragment.ShowcaseFragment;
 import com.ljmob.districtactivity.net.NetConst;
 import com.ljmob.districtactivity.subView.AttachView;
 import com.ljmob.districtactivity.util.DefaultParams;
@@ -473,16 +474,16 @@ public class DetailActivity extends AppCompatActivity implements
                 shareDialog.dismiss();
                 return;
             case R.id.activity_detail_btnVote:
-                ToastUtil.show(R.string.cannot_vote);
+//                ToastUtil.show(R.string.cannot_vote);
                 // TODO: 8.15
-//                if (result.is_vote) {
-//                    ToastUtil.show(R.string.had_voted);
-//                    return;
-//                }
-//                addVoteCount();
-//                HashMap<String, Object> voteParams = new DefaultParams();
-//                voteParams.put("activity_result_id", result.id);
-//                lRequestTool.doPost(NetConst.API_VOTE, voteParams, API_VOTE);
+                if (result.is_vote) {
+                    ToastUtil.show(R.string.had_voted);
+                    return;
+                }
+                addVoteCount();
+                HashMap<String, Object> voteParams = new DefaultParams();
+                voteParams.put("activity_result_id", result.id);
+                lRequestTool.doPost(NetConst.API_VOTE, voteParams, API_VOTE);
                 return;
         }
         if (MyApplication.currentUser == null) {
@@ -606,6 +607,14 @@ public class DetailActivity extends AppCompatActivity implements
                 uncheckedDialog.show();
                 break;
         }
+    }
+
+    private void addVoteCount() {
+        result.is_vote = true;
+        result.vote_count++;
+        activityDetailTvVote.setText(result.vote_count + getString(R.string._vote));
+        MyUploadActivity.isResultChanged = true;
+        ShowcaseFragment.isResultChanged = true;
     }
 
     @Override

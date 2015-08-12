@@ -10,10 +10,6 @@ import com.londonx.lutil.util.LRequestTool;
 import com.londonx.lutil.util.ToastUtil;
 
 import cn.sharesdk.framework.Platform;
-import cn.sharesdk.sina.weibo.SinaWeibo;
-import cn.sharesdk.tencent.qq.QQ;
-import cn.sharesdk.wechat.friends.Wechat;
-import cn.sharesdk.wechat.moments.WechatMoments;
 
 /**
  * Created by london on 15/7/29.
@@ -36,7 +32,11 @@ public class ShareTool implements
     }
 
     public void share() {
-        lRequestTool.download(NetConst.ROOT_URL + shareable.imgUrl, 0);
+        if (shareable.imgUrl == null || shareable.imgUrl.length() == 0) {
+            onDownloaded(new LResponse());
+        } else {
+            lRequestTool.download(NetConst.ROOT_URL + shareable.imgUrl, 0);
+        }
     }
 
     @Override
@@ -53,44 +53,17 @@ public class ShareTool implements
 
     @Override
     public void onDownloaded(LResponse response) {
-        Platform.ShareParams shareParams=new Platform.ShareParams();
+        Platform.ShareParams shareParams = new Platform.ShareParams();
         shareParams.setShareType(Platform.SHARE_WEBPAGE);
         shareParams.setTitle(shareable.title);
         shareParams.setText(shareable.content + "\n" + shareable.url);
-        shareParams.setImagePath(response.downloadFile.getAbsolutePath());
+        if (response.downloadFile != null && response.downloadFile.length() > 0) {
+            shareParams.setImagePath(response.downloadFile.getAbsolutePath());
+        }
         shareParams.setUrl(shareable.url);
         shareParams.setTitleUrl(shareable.url);
         platform.share(shareParams);
 
-
-//        if (platform instanceof Wechat) {
-//            Wechat.ShareParams shareParams = new Wechat.ShareParams();
-//            shareParams.setShareType(Platform.SHARE_WEBPAGE);
-//            shareParams.setTitle(shareable.title);
-//            shareParams.setText(shareable.content + "\n" + shareable.url);
-//            shareParams.setImagePath(response.downloadFile.getAbsolutePath());
-//            shareParams.setUrl(shareable.url);
-//            platform.share(shareParams);
-//        } else if (platform instanceof WechatMoments) {
-//            WechatMoments.ShareParams shareParams = new WechatMoments.ShareParams();
-//            shareParams.setShareType(Platform.SHARE_WEBPAGE);
-//            shareParams.setTitle(shareable.title);
-//            shareParams.setText(shareable.content + "\n" + shareable.url);
-//            shareParams.setImagePath(response.downloadFile.getAbsolutePath());
-//            shareParams.setUrl(shareable.url);
-//            platform.share(shareParams);
-//        } else if (platform instanceof SinaWeibo) {
-//            SinaWeibo.ShareParams shareParams = new SinaWeibo.ShareParams();
-//            shareParams.setText(shareable.content + "\n" + shareable.url);
-//            platform.share(shareParams);
-//        } else if (platform instanceof QQ) {
-//            QQ.ShareParams shareParams = new QQ.ShareParams();
-//            shareParams.setTitle(shareable.title);
-//            shareParams.setText(shareable.content + "\n" + shareable.url);
-//            shareParams.setImagePath(response.downloadFile.getAbsolutePath());
-//            shareParams.setTitleUrl(shareable.url);
-//            platform.share(shareParams);
-//        }
         ToastUtil.show(R.string.shared);
     }
 }

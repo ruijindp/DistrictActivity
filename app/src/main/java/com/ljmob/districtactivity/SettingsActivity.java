@@ -100,7 +100,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         activity_settings_lnPush.setOnClickListener(this);
         activity_settings_flLogout.setOnClickListener(this);
         // TODO: 8.15
-//        activity_settings_imgHead.setOnClickListener(this);
+        activity_settings_imgHead.setOnClickListener(this);
     }
 
     @Override

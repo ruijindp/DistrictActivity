@@ -185,6 +185,9 @@ public class MessageActivity extends AppCompatActivity implements
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        HashMap<String, Object> params = new DefaultParams();
+        params.put("message_id", messages.get(position).id);
+        lRequestTool.doPost(NetConst.API_MESSAGE, params, 0);//标记已读
         MessageBox messageBox = messages.get(position);
         Result result = messageBox.activity_result;
         Intent detailIntent = new Intent(this, DetailActivity.class);
