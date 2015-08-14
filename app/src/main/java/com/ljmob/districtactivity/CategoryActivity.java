@@ -49,6 +49,7 @@ public class CategoryActivity extends AppCompatActivity implements
     private static final int API_SEARCH_RESULT = 1;
     private static final int API_SCHOOL = 2;
     private static final int API_TEAM_CLASS = 3;
+    private static final int MY_TEAM_CLASS_ID = -3;
     public static boolean isResultChanged = false;
 
     Activity selectedActivity;
@@ -205,16 +206,17 @@ public class CategoryActivity extends AppCompatActivity implements
                 params.put("school_id", schoolId);
             }
         } else if (classId != 0) {
-            if (MyApplication.currentUser != null) {
-                for (TeamClass teamClass : MyApplication.currentUser.team_class) {
-                    if (teamClass.id == classId) {
-                        params.put("level", "team_class");
-                        isLeveled = true;
-                        break;
+            if (classId == MY_TEAM_CLASS_ID) {
+                params.put("level", "team_class");
+            } else {
+                if (MyApplication.currentUser != null) {
+                    for (TeamClass teamClass : MyApplication.currentUser.team_class) {
+                        if (teamClass.id == classId) {
+                            params.put("level", "team_class");
+                            break;
+                        }
                     }
                 }
-            }
-            if (!isLeveled) {
                 params.put("team_class_id", classId);
             }
         }
@@ -401,7 +403,8 @@ public class CategoryActivity extends AppCompatActivity implements
                             schoolId = 0;
                         } else {
                             head_filter_flRight.setVisibility(View.INVISIBLE);
-                            classId = MyApplication.currentUser.team_class.get(0).id;
+                            classId = MY_TEAM_CLASS_ID;//标记为查本班
+//                            classId = MyApplication.currentUser.team_class.get(0).id;
                         }
                         break;
                 }
