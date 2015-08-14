@@ -28,6 +28,7 @@ import java.util.HashMap;
  * LRequestTool
  * Update in 2015-08-04 21:50:33 DELETE not working
  * Update in 2015-08-06 11:17:52 onPostExecute not calling in pre-JELLYBEAN
+ * Update in 2015-08-13 12:43:01 twice onResponse called in pre-JELLYBEAN
  */
 public class LRequestTool {
     private static HashMap<String, HttpURLConnection> lConnectionPool;
@@ -199,6 +200,7 @@ public class LRequestTool {
                     entity.writeTo(os);
                     os.close();
                 }
+
                 lResponse.requestCode = requestCode;
                 lResponse.responseCode = urlConnection.getResponseCode();
                 lResponse.url = url.toString();
@@ -246,6 +248,7 @@ public class LRequestTool {
                 message.what = WHAT_POST_EXECUTE;
                 message.obj = lResponse;
                 handler.sendMessage(message);
+                return null;
             }
             return lResponse;
         }

@@ -43,7 +43,9 @@ public class CategoryActivity extends AppCompatActivity implements
         LRequestTool.OnResponseListener,
         AbsListView.OnScrollListener,
         AdapterView.OnItemClickListener,
-        SwipeRefreshLayout.OnRefreshListener, View.OnClickListener, SimpleStringPopup.SimpleStringListener {
+        SwipeRefreshLayout.OnRefreshListener,
+        View.OnClickListener,
+        SimpleStringPopup.SimpleStringListener {
     private static final int API_SEARCH_RESULT = 1;
     private static final int API_SCHOOL = 2;
     private static final int API_TEAM_CLASS = 3;
@@ -65,6 +67,7 @@ public class CategoryActivity extends AppCompatActivity implements
     List<String> filterMethod;
     List<School> schools;
     List<String> schoolNames;
+    List<Integer> schoolIds;
     List<TeamClass> teamClasses;
     List<String> teamClassNames;
 
@@ -76,6 +79,7 @@ public class CategoryActivity extends AppCompatActivity implements
     boolean hasMore;
     int schoolId;
     int classId;
+    int dataIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,7 +162,7 @@ public class CategoryActivity extends AppCompatActivity implements
         if (MyApplication.currentUser == null) {
             loadAllClassOfSchool(0);
         } else {
-            List<Integer> schoolIds = new ArrayList<>();
+            schoolIds = new ArrayList<>();
             for (TeamClass teamClass : MyApplication.currentUser.team_class) {
                 if (!schoolIds.contains(teamClass.school.id)) {
                     schoolIds.add(teamClass.school.id);
@@ -232,11 +236,19 @@ public class CategoryActivity extends AppCompatActivity implements
             case API_TEAM_CLASS:
                 List<TeamClass> appendData = gson.fromJson(response.body, new TypeToken<List<TeamClass>>() {
                 }.getType());
-                teamClasses = new ArrayList<>(appendData.size());
-                TeamClass defaultClass = new TeamClass();
-                defaultClass.name = getString(R.string.str_default);
-                teamClasses.add(0, defaultClass);
-                teamClasses.addAll(appendData);
+                if (dataIndex == 0) {
+                    teamClasses = new ArrayList<>(appendData.size());
+                    TeamClass defaultClass = new TeamClass();
+                    defaultClass.name = getString(R.string.str_default);
+                    teamClasses.add(0, defaultClass);
+                    teamClasses.addAll(appendData);
+                } else {
+                    teamClasses.addAll(appendData);
+                }
+                dataIndex++;
+                if (dataIndex == schoolIds.size()) {
+                    dataIndex = 0;
+                }
                 break;
             case API_SCHOOL:
                 schools = gson.fromJson(response.body, new TypeToken<List<School>>() {
