@@ -181,7 +181,9 @@ public class CategoryActivity extends AppCompatActivity implements
         if (mySchoolId != 0) {
             params.put("school_id", mySchoolId);
         }
-        lRequestTool.doGet(NetConst.API_TEAM_CLASS, params, API_TEAM_CLASS);
+        if (MyApplication.currentUser != null) {
+            lRequestTool.doGet(NetConst.API_TEAM_CLASS, params, API_TEAM_CLASS);
+        }
     }
 
     private void loadAllSchools() {
@@ -250,6 +252,10 @@ public class CategoryActivity extends AppCompatActivity implements
                 dataIndex++;
                 if (dataIndex == schoolIds.size()) {
                     dataIndex = 0;
+                    teamClassNames = new ArrayList<>(teamClasses.size());
+                    for (TeamClass teamClass : teamClasses) {
+                        teamClassNames.add(teamClass.name);
+                    }
                 }
                 break;
             case API_SCHOOL:
@@ -359,12 +365,6 @@ public class CategoryActivity extends AppCompatActivity implements
                 popup.setStrings(filterMethod);
                 break;
             case R.id.head_filter_flRight:
-                if (teamClassNames == null) {
-                    teamClassNames = new ArrayList<>(teamClasses.size());
-                    for (TeamClass teamClass : teamClasses) {
-                        teamClassNames.add(teamClass.name);
-                    }
-                }
                 String currentFilterMethod = head_filter_tvLeft.getText().toString();
                 if (currentFilterMethod.equals(filterMethod.get(0))) {
                     popup.setStrings(schoolNames);
