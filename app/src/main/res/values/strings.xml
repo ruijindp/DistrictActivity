@@ -136,6 +136,7 @@
     <string name="activity_filter">筛选</string>
     <string name="activity_notice_list">公告</string>
     <string name="activity_notice">公告详情</string>
+    <string name="activity_video">视频</string>
 
     <string name="tag_reply">评</string>
     <string name="tag_vote">票</string>
@@ -172,6 +173,7 @@
     <string name="toast_uploaded">发表成功</string>
     <string name="toast_checked">审核成功</string>
     <string name="toast_file_not_support">格式错误，该文件不能上传</string>
+    <string name="toast_err_video">视频文件地址错误</string>
 
     <string name="test_user">测试学生</string>
     <string name="test1">9月29日正式开发区级朗读排行榜，敬请期待。</string>

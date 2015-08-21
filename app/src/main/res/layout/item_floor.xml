@@ -79,7 +79,8 @@
         android:layout_marginTop="8dp"
         android:contentDescription="@string/default_content_description"
         android:minHeight="@dimen/video_h"
-        android:src="@color/test" />
+        android:src="@color/test"
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/item_floor_linearPlayer"
@@ -94,7 +95,8 @@
         android:elevation="2dp"
         android:gravity="center"
         android:orientation="horizontal"
-        android:padding="12dp">
+        android:padding="12dp"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/item_floor_imgPlay"
@@ -112,6 +114,41 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/item_floor_flVideo"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/video_h"
+        android:layout_marginBottom="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/test"
+        android:clickable="true"
+        android:elevation="2dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/item_floor_imgVideoPreview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/default_content_description" />
+
+        <TextView
+            android:id="@+id/item_floor_tvVideoName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            android:textColor="@color/gray" />
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:contentDescription="@string/default_content_description"
+            android:src="@mipmap/icon_start"
+            android:tint="?colorAccent" />
+    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/item_floor_lnVideo"

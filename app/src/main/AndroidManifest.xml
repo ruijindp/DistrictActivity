@@ -76,13 +76,17 @@
         <activity
             android:name=".NoticeActivity"
             android:label="@string/activity_notice" />
+        <activity
+            android:name=".VideoActivity"
+            android:label="@string/activity_video"
+            android:screenOrientation="sensorLandscape" />
         <!-- share SDK-->
         <activity
             android:name="com.ljmob.quicksharesdk.wxapi.WXEntryActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <activity
             android:name="com.mob.tools.MobUIShell"

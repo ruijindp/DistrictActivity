@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import com.ljmob.districtactivity.MyUploadActivity;
 import com.ljmob.districtactivity.R;
+import com.ljmob.districtactivity.VideoActivity;
 import com.ljmob.districtactivity.entity.FloorItem;
 import com.ljmob.districtactivity.net.NetConst;
 import com.ljmob.districtactivity.util.DefaultParams;
@@ -80,7 +82,7 @@ public class FloorItemAdapter extends LAdapter implements LRequestTool.OnRespons
                     holder.itemFloorTvTitle.setVisibility(View.VISIBLE);
                     holder.itemFloorTvTitle.setText(floorItem.title);
                 } else {//除了第一行，其他用户前都有分割线
-                    holder.item_floor_div.setVisibility(View.VISIBLE);
+                    holder.itemFloorDiv.setVisibility(View.VISIBLE);
                 }
                 holder.itemFloorLnUserInfo.setVisibility(View.VISIBLE);
                 imageLoader.displayImage(NetConst.ROOT_URL + floorItem.author.avatar, holder.itemFloorImgHead);
@@ -117,7 +119,6 @@ public class FloorItemAdapter extends LAdapter implements LRequestTool.OnRespons
                         lMediaPlayer = new LMediaPlayer(null, holder.itemFloorSb);
                         lMediaPlayer.playUrl(NetConst.ROOT_URL + floorItem.item.file_url);
                         players.put(position, lMediaPlayer);
-//                        lMediaPlayer.setSeekBar(new SeekBar(parent.getContext()));
                     }
                     PlayClickListener listener = clickListeners.get(position);
                     if (listener == null) {
@@ -129,6 +130,14 @@ public class FloorItemAdapter extends LAdapter implements LRequestTool.OnRespons
                     holder.itemFloorImgPlay.setImageResource(lMediaPlayer.mediaPlayer.isPlaying()
                             ? R.mipmap.icon_stop : R.mipmap.icon_start);
                 }
+                if (FileUtil.getFileType(floorItem.item.file_url) == FileUtil.FileType.video) {//视频文件
+                    holder.itemFloorFlVideo.setVisibility(View.VISIBLE);
+                    holder.footDetailTvVideoName.setText(floorItem.item.file_name);
+//                    imageLoader.displayImage(NetConst.ROOT_URL + floorItem.item.file_url,
+//                            holder.itemFloorImgVideoPreview);
+                    holder.itemFloorFlVideo.setOnClickListener(new PreviewClickListener(floorItem.item.file_url));
+                }
+
                 break;
             case options:
                 holder.footDetailLnPraise.setVisibility(View.VISIBLE);
@@ -170,76 +179,6 @@ public class FloorItemAdapter extends LAdapter implements LRequestTool.OnRespons
         }
     }
 
-    /**
-     * This class contains all butterknife-injected Views & Layouts from layout file 'item_floor.xml'
-     * for easy to all layout elements.
-     *
-     * @author ButterKnifeZelezny, plugin for Android Studio by Avast Developers (http://github.com/avast)
-     */
-    static class ViewHolder {
-        @InjectView(R.id.item_floor_div)
-        View item_floor_div;
-        @InjectView(R.id.item_floor_tvTitle)
-        TextView itemFloorTvTitle;
-        @InjectView(R.id.item_floor_imgHead)
-        CircleImageView itemFloorImgHead;
-        @InjectView(R.id.item_floor_tvAuthor)
-        TextView itemFloorTvAuthor;
-        @InjectView(R.id.item_floor_tvFloorDate)
-        TextView itemFloorTvFloorDate;
-        @InjectView(R.id.item_floor_lnUserInfo)
-        LinearLayout itemFloorLnUserInfo;
-        @InjectView(R.id.item_floor_tvTextContent)
-        TextView itemFloorTvTextContent;
-        @InjectView(R.id.item_floor_imgContent)
-        ImageView itemFloorImgContent;
-        @InjectView(R.id.item_floor_imgPlay)
-        ImageView itemFloorImgPlay;
-        @InjectView(R.id.item_floor_sb)
-        SeekBar itemFloorSb;
-        @InjectView(R.id.item_floor_linearPlayer)
-        LinearLayout itemFloorLinearPlayer;
-        @InjectView(R.id.item_floor_tvVideoUrl)
-        TextView itemFloorTvVideoUrl;
-        @InjectView(R.id.item_floor_lnVideo)
-        LinearLayout itemFloorLnVideo;
-        @InjectView(R.id.foot_detail_tvPraise)
-        TextView footDetailTvPraise;
-        @InjectView(R.id.foot_detail_lnPraise)
-        LinearLayout footDetailLnPraise;
-
-        ViewHolder(View view) {
-            ButterKnife.inject(this, view);
-        }
-
-        public void resetViews() {
-            if (item_floor_div.getVisibility() != View.GONE) {
-                item_floor_div.setVisibility(View.GONE);
-            }
-            if (itemFloorTvTitle.getVisibility() != View.GONE) {
-                itemFloorTvTitle.setVisibility(View.GONE);
-            }
-            if (itemFloorLnUserInfo.getVisibility() != View.GONE) {
-                itemFloorLnUserInfo.setVisibility(View.GONE);
-            }
-            if (itemFloorTvTextContent.getVisibility() != View.GONE) {
-                itemFloorTvTextContent.setVisibility(View.GONE);
-            }
-            if (itemFloorImgContent.getVisibility() != View.GONE) {
-                itemFloorImgContent.setVisibility(View.GONE);
-            }
-            if (itemFloorLinearPlayer.getVisibility() != View.GONE) {
-                itemFloorLinearPlayer.setVisibility(View.GONE);
-            }
-            if (itemFloorLnVideo.getVisibility() != View.GONE) {
-                itemFloorLnVideo.setVisibility(View.GONE);
-            }
-            if (footDetailLnPraise.getVisibility() != View.GONE) {
-                footDetailLnPraise.setVisibility(View.GONE);
-            }
-        }
-    }
-
     private class PlayClickListener implements View.OnClickListener, MediaPlayer.OnPreparedListener {
         LMediaPlayer lMediaPlayer;
         boolean isPrepared = false;
@@ -274,6 +213,21 @@ public class FloorItemAdapter extends LAdapter implements LRequestTool.OnRespons
             if (playWhenReady) {
                 v.performClick();
             }
+        }
+    }
+
+    private class PreviewClickListener implements View.OnClickListener {
+        String url;
+
+        public PreviewClickListener(String url) {
+            this.url = url;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent videoIntent = new Intent(v.getContext(), VideoActivity.class);
+            videoIntent.putExtra("url", NetConst.ROOT_URL + url);
+            v.getContext().startActivity(videoIntent);
         }
     }
 
@@ -316,5 +270,84 @@ public class FloorItemAdapter extends LAdapter implements LRequestTool.OnRespons
 
     public interface LoginRequestListener {
         void requestLogin(FloorItemAdapter floorItemAdapter);
+    }
+
+    /**
+     * This class contains all butterknife-injected Views & Layouts from layout file 'item_floor.xml'
+     * for easy to all layout elements.
+     *
+     * @author ButterKnifeZelezny, plugin for Android Studio by Avast Developers (http://github.com/avast)
+     */
+    static class ViewHolder {
+        @InjectView(R.id.item_floor_div)
+        View itemFloorDiv;
+        @InjectView(R.id.item_floor_tvTitle)
+        TextView itemFloorTvTitle;
+        @InjectView(R.id.item_floor_imgHead)
+        CircleImageView itemFloorImgHead;
+        @InjectView(R.id.item_floor_tvAuthor)
+        TextView itemFloorTvAuthor;
+        @InjectView(R.id.item_floor_tvFloorDate)
+        TextView itemFloorTvFloorDate;
+        @InjectView(R.id.item_floor_lnUserInfo)
+        LinearLayout itemFloorLnUserInfo;
+        @InjectView(R.id.item_floor_tvTextContent)
+        TextView itemFloorTvTextContent;
+        @InjectView(R.id.item_floor_imgContent)
+        ImageView itemFloorImgContent;
+        @InjectView(R.id.item_floor_imgPlay)
+        ImageView itemFloorImgPlay;
+        @InjectView(R.id.item_floor_sb)
+        SeekBar itemFloorSb;
+        @InjectView(R.id.item_floor_linearPlayer)
+        LinearLayout itemFloorLinearPlayer;
+        @InjectView(R.id.item_floor_flVideo)
+        FrameLayout itemFloorFlVideo;
+        @InjectView(R.id.item_floor_imgVideoPreview)
+        ImageView itemFloorImgVideoPreview;
+        @InjectView(R.id.item_floor_tvVideoUrl)
+        TextView itemFloorTvVideoUrl;
+        @InjectView(R.id.item_floor_lnVideo)
+        LinearLayout itemFloorLnVideo;
+        @InjectView(R.id.foot_detail_tvPraise)
+        TextView footDetailTvPraise;
+        @InjectView(R.id.foot_detail_lnPraise)
+        LinearLayout footDetailLnPraise;
+        @InjectView(R.id.item_floor_tvVideoName)
+        TextView footDetailTvVideoName;
+
+        ViewHolder(View view) {
+            ButterKnife.inject(this, view);
+        }
+
+        public void resetViews() {
+            if (itemFloorDiv.getVisibility() != View.GONE) {
+                itemFloorDiv.setVisibility(View.GONE);
+            }
+            if (itemFloorTvTitle.getVisibility() != View.GONE) {
+                itemFloorTvTitle.setVisibility(View.GONE);
+            }
+            if (itemFloorLnUserInfo.getVisibility() != View.GONE) {
+                itemFloorLnUserInfo.setVisibility(View.GONE);
+            }
+            if (itemFloorTvTextContent.getVisibility() != View.GONE) {
+                itemFloorTvTextContent.setVisibility(View.GONE);
+            }
+            if (itemFloorImgContent.getVisibility() != View.GONE) {
+                itemFloorImgContent.setVisibility(View.GONE);
+            }
+            if (itemFloorLinearPlayer.getVisibility() != View.GONE) {
+                itemFloorLinearPlayer.setVisibility(View.GONE);
+            }
+            if (itemFloorLnVideo.getVisibility() != View.GONE) {
+                itemFloorLnVideo.setVisibility(View.GONE);
+            }
+            if (footDetailLnPraise.getVisibility() != View.GONE) {
+                footDetailLnPraise.setVisibility(View.GONE);
+            }
+            if (itemFloorFlVideo.getVisibility() != View.GONE) {
+                itemFloorFlVideo.setVisibility(View.GONE);
+            }
+        }
     }
 }

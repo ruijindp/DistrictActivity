@@ -47,6 +47,14 @@ public class LMediaPlayer implements MediaPlayer.OnBufferingUpdateListener,
         skbProgress.setOnSeekBarChangeListener(this);
     }
 
+    public void setSurfaceView(SurfaceView surfaceView) {
+        if (surfaceView != null) {
+            surfaceHolder = surfaceView.getHolder();
+            surfaceHolder.addCallback(this);
+        }
+        mediaPlayer.setDisplay(surfaceHolder);
+    }
+
     /**
      * ****************************************************
      * 通过定时器和Handler来更新进度条

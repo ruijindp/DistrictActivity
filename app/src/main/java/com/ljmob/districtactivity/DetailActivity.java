@@ -388,6 +388,7 @@ public class DetailActivity extends AppCompatActivity implements
             }
         });
         currentPage = 1;
+        floorItemAdapter.stopAllMusics();
         loadComment(currentPage);
     }
 
@@ -475,7 +476,6 @@ public class DetailActivity extends AppCompatActivity implements
                 return;
             case R.id.activity_detail_btnVote:
 //                ToastUtil.show(R.string.cannot_vote);
-                // TODO: 8.15
                 if (result.is_vote) {
                     ToastUtil.show(R.string.had_voted);
                     return;

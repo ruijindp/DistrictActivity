@@ -32,7 +32,9 @@ public class FileUtil {
                 fileUrl.endsWith(".flac")) {
             return FileType.music;
         }
-        if (fileUrl.endsWith(".mp4") || fileUrl.endsWith(".3gp")) {
+        if (fileUrl.endsWith(".mp4") ||
+                fileUrl.endsWith(".3gp") ||
+                fileUrl.endsWith(".mov")) {
             return FileType.video;
         }
         if (fileUrl.endsWith(".png") || fileUrl.endsWith("jpg")) {
