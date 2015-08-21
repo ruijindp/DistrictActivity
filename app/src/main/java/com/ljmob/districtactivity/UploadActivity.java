@@ -266,32 +266,32 @@ public class UploadActivity extends AppCompatActivity implements
                             .build();
                 }
                 materialDialog.setTitle(titleRes);
-                UploadActivity.this.materialDialog.show();
-//                MaterialDialog videoTypeDialog = new MaterialDialog.Builder(this)
-//                        .theme(Theme.LIGHT)
-//                        .title(R.string.video_source)
-//                        .items(R.array.video_source)
-//                        .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
-//                            @Override
-//                            public boolean onSelection(MaterialDialog materialDialog, View view,
-//                                                       int i, CharSequence charSequence) {
-//                                switch (i) {
-//                                    case 0://优酷
-//                                        UploadActivity.this.materialDialog.show();
-//                                        break;
-//                                    case 1://相册
-//                                        Intent audioIntent = new Intent(Intent.ACTION_GET_CONTENT);
-//                                        audioIntent.setType("video/*");
-//                                        audioIntent.putExtra("return-data", true);
-//                                        startActivityForResult(audioIntent, RESULT_GET);
-//                                        break;
-//                                }
-//                                return true;
-//                            }
-//                        })
-//                        .build();
-//                videoTypeDialog.show();
-//                break;
+//                materialDialog.show();
+                MaterialDialog videoTypeDialog = new MaterialDialog.Builder(this)
+                        .theme(Theme.LIGHT)
+                        .title(R.string.video_source)
+                        .items(R.array.video_source)
+                        .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog materialDialog, View view,
+                                                       int i, CharSequence charSequence) {
+                                switch (i) {
+                                    case 0://优酷
+                                        UploadActivity.this.materialDialog.show();
+                                        break;
+                                    case 1://相册
+                                        Intent audioIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                                        audioIntent.setType("video/*");
+                                        audioIntent.putExtra("return-data", true);
+                                        startActivityForResult(audioIntent, RESULT_GET);
+                                        break;
+                                }
+                                return true;
+                            }
+                        })
+                        .build();
+                videoTypeDialog.show();
+                break;
         }
     }
 
