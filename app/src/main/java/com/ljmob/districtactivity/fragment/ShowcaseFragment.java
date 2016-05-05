@@ -40,7 +40,10 @@ import java.util.List;
  * Created by london on 15/7/17.
  * 作品展示
  */
-public class ShowcaseFragment extends Fragment implements LRequestTool.OnResponseListener, AbsListView.OnScrollListener, SwipeRefreshLayout.OnRefreshListener, MainHeadPagerAdapter.OnActivitySelectListener, AdapterView.OnItemClickListener, View.OnClickListener {
+public class ShowcaseFragment extends Fragment implements LRequestTool.OnResponseListener,
+        AbsListView.OnScrollListener, SwipeRefreshLayout.OnRefreshListener,
+        MainHeadPagerAdapter.OnActivitySelectListener, AdapterView.OnItemClickListener,
+        View.OnClickListener {
     private static final int API_SEARCH_RESULT = 1;
     private static final int API_ACTIVITY = 2;
     private static final int API_PUBLIC_NOTICES = 3;
@@ -134,16 +137,19 @@ public class ShowcaseFragment extends Fragment implements LRequestTool.OnRespons
         loadPage(currentPage);
     }
 
+    //公告请求
     private void loadBroadcast() {
         lRequestTool.doGet(NetConst.API_PUBLIC_NOTICES, new DefaultParams(), API_PUBLIC_NOTICES);
     }
 
+    //头部类似GridView布局请求
     private void loadActivities() {
         HashMap<String, Object> params = new DefaultParams();
         params.put("activity_type_id", 1);
         lRequestTool.doGet(NetConst.API_ACTIVITY, params, API_ACTIVITY);
     }
 
+    //请求listView数据
     private void loadPage(int page) {
         isLoading = true;
         HashMap<String, Object> params = new DefaultParams();
