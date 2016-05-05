@@ -32,7 +32,9 @@ import java.util.List;
  * Created by london on 15/7/22.
  * 我参与的
  */
-public class JoinedActivity extends AppCompatActivity implements LRequestTool.OnResponseListener, SwipeRefreshLayout.OnRefreshListener, AbsListView.OnScrollListener, AdapterView.OnItemClickListener {
+public class JoinedActivity extends AppCompatActivity implements LRequestTool.OnResponseListener,
+        SwipeRefreshLayout.OnRefreshListener, AbsListView.OnScrollListener,
+        AdapterView.OnItemClickListener {
     private static final int API_MESSAGE = 1;
 
     ListView activity_join_lv;

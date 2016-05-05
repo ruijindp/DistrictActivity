@@ -7,6 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
@@ -122,10 +123,10 @@ public class SearchActivity extends AppCompatActivity implements
         }
         isLoading = true;
         HashMap<String, Object> params = new DefaultParams();
-        params.put("q%5Btitle_cont%5D", keyWord);
-        params.put("q%5Bauthor_cont%5D", keyWord);
-        params.put("page", page);
+        params.put("q[title_cont]", keyWord);
+        params.put("q[author_cont]", keyWord);
         params.put("activity", selectedActivity.id);
+        params.put("page", page);
         API_SEARCH++;
         lRequestTool.doGet(NetConst.API_SEARCH, params, API_SEARCH);
     }

@@ -56,9 +56,11 @@ public class MainHeadPagerAdapter extends PagerAdapter {
 
     @Override
     public boolean isViewFromObject(View view, Object object) {
-        return view == object;
+        return view == object;//它用于判断你当前要显示的页面
     }
 
+//  getItem(int position)是获取item的位置，
+//  instantiateItem(ViewGroup container, final int position)是初始化item用的
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         if (pages == null) {
@@ -142,7 +144,6 @@ public class MainHeadPagerAdapter extends PagerAdapter {
             imageLoader.displayImage(NetConst.ROOT_URL + activity.phone_img, img);
         }
     }
-
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {

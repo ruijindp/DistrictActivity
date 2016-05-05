@@ -50,9 +50,8 @@ public class FloorItemAdapter extends LAdapter implements LRequestTool.OnRespons
     String floor;
 
     TextView tvPraise;
-    int praiseCount = 0;
+    int praiseCount = 0;//点赞数量
     boolean isPraised;
-
 
     public FloorItemAdapter(List<? extends LEntity> lEntities, LoginRequestListener loginRequestListener) {
         super(lEntities);
@@ -92,8 +91,14 @@ public class FloorItemAdapter extends LAdapter implements LRequestTool.OnRespons
             case normal:
                 if (floorItem.item.content != null && floorItem.item.content.length() != 0) {//文本
                     holder.itemFloorTvTextContent.setVisibility(View.VISIBLE);
+                    String one = floorItem.item.content.replace("&nbsp;", " ");
+                    String two = one.replace("<div>", "");
+                    String three = two.replace("</div>", "");
+                    String four = three.replace("<br>", "");
+//                    holder.itemFloorTvTextContent.setText(LEmoji.
+//                            translate(floorItem.item.content.replace("&nbsp;", " ")));
                     holder.itemFloorTvTextContent.setText(LEmoji.
-                            translate(floorItem.item.content.replace("&nbsp;", " ")));
+                            translate(four));
                     break;
                 }
                 if (floorItem.item.file_url == null && floorItem.item.basic_video_url == null) {//既没有文本也没有文件
@@ -108,6 +113,7 @@ public class FloorItemAdapter extends LAdapter implements LRequestTool.OnRespons
                 }
                 if (FileUtil.getFileType(floorItem.item.file_url) == FileUtil.FileType.picture) {//图片
                     holder.itemFloorImgContent.setVisibility(View.VISIBLE);
+//                  setAdjustViewBounds当你需要在ImageView调整边框时保持可绘制对象的比例时，将该值设为真。
                     holder.itemFloorImgContent.setAdjustViewBounds(true);
                     imageLoader.displayImage(NetConst.ROOT_URL + floorItem.item.file_url, holder.itemFloorImgContent);
                     break;
@@ -179,6 +185,7 @@ public class FloorItemAdapter extends LAdapter implements LRequestTool.OnRespons
         }
     }
 
+    //音乐点击事件
     private class PlayClickListener implements View.OnClickListener, MediaPlayer.OnPreparedListener {
         LMediaPlayer lMediaPlayer;
         boolean isPrepared = false;
@@ -211,11 +218,13 @@ public class FloorItemAdapter extends LAdapter implements LRequestTool.OnRespons
         public void onPrepared(MediaPlayer mp) {
             isPrepared = true;
             if (playWhenReady) {
+                //performClickm模拟点击事件
                 v.performClick();
             }
         }
     }
 
+    //视频点击事件
     private class PreviewClickListener implements View.OnClickListener {
         String url;
 
@@ -231,6 +240,7 @@ public class FloorItemAdapter extends LAdapter implements LRequestTool.OnRespons
         }
     }
 
+    //链接点击事件
     private class UrlClickListener implements View.OnClickListener {
         String url;
 
@@ -244,6 +254,7 @@ public class FloorItemAdapter extends LAdapter implements LRequestTool.OnRespons
         }
     }
 
+    //点赞点击事件
     private class PraiseClickListener implements View.OnClickListener {
         FloorItem floorItem;
 

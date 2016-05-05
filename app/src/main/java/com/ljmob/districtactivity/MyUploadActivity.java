@@ -55,6 +55,7 @@ public class MyUploadActivity extends AppCompatActivity implements
     boolean isLoading;
     boolean isDivDPage;
 
+    public static String EXPERT_FLAG = "EXPERT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,8 +84,11 @@ public class MyUploadActivity extends AppCompatActivity implements
         ActionBar ab = getSupportActionBar();
         if (ab != null) {
             ab.setDisplayHomeAsUpEnabled(true);
-            if (MyApplication.currentUser.roles.equals("teacher")) {
+            if (MyApplication.currentUser.roles.equals("teacher") ||
+                    MyApplication.currentUser.roles.equals("grade")) {
                 ab.setTitle(R.string.activity_myUpload_teacher);
+            } else if (MyApplication.currentUser.roles.equals("expert")) {
+                ab.setTitle(R.string.activity_expert);
             }
         }
 
@@ -113,6 +117,12 @@ public class MyUploadActivity extends AppCompatActivity implements
         params.put("user_id", MyApplication.currentUser.id);
         params.put("roles", MyApplication.currentUser.roles);
         params.put("page", page);
+        if(MyApplication.currentUser.roles.equals("expert") ||
+                MyApplication.currentUser.roles.equals("teacher") ||
+                MyApplication.currentUser.roles.equals("grade") ||
+                MyApplication.currentUser.roles.equals("general")){
+            params.put("status", "checking");
+        }
         lRequestTool.doGet(NetConst.API_SEARCH_RESULT, params, API_SEARCH_RESULT);
     }
 
@@ -144,6 +154,23 @@ public class MyUploadActivity extends AppCompatActivity implements
             case API_SEARCH_RESULT:
                 List<Result> appendResults = gson.fromJson(response.body, new TypeToken<List<Result>>() {
                 }.getType());
+
+                if (MyApplication.currentUser != null && (MyApplication.currentUser.roles.equals("teacher")
+                        || MyApplication.currentUser.roles.equals("grade")|| MyApplication.currentUser.roles.equals("general"))) {
+                    List<Result> list = null;
+                    if (appendResults != null || appendResults.size() > 0) {
+                        list = new ArrayList<>();
+                        for (int i = 0; i < appendResults.size(); i++) {
+                            Result result = appendResults.get(i);
+                            if (result.is_check.equals("true")) {
+                                list.add(result);
+                            }
+                        }
+                        for (int i = 0; i < list.size(); i++) {
+                            appendResults.remove(list.get(i));
+                        }
+                    }
+                }
                 if (results == null) {
                     results = new ArrayList<>();
                 }
@@ -152,6 +179,7 @@ public class MyUploadActivity extends AppCompatActivity implements
                 } else {
                     results.addAll(appendResults);
                 }
+
                 if (appendResults == null || appendResults.size() != 15) {
                     hasMore = false;
                     ((TextView) foot_more.findViewById(R.id.foot_more_tv)).setText(R.string.no_more);
@@ -196,6 +224,8 @@ public class MyUploadActivity extends AppCompatActivity implements
         Result result = results.get(position);
         Intent detailIntent = new Intent(this, DetailActivity.class);
         detailIntent.putExtra("result", result);
+        detailIntent.putExtra("expert_flag", EXPERT_FLAG);
         startActivity(detailIntent);
+        finish();
     }
 }

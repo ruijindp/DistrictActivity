@@ -51,7 +51,9 @@ import cn.jpush.android.api.JPushInterface;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, LoginDialog.LoginListener, DrawerLayout.DrawerListener, ViewPager.OnPageChangeListener, LRequestTool.OnResponseListener, FirimUpdate.OnUpdateListener, UiChangeRequest {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, LoginDialog.LoginListener,
+        DrawerLayout.DrawerListener, ViewPager.OnPageChangeListener, LRequestTool.OnResponseListener,
+        FirimUpdate.OnUpdateListener, UiChangeRequest {
     //firim token:e9400a3620552593c1851beecb8431a0
     //firim appId:55bb0e50692d65612d00000c
     private static final int INTENT_FILTER = 1;
@@ -122,7 +124,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -141,14 +142,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_make_post:
+            case R.id.action_make_post://上传作品
                 if (ShowcaseFragment.activities == null) {
                     break;
                 }
                 Intent intent = new Intent(this, UploadActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.action_filter:
+            case R.id.action_filter://筛选
                 Intent filterIntent = new Intent(this, FilterActivity.class);
                 startActivityForResult(filterIntent, INTENT_FILTER);
                 break;
@@ -225,6 +226,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         if (MyApplication.currentUser.roles.equals("student")) {
             activity_main_tvMyUpload.setText(R.string.activity_myUpload);
+        } else if (MyApplication.currentUser.roles.equals("expert")){
+            activity_main_tvMyUpload.setText(R.string.activity_expert);
         } else {
             activity_main_tvMyUpload.setText(R.string.activity_myUpload_teacher);
         }

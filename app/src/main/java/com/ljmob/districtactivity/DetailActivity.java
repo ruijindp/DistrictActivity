@@ -63,6 +63,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import cn.sharesdk.sina.weibo.SinaWeibo;
 import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.wechat.friends.Wechat;
@@ -73,18 +74,17 @@ import cn.sharesdk.wechat.moments.WechatMoments;
  * 帖子详情和评论
  */
 public class DetailActivity extends AppCompatActivity implements
-        LRequestTool.OnResponseListener,
-        SwipeRefreshLayout.OnRefreshListener,
-        LoginDialog.LoginListener,
-        AbsListView.OnScrollListener,
-        View.OnClickListener,
-        TextWatcher,
-        AdapterView.OnItemClickListener, AttachView.AttachViewDeleteListener, FloorItemAdapter.LoginRequestListener {
+        LRequestTool.OnResponseListener, SwipeRefreshLayout.OnRefreshListener,
+        LoginDialog.LoginListener, AbsListView.OnScrollListener,
+        View.OnClickListener, TextWatcher,//TextWatcher输入框的监听事件
+        AdapterView.OnItemClickListener, AttachView.AttachViewDeleteListener,
+        FloorItemAdapter.LoginRequestListener {
     private static final int RESULT_GET = 1;
     private static final int API_VOTE = 2;
     private static final int API_COMMENT = 3;
     private static final int API_COMMENT_SEND = 4;
     private static final int API_CHECK = 5;
+    private static final int API_EXPERT_CHECK = 6;
 
     @InjectView(R.id.toolbar_root)
     Toolbar toolbarRoot;
@@ -92,34 +92,70 @@ public class DetailActivity extends AppCompatActivity implements
     ListView activityDetailLv;
     @InjectView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
+    /**
+     * 回复fra
+     */
     @InjectView(R.id.activity_detail_btnReply)
     FrameLayout activityDetailBtnReply;
+    /**
+     * 票数tv
+     */
     @InjectView(R.id.activity_detail_tvVote)
     TextView activityDetailTvVote;
+    /**
+     * 投票fra
+     */
     @InjectView(R.id.activity_detail_btnVote)
     FrameLayout activityDetailBtnVote;
+    /**
+     * 回复和票数的Lin
+     */
     @InjectView(R.id.activity_detail_lnOptions)
     LinearLayout activityDetailLnOptions;
+    /**
+     * 回复里面的加号Img
+     */
     @InjectView(R.id.activity_detail_btnAttach)
     ImageView activityDetailBtnAttach;
     @InjectView(R.id.activity_detail_etComment)
     EditText activityDetailEtComment;
+    /**
+     * 打开表情Img
+     */
     @InjectView(R.id.activity_detail_btnEmoji)
     ImageView activityDetailBtnEmoji;
+    /**
+     * 发送回复Img
+     */
     @InjectView(R.id.activity_detail_btnSend)
     ImageView activityDetailBtnSend;
+    /**
+     * 底部显示添加图片后的Lin
+     */
     @InjectView(R.id.activity_detail_lnAttached)
     LinearLayout activityDetailLnAttached;
     @InjectView(R.id.activity_detail_scAttached)
     HorizontalScrollView activityDetailScAttached;
     @InjectView(R.id.activity_detail_gvEmoji)
     GridView activityDetailGvEmoji;
+    /**
+     * 加号，编辑框，发送Lin
+     */
     @InjectView(R.id.activity_detail_lnReply)
     LinearLayout activityDetailLnReply;
+    /**
+     * 审核通过tv
+     */
     @InjectView(R.id.activity_detail_tvCheck)
     TextView activityDetailTvCheck;
+    /**
+     * 谢谢参与tv
+     */
     @InjectView(R.id.activity_detail_tvUnchecked)
     TextView activityDetailTvUnchecked;
+    /**
+     * 审核通过和谢谢参与Lin
+     */
     @InjectView(R.id.activity_detail_lnCheck)
     LinearLayout activityDetailLnCheck;
 
@@ -148,12 +184,20 @@ public class DetailActivity extends AppCompatActivity implements
     boolean isDivDPage;
     boolean hasMore;
     String checkVisibleLevel = "all";
+    @InjectView(R.id.activity_detail_lnScore)
+    LinearLayout activityDetailLnScore;
+    @InjectView(R.id.activity_detail_edtScore)
+    EditText activityDetailEdtScore;
+
+    String Expert_flag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        ButterKnife.inject(this);
         result = (Result) getIntent().getSerializableExtra("result");
+        Expert_flag = getIntent().getStringExtra("expert_flag");
         if (result == null) {
             ToastUtil.show("result:null");
             finish();
@@ -165,6 +209,8 @@ public class DetailActivity extends AppCompatActivity implements
 
         shareable = new Shareable();
         shareable.title = result.title;
+        shareable.pushName = result.author.name;
+        shareable.inSchool = result.author.grade_school;
         shareable.content = LEmoji.simplify(result.description);
         shareable.url = NetConst.PAGE_SHARE + "?id=" + result.id;
         for (Item item : result.items) {
@@ -210,7 +256,17 @@ public class DetailActivity extends AppCompatActivity implements
         activityDetailLnCheck.setVisibility(View.GONE);
         activityDetailLnOptions.setVisibility(View.GONE);
         boolean isTeacher = MyApplication.currentUser != null &&
-                MyApplication.currentUser.roles.equals("teacher");
+                (MyApplication.currentUser.roles.equals("teacher") ||
+                        MyApplication.currentUser.roles.equals("grade") || MyApplication.currentUser.roles.equals("general"));
+        boolean isExpert = MyApplication.currentUser != null && MyApplication.currentUser.roles.equals("expert");
+        if (isExpert) {
+            if (Expert_flag == null || Expert_flag.length() == 0){
+                activityDetailLnScore.setVisibility(View.GONE);
+            }else{
+                activityDetailLnScore.setVisibility(View.VISIBLE);
+            }
+            activityDetailLnOptions.setVisibility(View.GONE);
+        }
         switch (result.is_check) {
             case "checking":
                 if (isTeacher) {
@@ -218,7 +274,8 @@ public class DetailActivity extends AppCompatActivity implements
                 }
                 break;
             case "true":
-                activityDetailLnOptions.setVisibility(View.VISIBLE);
+                if (!isExpert)
+                    activityDetailLnOptions.setVisibility(View.VISIBLE);
                 break;
             case "false":
                 break;
@@ -256,6 +313,27 @@ public class DetailActivity extends AppCompatActivity implements
 
         activityDetailLv.setAdapter(floorItemAdapter);
         activityDetailLv.setOnScrollListener(this);
+    }
+
+    @OnClick(R.id.activity_detail_btnScore)
+    protected void playScore() {
+        String inputScore = activityDetailEdtScore.getText().toString();
+        if (inputScore.length() == 0 || inputScore == null) {
+            ToastUtil.show(R.string.toast_score_null);
+        } else {
+            int exchangeInputScore = Integer.parseInt(inputScore);
+            if (exchangeInputScore > 100) {
+                ToastUtil.show(R.string.inputScoreToast);
+            } else {
+                HashMap<String, Object> params = new DefaultParams();
+                params.put("result_id", result.id);
+                params.put("score", activityDetailEdtScore.getText().toString());
+                params.put("roles", MyApplication.currentUser.roles);
+                lRequestTool.doPost(NetConst.API_EXPERT_CHECK, params, API_EXPERT_CHECK);
+
+
+            }
+        }
     }
 
     @Override
@@ -374,7 +452,17 @@ public class DetailActivity extends AppCompatActivity implements
             case API_CHECK:
                 ToastUtil.show(R.string.toast_checked);
                 MyUploadActivity.isResultChanged = true;
-                initViewsWithResult();
+                startActivity(new Intent(DetailActivity.this, MyUploadActivity.class));
+//                initViewsWithResult();
+                DetailActivity.this.finish();
+                break;
+            case API_EXPERT_CHECK:
+                ToastUtil.show(R.string.toast_playScore_success);
+                activityDetailEdtScore.setText("");
+                MyUploadActivity.isResultChanged = true;
+                startActivity(new Intent(DetailActivity.this, MyUploadActivity.class));
+//                hideKeyBoard();
+                DetailActivity.this.finish();
                 break;
         }
     }
@@ -573,6 +661,7 @@ public class DetailActivity extends AppCompatActivity implements
                                 HashMap<String, Object> params = new DefaultParams();
                                 params.put("activity_result_id", result.id);
                                 params.put("is_check", "true");
+                                params.put("checker_id", MyApplication.currentUser.id);//后加入检查用户id
                                 params.put("level", checkVisibleLevel);
                                 result.is_check = "true";
                                 lRequestTool.doPost(NetConst.API_CHECK, params, API_CHECK);

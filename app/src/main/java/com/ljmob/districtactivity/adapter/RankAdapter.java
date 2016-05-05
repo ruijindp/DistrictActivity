@@ -106,7 +106,12 @@ public class RankAdapter extends LAdapter {
             holder.itemRankTvContent.setVisibility(View.GONE);
         } else {
             holder.itemRankTvContent.setVisibility(View.VISIBLE);
-            holder.itemRankTvContent.setText(LEmoji.simplify(result.description));
+            String one = result.description.replace("&nbsp;", " ");
+            String two = one.replace("&nbsp", " ");
+            String three = two.replace("&n","");
+            String four = three.replace("&","");
+//            holder.itemRankTvContent.setText(LEmoji.simplify(result.description));
+            holder.itemRankTvContent.setText(LEmoji.simplify(four));
         }
     }
 

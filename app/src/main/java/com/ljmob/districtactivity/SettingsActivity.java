@@ -96,8 +96,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         activity_settings_swPush.setChecked(!JPushInterface.isPushStopped(getApplicationContext()));
         activity_settings_tvChangeName.setOnClickListener(this);
         activity_settings_tvChangePassword.setOnClickListener(this);
-        activity_settings_swPush.setOnCheckedChangeListener(this);
         activity_settings_lnPush.setOnClickListener(this);
+        activity_settings_swPush.setOnCheckedChangeListener(this);
         activity_settings_flLogout.setOnClickListener(this);
         // TODO: 8.15
         activity_settings_imgHead.setOnClickListener(this);
@@ -117,7 +117,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             case R.id.activity_settings_lnPush:
                 activity_settings_swPush.setChecked(!activity_settings_swPush.isChecked());
                 break;
-            case R.id.activity_settings_flLogout:
+            case R.id.activity_settings_flLogout://注销
 //                HashMap<String, Object> params = new DefaultParams();
 //                params.put("jpush_out", 0);
 //                lRequestTool.doDelete(NetConst.API_SIGN_OUT, params, 0);
@@ -131,11 +131,12 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 sendBroadcast(new Intent(ACTION_LOGOUT));
                 break;
             case R.id.activity_settings_imgHead:
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("image/*");
-                intent.putExtra("crop", "true");
-                intent.putExtra("return-data", true);
-                startActivityForResult(intent, RESULT_GET);
+//                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//                intent.setType("image/*");
+//                intent.putExtra("crop", "true");
+//                intent.putExtra("return-data", true);
+//                startActivityForResult(intent, RESULT_GET);
+                Crop.pickImage(SettingsActivity.this, RESULT_GET);
                 cropFile = new File(getCacheDir(), System.currentTimeMillis() + "cropped.jpg");
                 break;
         }

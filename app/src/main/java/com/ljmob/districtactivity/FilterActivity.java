@@ -73,7 +73,6 @@ public class FilterActivity extends AppCompatActivity implements
     ProgressDialog progressDialog;
     SimpleStringPopup popup;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -203,6 +202,8 @@ public class FilterActivity extends AppCompatActivity implements
                 filterCondition.schoolId = 0;
                 activityFilterTvDistrict.setText(districts.get(index).name);
                 activityFilterTvSchool.setText(R.string.invaluable);
+
+                getSelectSchool(districts.get(index).id);
                 break;
             case R.id.activity_filter_flSchool:
                 filterCondition.schoolId = schools.get(index).id;
@@ -211,5 +212,13 @@ public class FilterActivity extends AppCompatActivity implements
                 activityFilterTvDistrict.setText(R.string.invaluable);
                 break;
         }
+    }
+
+    private void getSelectSchool(int index) {
+        schoolNames.clear();
+        System.gc();
+        HashMap<String, Object> params = new DefaultParams();
+        params.put("district_id", index);
+        lRequestTool.doGet(NetConst.API_SCHOOL, params, API_SCHOOL);
     }
 }

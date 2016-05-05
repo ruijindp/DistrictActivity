@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 22
+    compileSdkVersion 23
     buildToolsVersion "23.0.0"
 
     packagingOptions {
@@ -14,8 +14,8 @@ android {
         applicationId "com.ljmob.districtactivity"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 10
-        versionName "1.5"
+        versionCode 25
+        versionName "1.8.1"
     }
     buildTypes {
         release {
@@ -29,19 +29,23 @@ android {
     }
 }
 
+repositories {
+    maven {
+        url "https://jitpack.io"
+    }
+}
+
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':lutil')
     compile project(':firimupdate')
     compile project(':richeditorfragment')
     compile project(':qiniuupload')
     compile project(':quicksharesdk')
     compile project(':lemoji')
-
-    compile 'com.android.support:appcompat-v7:22.2.1'
-    compile 'com.android.support:cardview-v7:22.2.1'
-    compile 'com.android.support:recyclerview-v7:22.2.1'
-
+    compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.android.support:cardview-v7:23.1.1'
+    compile 'com.android.support:recyclerview-v7:23.1.1'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.4'
     compile 'com.qiniu:qiniu-android-sdk:7.0.7'
     compile 'jp.wasabeef:richeditor-android:0.1@aar'
@@ -49,6 +53,9 @@ dependencies {
     compile 'com.jpardogo.materialtabstrip:library:1.1.0'
     compile 'com.soundcloud.android:android-crop:1.0.0@aar'
     compile 'com.github.castorflex.verticalviewpager:library:19.0.1'
-    compile 'com.afollestad:material-dialogs:0.7.7.0'
     compile 'com.jakewharton:butterknife:6.1.0'
+    compile('com.github.afollestad.material-dialogs:core:0.8.5.3@aar') {
+        transitive = true
+    }
+//    compile 'com.afollestad:material-dialogs:0.7.7.0'
 }
