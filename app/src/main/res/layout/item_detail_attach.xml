@@ -33,5 +33,5 @@
         android:background="?selectableItemBackgroundBorderless"
         android:contentDescription="@string/default_content_description"
         android:padding="4dp"
-        android:src="@drawable/abc_ic_clear_mtrl_alpha" />
+        android:src="@mipmap/bot_off" />
 </FrameLayout>

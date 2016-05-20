@@ -30,4 +30,7 @@
     <color name="test">#E6E6E6</color>
     <color name="test2">#d0d0d0</color>
     <color name="test3">#B758B8</color>
+
+    <color name="expert">#5bbba0</color>
+
 </resources>

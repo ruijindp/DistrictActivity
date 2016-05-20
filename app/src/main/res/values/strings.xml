@@ -1,8 +1,10 @@
 <resources>
-    <string name="app_name">社会实践</string>
+    <string name="app_name">我爱学习</string>
 
     <string name="default_content_description">dcd</string>
     <string name="login">登录</string>
+    <string name="register_new">注册账号</string>
+    <string name="register">注册</string>
     <string name="login_ing">正在登录</string>
     <string name="login_ed">登录成功</string>
     <string name="login_auth">正在获取用户信息</string>
@@ -36,6 +38,9 @@
     <string name="checking">待审核</string>
     <string name="checked">已通过</string>
     <string name="unchecked">未通过</string>
+    <string name="expert_one">专家一</string>
+    <string name="expert_two">专家二</string>
+    <string name="inputScoreToast">分数不能大于100</string>
     <string name="replied">评论了您的</string>
     <string name="to_your">对您的</string>
     <string name="praised">点了赞</string>
@@ -58,6 +63,10 @@
     <string name="err_change_password">原始密码有误\n请重新输入</string>
     <string name="user_">账号：</string>
     <string name="pass_">密码：</string>
+    <string name="register_user_">账                 号：</string>
+    <string name="register_pass_">密                 码：</string>
+    <string name="register_confim_pass_">确认密码：</string>
+    <string name="nickname_">昵                 称：</string>
     <string name="login_please">点击这里登录</string>
     <string name="floor_">楼</string>
     <string name="buffering">正在缓冲</string>
@@ -96,9 +105,9 @@
         <item>本班作品</item>
     </string-array>
     <string-array name="visible_level">
-        <item>全部可见</item>
-        <item>本校可见</item>
-        <item>本班可见</item>
+        <item>全部可见("符合参赛要求"且"质量达四星以上")</item>
+        <item>本校可见("符合参赛要求"且"质量达三星")</item>
+        <item>本班可见("基本符合参赛条件"且"质量达二星")</item>
     </string-array>
     <string-array name="video_source">
         <item>优酷链接</item>
@@ -128,6 +137,8 @@
     <string name="activity_upload">上传作品</string>
     <string name="activity_myUpload">我的作品</string>
     <string name="activity_myUpload_teacher">学生作品</string>
+    <string name="activity_expert">专家审核</string>
+    <string name="activity_expert_score">分</string>
     <string name="activity_message">消息</string>
     <string name="activity_joined">我参与的</string>
     <string name="activity_detail">作品详情</string>
@@ -142,6 +153,7 @@
     <string name="tag_vote">票</string>
     <string name="tag_praise">赞</string>
     <string name="tag_check">审</string>
+    <string name="tag_waitCheck">待审核</string>
 
     <string name="tab_showcase">作品展示</string>
     <string name="tab_rank">排行榜</string>
@@ -174,6 +186,14 @@
     <string name="toast_checked">审核成功</string>
     <string name="toast_file_not_support">格式错误，该文件不能上传</string>
     <string name="toast_err_video">视频文件地址错误</string>
+    <string name="toast_score_null">请输入分数</string>
+    <string name="toast_playScore_success">评分成功</string>
+    <string name="toast_different_password">密码不一样</string>
+    <string name="toast_registr_username">用户名不能为空</string>
+    <string name="toast_registr_nickname">昵称不能为空</string>
+    <string name="toast_registr_password">密码不能为空</string>
+    <string name="toast_register_passwordLength">密码要不能少于6位</string>
+    <string name="toast_register_success">注册成功，已登录</string>
 
     <string name="test_user">测试学生</string>
     <string name="test1">9月29日正式开发区级朗读排行榜，敬请期待。</string>

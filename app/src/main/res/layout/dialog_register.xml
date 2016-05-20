@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="264dp"
-    android:layout_height="250dp"
+    android:layout_width="274dp"
+    android:layout_height="330dp"
     android:background="@drawable/shape_card"
     android:orientation="vertical"
     android:paddingBottom="22dp"
@@ -17,15 +17,14 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/user_"
+            android:text="@string/register_user_"
             android:textSize="16sp" />
 
-        <AutoCompleteTextView
-            android:id="@+id/dialog_name_etUserName"
+        <EditText
+            android:id="@+id/dialog_register_etUserName"
             android:layout_width="match_parent"
             android:layout_height="42dp"
             android:background="@drawable/shape_et_dialog"
-            android:completionThreshold="1"
             android:paddingLeft="8dp"
             android:singleLine="true"
             android:textColor="@color/blue"
@@ -41,15 +40,62 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/pass_"
+            android:text="@string/register_pass_"
             android:textSize="16sp" />
 
         <EditText
-            android:id="@+id/dialog_name_etPassword"
+            android:id="@+id/dialog_register_etPassword"
             android:layout_width="match_parent"
             android:layout_height="42dp"
             android:background="@drawable/shape_et_dialog"
             android:inputType="textPassword"
+            android:paddingLeft="8dp"
+            android:singleLine="true"
+            android:textColor="@color/blue"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/register_confim_pass_"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/dialog_register_etConfimPassword"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:background="@drawable/shape_et_dialog"
+            android:inputType="textPassword"
+            android:paddingLeft="8dp"
+            android:singleLine="true"
+            android:textColor="@color/blue"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/nickname_"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/dialog_register_etNickname"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:background="@drawable/shape_et_dialog"
             android:paddingLeft="8dp"
             android:singleLine="true"
             android:textColor="@color/blue"
@@ -63,36 +109,15 @@
         android:layout_weight="1" />
 
     <TextView
-        android:id="@+id/dialog_name_tvLogin"
+        android:id="@+id/dialog_register_tvRegister"
         android:layout_width="match_parent"
+        android:layout_marginBottom="2dp"
         android:layout_height="40dp"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="2dp"
         android:background="@drawable/selector_btn_dialog"
         android:elevation="2dp"
         android:gravity="center"
-        android:text="@string/login"
+        android:text="@string/register"
         android:textColor="@android:color/white" />
 
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/dialog_name_tvRegister"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:gravity="center"
-            android:text="@string/register_new"
-            android:textColor="#444" />
-
-        <View
-            android:layout_width="56dp"
-            android:layout_height="0.7dp"
-            android:layout_below="@id/dialog_name_tvRegister"
-            android:layout_centerHorizontal="true"
-            android:background="#444" />
-    </RelativeLayout>
 </LinearLayout>

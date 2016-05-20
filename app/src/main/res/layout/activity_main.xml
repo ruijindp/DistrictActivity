@@ -19,6 +19,7 @@
 
         <include layout="@layout/tool_bar_root" />
 
+        <!-- pstsShouldExpand=true填满界面 -->
         <com.astuetz.PagerSlidingTabStrip
             android:id="@+id/activity_main_tabStrip"
             android:layout_width="match_parent"
