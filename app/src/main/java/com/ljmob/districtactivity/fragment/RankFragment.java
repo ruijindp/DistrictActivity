@@ -38,7 +38,9 @@ import butterknife.InjectView;
  * Created by london on 15/7/17.
  * 排行榜
  */
-public class RankFragment extends Fragment implements AbsListView.OnScrollListener, AdapterView.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener, LRequestTool.OnResponseListener {
+public class RankFragment extends Fragment implements AbsListView.OnScrollListener,
+        AdapterView.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener,
+        LRequestTool.OnResponseListener {
     private static final int API_RANK = 1;
 
     View rootView;

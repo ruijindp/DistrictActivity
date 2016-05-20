@@ -54,6 +54,7 @@ public class LEmoji {
         if (emojiList == null || emojiList.size() == 0) {
             getAllEmoji();
         }
+//      SpannableString 给TextView加上特殊的文本效果
         SpannableString spannableString = new SpannableString(origin);
         List<int[]> indexList = new ArrayList<>();
         int lastIndexOfEnd = 0;

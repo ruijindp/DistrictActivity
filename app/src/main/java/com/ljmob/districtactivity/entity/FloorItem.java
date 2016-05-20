@@ -14,10 +14,10 @@ public class FloorItem extends LEntity {
     public String title;
     public Author author;
     public int floor;
-    public String created_at;
+    public String created_at;//创建日期
     public Item item;
 
     public enum ItemType {
-        userInfo, normal, options
+        userInfo, normal, options//分别是用户信息，内容，和观点
     }
 }

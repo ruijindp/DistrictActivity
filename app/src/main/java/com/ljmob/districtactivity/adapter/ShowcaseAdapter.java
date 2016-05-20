@@ -85,8 +85,6 @@ public class ShowcaseAdapter extends LAdapter {
                 }
             }
 
-
-
             switch (result.is_check) {
                 case "checking":
                     if (MyApplication.currentUser.roles.equals("teacher") || MyApplication.currentUser.roles.equals("grade")

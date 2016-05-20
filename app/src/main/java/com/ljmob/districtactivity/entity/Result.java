@@ -23,4 +23,5 @@ public class Result extends LEntity {
     public String is_check;
     public Author author;
     public List<Item> items;
+    public List<CheckScores> check_scores;
 }

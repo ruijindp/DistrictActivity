@@ -50,9 +50,9 @@ import java.util.List;
  * 上传作品
  */
 public class UploadActivity extends AppCompatActivity implements
-        View.OnClickListener,
-        LRequestTool.OnResponseListener,
-        SimpleStringPopup.SimpleStringListener, AttachView.AttachViewDeleteListener, LoginDialog.LoginListener, AdapterView.OnItemClickListener {
+        View.OnClickListener, LRequestTool.OnResponseListener,
+        SimpleStringPopup.SimpleStringListener, AttachView.AttachViewDeleteListener,
+        LoginDialog.LoginListener, AdapterView.OnItemClickListener {
     private static final int RESULT_GET = 1;
     private static final int API_RESULT = 1;
 

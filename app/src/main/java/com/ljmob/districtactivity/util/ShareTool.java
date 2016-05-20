@@ -56,7 +56,7 @@ public class ShareTool implements
         Platform.ShareParams shareParams = new Platform.ShareParams();
         shareParams.setShareType(Platform.SHARE_WEBPAGE);
         shareParams.setTitle(shareable.title);
-        shareParams.setText(shareable.content + "\n" + shareable.url);
+        shareParams.setText(shareable.inSchool + " " + shareable.pushName + "\n" + shareable.content + "\n" + shareable.url);
         if (response.downloadFile != null && response.downloadFile.length() > 0) {
             shareParams.setImagePath(response.downloadFile.getAbsolutePath());
         }

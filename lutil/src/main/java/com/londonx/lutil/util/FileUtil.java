@@ -37,7 +37,8 @@ public class FileUtil {
                 fileUrl.endsWith(".mov")) {
             return FileType.video;
         }
-        if (fileUrl.endsWith(".png") || fileUrl.endsWith("jpg")) {
+        if (fileUrl.endsWith(".png") || fileUrl.endsWith("jpg") || fileUrl.endsWith(".jpeg") ||
+                fileUrl.endsWith(".JPEG") || fileUrl.endsWith(".PENG")|| fileUrl.endsWith(".JPG")) {
             return FileType.picture;
         }
         if (fileUrl.startsWith("http")) {
@@ -49,33 +50,47 @@ public class FileUtil {
     public static File getFileFromUri(Uri uri) {
         String filePath = "";
         String[] column = {MediaStore.Images.Media.DATA};
-        if (Build.VERSION.SDK_INT >= 19) {
-            String wholeID = DocumentsContract.getDocumentId(uri);
-            // Split at colon, use second item in the array
-            String id = "";
-            try {
-                id = wholeID.split(":")[1];
-            } catch (IndexOutOfBoundsException e) {
-                return null;
-            }
-            // where id is equal to
-            String sel = MediaStore.Images.Media._ID + "=?";
-            Cursor cursor = Lutil.context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    column, sel, new String[]{id}, null);
-            if (cursor.getCount() == 0) {
-                cursor = Lutil.context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+        try {
+            if (Build.VERSION.SDK_INT >= 19) {
+                String wholeID = DocumentsContract.getDocumentId(uri);
+                // Split at colon, use second item in the array
+                String id = "";
+                try {
+                    id = wholeID.split(":")[1];
+                } catch (IndexOutOfBoundsException e) {
+                    return null;
+                }
+                // where id is equal to
+                String sel = MediaStore.Images.Media._ID + "=?";
+                Cursor cursor = Lutil.context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                         column, sel, new String[]{id}, null);
+                if (cursor.getCount() == 0) {
+                    cursor = Lutil.context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                            column, sel, new String[]{id}, null);
+                }
+                if (cursor.getCount() == 0) {
+                    cursor = Lutil.context.getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                            column, sel, new String[]{id}, null);
+                }
+                int columnIndex = cursor.getColumnIndex(column[0]);
+                if (cursor.moveToFirst()) {
+                    filePath = cursor.getString(columnIndex);
+                }
+                cursor.close();
+            } else {
+                CursorLoader cursorLoader = new CursorLoader(
+                        Lutil.context,
+                        uri, column, null, null, null);
+                Cursor cursor = cursorLoader.loadInBackground();
+
+                if (cursor != null) {
+                    int column_index =
+                            cursor.getColumnIndexOrThrow(column[0]);
+                    cursor.moveToFirst();
+                    filePath = cursor.getString(column_index);
+                }
             }
-            if (cursor.getCount() == 0) {
-                cursor = Lutil.context.getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                        column, sel, new String[]{id}, null);
-            }
-            int columnIndex = cursor.getColumnIndex(column[0]);
-            if (cursor.moveToFirst()) {
-                filePath = cursor.getString(columnIndex);
-            }
-            cursor.close();
-        } else {
+        }catch (Exception e){
             CursorLoader cursorLoader = new CursorLoader(
                     Lutil.context,
                     uri, column, null, null, null);

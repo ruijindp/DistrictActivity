@@ -13,7 +13,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * Created by london on 15/7/8.
+ * Created by londons on 15/7/8.
  * 多媒体播放器
  * Update at 2015-07-24 17:26:11
  */

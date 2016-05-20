@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
 
 /**
@@ -34,7 +36,8 @@ import cn.jpush.android.api.JPushInterface;
  * 登录对话框
  * Update at 2015-07-21 20:17:46
  */
-public class LoginDialog extends Dialog implements View.OnClickListener, LRequestTool.OnResponseListener, AdapterView.OnItemClickListener {
+public class LoginDialog extends Dialog implements View.OnClickListener,
+        LRequestTool.OnResponseListener, AdapterView.OnItemClickListener {
     private static final int API_SIGN_IN = 1;
 
     AutoCompleteTextView dialog_name_etUserName;
@@ -45,6 +48,7 @@ public class LoginDialog extends Dialog implements View.OnClickListener, LReques
     LRequestTool lRequestTool;
     boolean isDoingLogin;
     List<UserTool.SimpleUser> simpleUsers;
+    private TextView dialog_name_tvRegister;
 
     public LoginDialog(Context context) {
         this(context, R.style.DefaultDialog);
@@ -62,7 +66,9 @@ public class LoginDialog extends Dialog implements View.OnClickListener, LReques
         dialog_name_etUserName = (AutoCompleteTextView) findViewById(R.id.dialog_name_etUserName);
         dialog_name_etPassword = (EditText) findViewById(R.id.dialog_name_etPassword);
         dialog_name_tvLogin = (TextView) findViewById(R.id.dialog_name_tvLogin);
+        dialog_name_tvRegister = (TextView) findViewById(R.id.dialog_name_tvRegister);
 
+        dialog_name_tvRegister.setOnClickListener(this);
         dialog_name_tvLogin.setOnClickListener(this);
         List<String> userNames = new ArrayList<>(simpleUsers.size());
         for (int i = 0; i < simpleUsers.size(); i++) {
@@ -87,6 +93,11 @@ public class LoginDialog extends Dialog implements View.OnClickListener, LReques
                 params.put("jpush_login", Build.VERSION.SDK_INT);
                 lRequestTool.doPost(NetConst.API_SIGN_IN, params, API_SIGN_IN);
                 isDoingLogin = true;
+                break;
+            case  R.id.dialog_name_tvRegister:
+                LoginDialog.this.dismiss();
+                RegisterDialog dialog = new RegisterDialog(getContext());
+                dialog.show();
                 break;
         }
     }
@@ -145,4 +156,6 @@ public class LoginDialog extends Dialog implements View.OnClickListener, LReques
     public interface LoginListener {
         void loginSuccess(LoginDialog dialog);
     }
+
+
 }

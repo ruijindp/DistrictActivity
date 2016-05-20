@@ -94,7 +94,7 @@ public class LRequestTool {
                 response.downloadFile = file;
                 response.responseCode = statusCode;
                 if (onDownloadListener != null) {
-                    onDownloadListener.onStartDownload(response);
+                    onDownloadListener.onDownloaded(response);
                 }
             }
 
@@ -103,7 +103,7 @@ public class LRequestTool {
                 response.downloadFile = file;
                 response.responseCode = statusCode;
                 if (onDownloadListener != null) {
-                    onDownloadListener.onStartDownload(response);
+                    onDownloadListener.onDownloaded(response);
                 }
             }
         });

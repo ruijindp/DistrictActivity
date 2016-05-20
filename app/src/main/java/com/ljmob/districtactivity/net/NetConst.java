@@ -5,7 +5,7 @@ package com.ljmob.districtactivity.net;
  * 网络常量
  */
 public class NetConst {
-//    public static final String ROOT_URL = "http://192.168.31.148:3100";
+//    public static final String ROOT_URL = "http://192.168.31.148:3200";
     public static final String ROOT_URL = "http://disact.ljmob.com";
 
     public static final String API_USER = ROOT_URL + "/users.json";
@@ -29,4 +29,5 @@ public class NetConst {
     public static final String API_PUBLIC_NOTICES = ROOT_URL + "/api/public_notices.json";
     public static final String API_CHECK = ROOT_URL + "/api/activity_results/check.json";
     public static final String PAGE_SHARE = ROOT_URL + "/project/demo_details.html";
+    public static final String API_EXPERT_CHECK = ROOT_URL + "/api/check.json";
 }

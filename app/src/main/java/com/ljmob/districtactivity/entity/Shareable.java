@@ -10,6 +10,8 @@ import com.ljmob.districtactivity.net.NetConst;
 public class Shareable {
     public String title;
     public String content;
+    public String pushName;
+    public String inSchool;
     public String url = NetConst.PAGE_SHARE;
     public String imgUrl;
 }
